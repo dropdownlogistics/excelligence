@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excelligence — Knowledge Vault</title>
+<meta name="description" content="A governed knowledge graph for Excel intelligence. 50 entries, 118 edges, 7 types, 4 tiers. What I know, structured so others can learn it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A;
+  --bg: #0d0d12;
+  --card: #10202f;
+  --cream: #F5F1EB;
+  --steel: #6B7B8D;
+  --muted: #5a5648;
+  --dim: #3a3830;
+  --border: rgba(245,241,235,0.07);
+  --crimson: #B23531;
+  --crimson-glow: rgba(178,53,49,0.05);
+  --crimson-border: rgba(178,53,49,0.12);
+  --teal: #2C7A7B;
+  --amber: #C49A3C;
+  --violet: #8a6cc9;
+  --blue: #6B9DC2;
+  --green-tier: #10B981;
+  --blue-tier: #3B82F6;
+  --purple-tier: #8B5CF6;
+  --red-tier: #EF4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: linear-gradient(165deg, var(--bg) 0%, #12121a 50%, #0d1117 100%);
+  color: var(--cream);
+  font-family: 'Space Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+body.loaded { opacity: 1; }
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--crimson);
+  margin-bottom: 16px;
+}
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--crimson);
+  margin-bottom: 20px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--crimson-border);
+}
+h1 {
+  font-size: 42px; font-weight: 700;
+  letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: 12px;
+}
+.tagline {
+  font-family: 'Source Serif 4', serif;
+  font-size: 18px; color: #7a7668;
+  font-style: italic; line-height: 1.5;
+  margin-bottom: 32px;
+}
+.desc { font-size: 14px; color: #94918a; line-height: 1.7; max-width: 580px; margin: 0 auto 24px; }
+.desc-sm { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 520px; margin: 0 auto; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 56px 0; }
+.stat-card {
+  background: var(--crimson-glow);
+  border: 1px solid var(--crimson-border);
+  border-radius: 8px; padding: 18px 12px; text-align: center;
+}
+.stat-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px; font-weight: 600; margin-bottom: 4px;
+}
+.stat-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* Type cards */
+.type-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 10px; }
+.type-card {
+  border-radius: 8px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.type-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+.type-name { font-size: 13px; font-weight: 600; }
+.type-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
+
+/* Tiers */
+.tier-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; }
+.tier-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.tier-name { font-size: 14px; font-weight: 600; }
+.tier-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; margin-left: auto;
+}
+.tier-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: 12px; color: #7a7668; line-height: 1.4;
+}
+
+/* Paths */
+.path-card {
+  background: rgba(255,255,255,0.015);
+  border: 1px solid var(--crimson-border);
+  border-radius: 10px; padding: 18px 20px;
+  margin-bottom: 12px; cursor: default;
+  transition: background 0.2s;
+}
+.path-card:hover { background: rgba(178,53,49,0.06); }
+.path-title { font-size: 15px; font-weight: 600; display: inline; }
+.path-steps {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted); display: inline; margin-left: 10px;
+}
+.path-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: 12px; color: #7a7668; margin: 6px 0 14px; line-height: 1.4;
+}
+.path-chain { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.path-node {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 500;
+}
+.path-node .dot { width: 6px; height: 6px; border-radius: 50%; }
+.path-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--dim); font-size: 10px; padding: 0 4px;
+}
+
+/* Quote block */
+.quote-block {
+  background: rgba(255,255,255,0.015);
+  border-radius: 10px; padding: 28px;
+  border: 1px solid rgba(178,53,49,0.06);
+  margin: 56px 0;
+}
+.quote-block .lead {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px; color: #7a7668;
+  font-style: italic; line-height: 1.7; margin-bottom: 16px;
+}
+.quote-block .follow {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px; color: #a09a8c; line-height: 1.7;
+}
+
+/* Coming soon */
+.soon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 12px; }
+.soon-card {
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(178,53,49,0.06);
+  border-radius: 10px; padding: 18px;
+}
+.soon-icon { font-size: 20px; margin-bottom: 8px; }
+.soon-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.soon-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: 12px; color: #7a7668; line-height: 1.5; margin-bottom: 10px;
+}
+.soon-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+/* CTA */
+.cta-area { text-align: center; margin: 56px 0 40px; }
+.cta-btn {
+  display: inline-block; padding: 16px 48px;
+  background: var(--crimson); color: var(--cream);
+  font-size: 15px; font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  border-radius: 8px; text-decoration: none;
+  letter-spacing: 0.5px; border: 1px solid rgba(178,53,49,0.5);
+  transition: all 0.2s;
+}
+.cta-btn:hover { background: #C94440; transform: translateY(-1px); }
+.cta-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--dim); margin-top: 12px;
+}
+
+/* Footer */
+.footer {
+  text-align: center; padding: 32px 24px 48px;
+  border-top: 1px solid var(--crimson-border);
+  margin-top: 48px;
+}
+.footer .f1 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 14px; color: var(--muted);
+  font-style: italic; margin-bottom: 6px;
+}
+.footer .f2 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 12px; color: var(--dim);
+  font-style: italic; margin-bottom: 16px;
+}
+.footer .f3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: #2a2820; letter-spacing: 2px;
+}
+.footer a { color: var(--crimson); text-decoration: none; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 32px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .type-grid, .soon-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section style="padding: 80px 0 20px; text-align: center;">
+  <div class="wrap">
+    <div class="eyebrow">Dropdown Logistics</div>
+    <h1>EXCELLIGENCE</h1>
+    <p class="tagline">What I know about Excel, structured so others can learn it.</p>
+    <p class="desc">A governed knowledge graph of Excel formulas, patterns, shortcuts, conventions, architectures, and anti-patterns — connected by typed relationships that show you what to learn, what it depends on, and what breaks when you get it wrong.</p>
+    <p class="desc-sm">Not a glossary. Not a tutorial. A graph that reveals how Excel knowledge actually connects — and shows you the governed path between where you are and where you want to be.</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<section>
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" data-target="50">0</div><div class="stat-lbl">Entries</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="118">0</div><div class="stat-lbl">Edges</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="148">0</div><div class="stat-lbl">Aliases</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="574">0</div><div class="stat-lbl">Checks Passed</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEVEN TYPES -->
+<section style="margin-bottom: 56px;">
+  <div class="wrap">
+    <div class="section-label">Seven Entry Types</div>
+    <div class="type-grid" id="type-grid"></div>
+  </div>
+</section>
+
+<!-- FOUR TIERS -->
+<section style="margin-bottom: 56px;">
+  <div class="wrap">
+    <div class="section-label">Four Skill Tiers</div>
+    <div id="tier-list"></div>
+  </div>
+</section>
+
+<!-- SAMPLE PATHS -->
+<section style="margin-bottom: 56px;">
+  <div class="wrap">
+    <div class="section-label">Sample Learning Paths</div>
+    <div id="paths"></div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section>
+  <div class="wrap">
+    <div class="quote-block">
+      <div class="lead">Every existing Excel resource does flat lookup: name to definition. ExcelJet, Microsoft docs, even AI answers.</div>
+      <div class="follow">Nobody maps name to intent to tier to progression to what breaks to what comes next. The graph structure is the difference. When you search Excelligence, you don't just find XLOOKUP. You find that it leads to LET, which leads to MAKEARRAY, which is the engine behind every dashboard I've ever built. That's a skill progression path, not a search result.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARDS & RESOURCES -->
+<section style="margin-bottom: 56px;">
+  <div class="wrap">
+    <div class="section-label">Standards & Resources</div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;">
+      <a href="standards/excel-001/" style="text-decoration:none; background:rgba(255,255,255,0.015); border:1px solid rgba(178,53,49,0.08); border-radius:10px; padding:20px 18px; transition: background 0.2s; display:block;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#B23531; letter-spacing:1px; margin-bottom:8px;">STD-EXCEL-001</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:600; color:#F5F1EB; margin-bottom:6px;">Analytical Workbook Standard</div>
+        <div style="font-family:'Source Serif 4',serif; font-size:12px; color:#7a7668; line-height:1.5;">Layered architecture, fact table standards, dimension generation, MAKEARRAY patterns, dashboard rules. The DDL blueprint for any workbook that answers a business question.</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a5648; margin-top:10px;">9 RULES · COUNCIL RATIFIED · v0.2</div>
+      </a>
+      <a href="standards/excel-002/" style="text-decoration:none; background:rgba(255,255,255,0.015); border:1px solid rgba(178,53,49,0.08); border-radius:10px; padding:20px 18px; transition: background 0.2s; display:block;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#B23531; letter-spacing:1px; margin-bottom:8px;">STD-EXCEL-002</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:600; color:#F5F1EB; margin-bottom:6px;">Operational Workbook Standard</div>
+        <div style="font-family:'Source Serif 4',serif; font-size:12px; color:#7a7668; line-height:1.5;">Input → Logic → Output architecture, status lifecycle, governed exception paths, error handling mandates. The DDL blueprint for any workbook that executes a process.</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:9px; color:#5a5648; margin-top:10px;">8 RULES · COUNCIL RATIFIED · v0.2</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- COMING SOON -->
+<section style="margin-bottom: 56px;">
+  <div class="wrap">
+    <div class="section-label">Coming Soon — The Living Graph</div>
+    <div class="soon-grid" id="soon-grid"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap cta-area">
+    <a href="explorer/" class="cta-btn">Enter the Graph →</a>
+    <div class="cta-sub">50 entries · 118 edges · 7 types · 4 tiers · Interactive explorer with Path Finder</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section>
+  <div class="wrap footer">
+    <div class="f1">Same engine. Different data. Every time.</div>
+    <div class="f2">Built by one person. Governed by a ten-seat AI council. Validated by 574 checks.</div>
+    <div class="f3">CHAOS → STRUCTURED → AUTOMATED</div>
+    <div style="margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #2a2820;">
+      A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product
+    </div>
+  </div>
+</section>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const TYPES = [
+  { code: "FRM", name: "Formulas", count: 17, color: "#2563EB" },
+  { code: "PTN", name: "Patterns", count: 7, color: "#059669" },
+  { code: "KEY", name: "Shortcuts", count: 4, color: "#D97706" },
+  { code: "CON", name: "Conventions", count: 5, color: "#7C3AED" },
+  { code: "ARC", name: "Architecture", count: 5, color: "#DC2626" },
+  { code: "ANT", name: "Anti-Patterns", count: 6, color: "#6B7280" },
+  { code: "PQ", name: "Power Query", count: 6, color: "#0891B2" },
+];
+
+const TIERS = [
+  { name: "Beginner", count: 12, color: "#10B981", desc: "Foundation concepts. Where everyone starts." },
+  { name: "Intermediate", count: 16, color: "#3B82F6", desc: "Comfortable daily use. The working layer." },
+  { name: "Advanced", count: 17, color: "#8B5CF6", desc: "Complex combinations and architecture." },
+  { name: "Expert", count: 5, color: "#EF4444", desc: "Institutional-grade patterns. Full Dave." },
+];
+
+const PATHS = [
+  {
+    name: "Beginner to Dashboard", steps: 5,
+    desc: "From your first Table to a selector-driven matrix.",
+    nodes: [
+      { label: "Ctrl+T", tier: "Beginner" },
+      { label: "XLOOKUP", tier: "Intermediate" },
+      { label: "LET", tier: "Advanced" },
+      { label: "Spill Ranges", tier: "Advanced" },
+      { label: "Selector Dashboard", tier: "Expert" },
+    ]
+  },
+  {
+    name: "Anti-Pattern Escape", steps: 5,
+    desc: "Stop doing it wrong. Start doing it governed.",
+    nodes: [
+      { label: "Merged Cells", tier: "Beginner" },
+      { label: "Center Across", tier: "Beginner" },
+      { label: "Hardcoded Values", tier: "Beginner" },
+      { label: "Named Ranges", tier: "Beginner" },
+      { label: "LET", tier: "Advanced" },
+    ]
+  },
+  {
+    name: "Power Query Pipeline", steps: 5,
+    desc: "From raw file to governed, refreshable data.",
+    nodes: [
+      { label: "Load to Table", tier: "Intermediate" },
+      { label: "Type Enforce", tier: "Intermediate" },
+      { label: "Unpivot", tier: "Advanced" },
+      { label: "Append", tier: "Advanced" },
+      { label: "Folder Ingest", tier: "Expert" },
+    ]
+  },
+];
+
+const SOON = [
+  { icon: "⚡", title: "Live API", desc: "The registry becomes a service. Entries update in real time without redeployment. Powered by a local LLM on dedicated hardware.", status: "In Development", color: "#C49A3C" },
+  { icon: "🧭", title: "Learning Tracks", desc: "Curated paths through the graph for auditors, dashboard builders, and Power Query learners. The graph generates the curriculum.", status: "Designed", color: "#6B9DC2" },
+  { icon: "🤖", title: "AI-Grounded Search", desc: "Ask a question in plain language. A governed local LLM searches the registry and returns entries — not hallucinations.", status: "In Development", color: "#C49A3C" },
+  { icon: "📊", title: "Companion Workbook", desc: "An Excel workbook connected to the registry via Power Query. Refresh to get the latest entries. Practice in your own environment.", status: "Planned", color: "#5a5648" },
+  { icon: "🧠", title: "AI Proficiency Mapping", desc: "A guided conversation that assesses your Excel + AI skills and places you on the graph. Your score becomes a starting node.", status: "Designed", color: "#6B9DC2" },
+  { icon: "🔍", title: "Workbook Scanner", desc: "Upload a workbook. The system maps your formulas to the registry, detects anti-patterns, and suggests governed upgrades.", status: "Cathedral", color: "#8a6cc9" },
+];
+
+const TIER_COLORS = { Beginner: "#10B981", Intermediate: "#3B82F6", Advanced: "#8B5CF6", Expert: "#EF4444" };
+
+// ============================================================
+// RENDER
+// ============================================================
+
+function renderTypes() {
+  const grid = document.getElementById('type-grid');
+  TYPES.forEach(t => {
+    grid.innerHTML += `
+      <div class="type-card" style="background:${t.color}0A; border:1px solid ${t.color}20;">
+        <div class="type-dot" style="background:${t.color}18; color:${t.color};">${t.code}</div>
+        <div>
+          <div class="type-name">${t.name}</div>
+          <div class="type-count">${t.count} entries</div>
+        </div>
+      </div>`;
+  });
+}
+
+function renderTiers() {
+  const list = document.getElementById('tier-list');
+  TIERS.forEach(t => {
+    list.innerHTML += `
+      <div class="tier-row">
+        <div class="tier-dot" style="background:${t.color};"></div>
+        <div style="flex:1">
+          <div style="display:flex; align-items:baseline; gap:8px;">
+            <span class="tier-name">${t.name}</span>
+            <span class="tier-count" style="color:${t.color}; margin-left:auto;">${t.count} entries</span>
+          </div>
+          <div class="tier-desc">${t.desc}</div>
+        </div>
+      </div>`;
+  });
+}
+
+function renderPaths() {
+  const container = document.getElementById('paths');
+  PATHS.forEach(p => {
+    let chain = '';
+    p.nodes.forEach((n, i) => {
+      const c = TIER_COLORS[n.tier];
+      chain += `<span class="path-node" style="background:${c}10; border:1px solid ${c}25;">
+        <span class="dot" style="background:${c};"></span>${n.label}
+      </span>`;
+      if (i < p.nodes.length - 1) chain += '<span class="path-arrow">→</span>';
+    });
+    container.innerHTML += `
+      <div class="path-card">
+        <span class="path-title">${p.name}</span>
+        <span class="path-steps">${p.steps} steps</span>
+        <div class="path-desc">${p.desc}</div>
+        <div class="path-chain">${chain}</div>
+      </div>`;
+  });
+}
+
+function renderSoon() {
+  const grid = document.getElementById('soon-grid');
+  SOON.forEach(s => {
+    grid.innerHTML += `
+      <div class="soon-card">
+        <div class="soon-icon">${s.icon}</div>
+        <div class="soon-title">${s.title}</div>
+        <div class="soon-desc">${s.desc}</div>
+        <div class="soon-status" style="color:${s.color};">${s.status}</div>
+      </div>`;
+  });
+}
+
+// ============================================================
+// ANIMATED COUNTERS
+// ============================================================
+
+function animateCounters() {
+  const counters = document.querySelectorAll('.stat-num[data-target]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.done) {
+        entry.target.dataset.done = '1';
+        const target = parseInt(entry.target.dataset.target);
+        const duration = 1400;
+        const start = performance.now();
+        function step(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          entry.target.textContent = Math.floor(eased * target).toLocaleString();
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+    });
+  }, { threshold: 0.3 });
+  counters.forEach(c => observer.observe(c));
+}
+
+// ============================================================
+// OPTIONAL: LIVE STATS FROM API
+// ============================================================
+
+async function tryLoadLiveStats() {
+  try {
+    const res = await fetch('api/excelligence.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.meta) {
+      const counters = document.querySelectorAll('.stat-num[data-target]');
+      const mapping = [
+        data.meta.entry_count,
+        data.meta.edge_count,
+        data.meta.alias_count,
+        574 // checks passed is not in the JSON — keep static
+      ];
+      counters.forEach((c, i) => {
+        if (mapping[i]) c.dataset.target = mapping[i];
+      });
+    }
+  } catch (e) { /* fallback to static values */ }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await tryLoadLiveStats();
+  renderTypes();
+  renderTiers();
+  renderPaths();
+  renderSoon();
+  animateCounters();
+  document.body.classList.add('loaded');
+});
+</script>
+</body>
+</html>

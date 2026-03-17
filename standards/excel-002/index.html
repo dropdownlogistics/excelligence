@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STD-EXCEL-002 — Operational Workbook Standard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--bg:#0d0d12;--card:#10202f;--cream:#F5F1EB;--steel:#6B7B8D;--muted:#5a5648;--dim:#3a3830;--border:rgba(245,241,235,0.07);--crimson:#B23531;--crimson-border:rgba(178,53,49,0.12);--teal:#2C7A7B;--teal-border:rgba(44,122,123,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:linear-gradient(165deg,var(--bg) 0%,#12121a 50%,#0d1117 100%);color:var(--cream);font-family:'Source Serif 4',serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--crimson);margin-bottom:8px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:8px}
+h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:var(--cream);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--crimson-border);scroll-margin-top:24px}
+h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--cream);margin:24px 0 8px}
+p{font-size:15px;color:#a09a8c;margin-bottom:16px;line-height:1.7}
+.subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel);margin-bottom:32px}
+.version-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--crimson);color:var(--cream);border-radius:4px;margin-right:8px}
+.status-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--teal);color:var(--cream);border-radius:4px}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:3px;color:var(--cream)}
+pre{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;margin:12px 0 20px;line-height:1.6;color:#a09a8c}
+.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:16px 0}
+.rule-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--crimson);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
+th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;text-align:left;padding:10px 12px;background:var(--card);color:var(--steel);border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);color:#a09a8c;vertical-align:top}
+.layer-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:12px}
+.layer-box{padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-weight:500}
+.layer-arrow{color:var(--crimson)}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:32px 0}
+.toc a{color:var(--cream);text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:13px;display:block;padding:4px 0}
+.toc a:hover{color:var(--crimson)}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--steel);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.download-bar{background:var(--card);border:1px solid var(--teal-border);border-radius:8px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin:24px 0}
+.download-bar span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel)}
+.download-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 16px;background:var(--teal);color:var(--cream);border:none;border-radius:4px;cursor:pointer;text-decoration:none}
+.footer{text-align:center;padding:32px 24px 48px;border-top:1px solid var(--crimson-border);margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:1px}
+.footer a{color:var(--crimson);text-decoration:none}
+.note{font-size:13px;color:var(--steel);font-style:italic;padding:12px 16px;border-left:3px solid var(--crimson);margin:16px 0;background:rgba(178,53,49,0.03)}
+.status-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0}
+.status-node{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 12px;border-radius:6px;font-weight:500}
+.status-arrow{font-family:'JetBrains Mono',monospace;color:var(--dim);font-size:10px;padding:0 6px}
+@media(max-width:600px){h1{font-size:26px}h2{font-size:18px}.layer-flow,.status-flow{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<section style="padding:64px 0 0">
+<div class="wrap">
+  <div class="eyebrow">Dropdown Logistics · Knowledge Vault</div>
+  <h1>STD-EXCEL-002</h1>
+  <p style="font-family:'Space Grotesk',sans-serif;font-size:18px;color:var(--cream);margin-bottom:8px">Operational Workbook Standard</p>
+  <div class="subtitle">
+    <span class="version-badge">v0.2</span>
+    <span class="status-badge">Ratification Ready</span>
+    &nbsp;·&nbsp; 2026-03-16 &nbsp;·&nbsp; Council: 4 LOCK · 5 REVISE · 0 REJECT
+  </div>
+
+  <p>An operational workbook executes a repeatable process — generating outputs, tracking status, or automating communication. This standard defines the structure, documentation, and output rules that all DDL operational workbooks must follow.</p>
+
+  <div class="rule-card">
+    <div class="rule-num">Core Distinction</div>
+    <table>
+      <tr><th>Analytical Workbook</th><th>Operational Workbook</th></tr>
+      <tr><td>Answers a question</td><td>Executes a process</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--steel);margin:0">Decision test: Which failure hurts more? Wrong output → operational. Wrong conclusion → analytical.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <a href="#rule-1">Rule 1 — Workbook Architecture</a>
+    <a href="#rule-2">Rule 2 — Input Layer Standards</a>
+    <a href="#rule-3">Rule 3 — Logic Layer Standards</a>
+    <a href="#rule-4">Rule 4 — Output Layer Standards</a>
+    <a href="#rule-5">Rule 5 — Control Parameters</a>
+    <a href="#rule-6">Rule 6 — Process Documentation</a>
+    <a href="#rule-7">Rule 7 — Naming Conventions</a>
+    <a href="#rule-8">Rule 8 — Formatting Standards</a>
+  </div>
+
+  <!-- RULE 1 -->
+  <h2 id="rule-1">Rule 1 — Workbook Architecture</h2>
+  <p>All operational workbooks follow a 3-layer structure with unidirectional data flow.</p>
+
+  <div class="layer-flow">
+    <span class="layer-box">INPUT</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">LOGIC</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">OUTPUT</span>
+  </div>
+
+  <table>
+    <tr><th>Layer</th><th>Purpose</th></tr>
+    <tr><td><code>INPUT</code></td><td>Structured data entry. Validated. Never free-form.</td></tr>
+    <tr><td><code>LOGIC</code></td><td>Process rules, formulas, status derivation.</td></tr>
+    <tr><td><code>OUTPUT</code></td><td>Generated content ready for use or export.</td></tr>
+  </table>
+
+  <h3>Optional Layers</h3>
+  <p><strong>STAGING:</strong> For workbooks receiving external data requiring validation before it qualifies as INPUT. Raw imports, CSV dumps, or multi-source merges land in STAGING.</p>
+  <p><strong>CONTROL:</strong> Parameter cells, run instructions, and configuration values that govern the process.</p>
+
+  <div class="layer-flow">
+    <span class="layer-box">CONTROL</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box" style="opacity:0.5">STAGING</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">INPUT</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">LOGIC</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">OUTPUT</span>
+  </div>
+
+  <div class="rule-card">
+    <div class="rule-num">Violation Boundary</div>
+    <table>
+      <tr><th>Allowed in OUTPUT</th><th>Violation in OUTPUT</th></tr>
+      <tr><td><code>=INPUT!A3</code> — value passthrough</td><td><code>=INPUT!D3 * 1.1</code> — arithmetic</td></tr>
+      <tr><td><code>TEXT()</code>, <code>UPPER()</code>, <code>TRIM()</code> — formatting</td><td><code>=IF(INPUT!C3>0,…)</code> — conditional logic</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--steel);margin:0">Display references are allowed. Anything that changes the underlying value belongs in LOGIC.</p>
+  </div>
+
+  <!-- RULE 2 -->
+  <h2 id="rule-2">Rule 2 — Input Layer Standards</h2>
+
+  <h3>2a. Structure</h3>
+  <p>INPUT tabs contain structured, validated data organized as an Excel Table. Naming: <code>tbl_Input&lt;Process&gt;</code>.</p>
+
+  <h3>2b. Data Validation</h3>
+  <p>Every input field with a constrained set of values must use Excel Data Validation (dropdown list or range reference).</p>
+
+  <h3>2c. Required Metadata Fields</h3>
+  <table>
+    <tr><th>Field</th><th>Format</th><th>Purpose</th></tr>
+    <tr><td>Record ID</td><td><code>&lt;Process&gt;-0001</code></td><td>Surrogate key</td></tr>
+    <tr><td>Status</td><td>See Rule 4b</td><td>Process lifecycle tracking</td></tr>
+    <tr><td>Date</td><td>Created or process date</td><td>Temporal anchor</td></tr>
+    <tr><td>Reviewer / Owner</td><td>Name or ID</td><td>Accountability</td></tr>
+  </table>
+
+  <h3>2d–2e. Discipline</h3>
+  <p>No calculations in INPUT (exception: auto-populated Record IDs and timestamps). Use conditional formatting to highlight invalid or incomplete entries — errors should be visible before reaching LOGIC.</p>
+
+  <!-- RULE 3 -->
+  <h2 id="rule-3">Rule 3 — Logic Layer Standards</h2>
+
+  <h3>3a–3b. Process Rules</h3>
+  <p>The LOGIC layer is where all process rules live. Status fields that can be determined from data must be formula-driven — not manually typed.</p>
+  <pre>Draft → Ready:
+=IF(AND(required fields populated), "Ready", "Draft")
+
+Ready → Sent:  operator sets manually after sending
+Sent → Complete: operator confirms after verification
+Exception: operator sets with required rationale</pre>
+
+  <h3>3c. Output Generation</h3>
+  <pre>="Dear " &amp; InputTab[@Name] &amp; "," &amp; CHAR(10) &amp;
+"Your commission for " &amp; InputTab[@Period] &amp; " is " &amp;
+TEXT(InputTab[@Amount], "$#,##0.00") &amp; "."</pre>
+
+  <h3>3d. Rule Documentation</h3>
+  <p>Every formula in LOGIC that encodes a business rule must have a comment explaining the rule — not the syntax.</p>
+
+  <h3>3e. Error Handling (Mandatory)</h3>
+  <div class="rule-card">
+    <div class="rule-num">Post-Council Addition (5 seats)</div>
+    <p>Every LOGIC formula that could produce a standard Excel error must be wrapped in IFERROR. The fallback must be a visible, human-readable string:</p>
+    <pre>"DATA MISSING"
+"REVIEW REQUIRED"
+"ERROR — SEE INPUT"</pre>
+    <p style="font-size:13px;color:var(--steel);margin:0">Blank cells and zero values are not acceptable error fallbacks in operational workbooks — they hide failures that propagate silently to OUTPUT.</p>
+  </div>
+
+  <!-- RULE 4 -->
+  <h2 id="rule-4">Rule 4 — Output Layer Standards</h2>
+
+  <h3>4a. OUTPUT Is Read-Only</h3>
+  <p>OUTPUT tabs contain generated content only. No manual edits. If generated content is wrong: fix INPUT or LOGIC → verify OUTPUT regenerates correctly → copy and send.</p>
+
+  <p class="note">Once operators learn they can edit OUTPUT, LOGIC becomes optional. Within cycles, OUTPUT becomes a manually-authored tab and the architecture collapses. Protect this rule.</p>
+
+  <div class="rule-card">
+    <div class="rule-num">Governed Exception Path</div>
+    <p>When time constraints make fix-and-regenerate infeasible, a manual correction to OUTPUT is allowed only when:</p>
+    <p>1. The correction is logged in the CONTROL tab exception log (record ID, field edited, original value, edited value, reason, date).</p>
+    <p>2. The record status is updated to Exception.</p>
+    <p>3. The root cause is fixed in INPUT or LOGIC before the next run.</p>
+    <p style="font-size:13px;color:var(--steel);margin:0">The exception path is both a pressure valve and a feedback loop. Frequent use signals that LOGIC does not handle enough cases.</p>
+  </div>
+
+  <h3>4b. Status Tracking</h3>
+  <p>Every record displays a current status reflecting the complete process lifecycle:</p>
+
+  <div class="status-flow">
+    <span class="status-node" style="background:rgba(107,123,141,0.15);color:var(--steel)">Draft</span>
+    <span class="status-arrow">→</span>
+    <span class="status-node" style="background:rgba(59,130,246,0.15);color:#3B82F6">Ready</span>
+    <span class="status-arrow">→</span>
+    <span class="status-node" style="background:rgba(16,185,129,0.15);color:#10B981">Sent</span>
+    <span class="status-arrow">→</span>
+    <span class="status-node" style="background:rgba(5,150,105,0.15);color:#059669">Complete</span>
+  </div>
+  <div style="margin-top:8px">
+    <span class="status-node" style="background:rgba(239,68,68,0.15);color:#EF4444">Exception</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">Manual flag · requires rationale</span>
+  </div>
+
+  <p style="margin-top:16px">Backward transitions (e.g., Sent → Ready) are allowed but must be logged in the exception log with reason.</p>
+
+  <h3>4c–4d. Output Quality</h3>
+  <p>Generated outputs must be fully formed (no placeholders), validated against INPUT, and identifiable by Record ID. "Copy and send" is the standard — not "copy, edit, then send."</p>
+
+  <!-- RULE 5 -->
+  <h2 id="rule-5">Rule 5 — Control Parameters</h2>
+
+  <h3>5a–5c. Parameter Cells</h3>
+  <p>All values that govern process behavior reside on the CONTROL tab as named parameter cells. Naming: <code>sel_&lt;ParameterName&gt;</code>. Every parameter must have adjacent documentation explaining what it controls, valid values, and behavior when changed.</p>
+
+  <h3>5d. Exception Log</h3>
+  <div class="rule-card">
+    <div class="rule-num">Required on CONTROL Tab</div>
+    <table>
+      <tr><th>Column</th><th>Purpose</th></tr>
+      <tr><td>Date</td><td>When the exception occurred</td></tr>
+      <tr><td>RecordID</td><td>Which record was affected</td></tr>
+      <tr><td>FieldEdited</td><td>Which field was manually changed</td></tr>
+      <tr><td>OriginalValue</td><td>What it was before the edit</td></tr>
+      <tr><td>EditedValue</td><td>What it was changed to</td></tr>
+      <tr><td>Reason</td><td>Why the exception was necessary</td></tr>
+      <tr><td>Operator</td><td>Who made the change</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--steel);margin:0">Append-only. Entries are never deleted.</p>
+  </div>
+
+  <!-- RULE 6 -->
+  <h2 id="rule-6">Rule 6 — Process Documentation</h2>
+  <p>Every operational workbook must include a CONTROL tab header with: workbook name and version, process it supports, owner, date last updated, last verified date, and brief description of inputs, outputs, and how to run it.</p>
+  <p>Run instructions must be step-by-step and verified as current before every process cycle that includes a structural change. A stale Last Verified date on a recently changed process is a visible signal that documentation discipline has failed.</p>
+
+  <!-- RULE 7 -->
+  <h2 id="rule-7">Rule 7 — Naming Conventions</h2>
+  <table>
+    <tr><th>Object</th><th>Convention</th><th>Example</th></tr>
+    <tr><td>Input table</td><td><code>tbl_Input&lt;Process&gt;</code></td><td>tbl_InputReview</td></tr>
+    <tr><td>Output table</td><td><code>tbl_Output&lt;Process&gt;</code></td><td>tbl_OutputEmails</td></tr>
+    <tr><td>Logic table</td><td><code>tbl_Logic&lt;Process&gt;</code></td><td>tbl_LogicStatus</td></tr>
+    <tr><td>Parameter cell</td><td><code>sel_&lt;Name&gt;</code></td><td>sel_ReviewPeriod</td></tr>
+    <tr><td>Record ID</td><td><code>&lt;Process&gt;-0000</code></td><td>REVIEW-0001</td></tr>
+  </table>
+
+  <!-- RULE 8 -->
+  <h2 id="rule-8">Rule 8 — Formatting Standards</h2>
+  <h3>Tab Color Coding</h3>
+  <table>
+    <tr><th>Layer</th><th>Tab Color</th></tr>
+    <tr><td>INPUT</td><td style="color:#60A5FA">Light Blue</td></tr>
+    <tr><td>LOGIC</td><td style="color:#9CA3AF">Light Gray</td></tr>
+    <tr><td>OUTPUT</td><td style="color:#34D399">Light Green</td></tr>
+    <tr><td>CONTROL</td><td style="color:#FCD34D">Light Yellow</td></tr>
+    <tr><td>STAGING</td><td style="color:#FB923C">Light Orange</td></tr>
+  </table>
+
+  <h3>Status Visualization</h3>
+  <p>Status fields must use conditional formatting: Draft (gray), Ready (blue), Sent (green), Complete (dark green), Exception (red).</p>
+
+  <div class="download-bar">
+    <span>STD-EXCEL-002 · Operational Workbook Standard · v0.2</span>
+    <a href="../api/STD-EXCEL-002.txt" class="download-btn" download>Download .txt</a>
+  </div>
+</div>
+</section>
+
+<div class="wrap footer">
+  <div>STD-EXCEL-002 · Dropdown Logistics · Chaos → Structured → Automated</div>
+  <div style="margin-top:8px">A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product · <a href="../">Knowledge Vault</a></div>
+</div>
+
+</body>
+</html>

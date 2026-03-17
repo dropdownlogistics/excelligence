@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excelligence — Pricing Flyer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --card: #10202f;
+    --cream: #F5F1EB;
+    --steel: #6B7B8D;
+    --border: rgba(245,241,235,0.07);
+    --accent: #B23531;
+    --accent-glow: rgba(178,53,49,0.05);
+    --accent-border: rgba(178,53,49,0.15);
+    --teal: #2C7A7B;
+    --teal-glow: rgba(44,122,123,0.05);
+    --teal-border: rgba(44,122,123,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'Source Serif 4', serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 32px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--steel);
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+
+  .thesis {
+    font-style: italic;
+    font-size: 17px;
+    color: #a09a8c;
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 40px auto 0;
+    text-align: center;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Pain cards */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .pain-card {
+    background: var(--card);
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    padding: 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pain-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .pain-card h3 { color: var(--cream); }
+  .pain-card p { font-size: 14px; color: var(--steel); line-height: 1.5; margin-top: 8px; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 40px 0;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 16px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  /* Timeline */
+  .timeline {
+    margin-top: 40px;
+    border-left: 2px solid var(--accent-border);
+    padding-left: 28px;
+  }
+
+  .timeline-item {
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -34px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--navy);
+  }
+
+  .timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--steel);
+    line-height: 1.5;
+  }
+
+  /* Pricing */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 40px 0;
+  }
+
+  .tier-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .tier-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--teal);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .tier-card:hover::before { transform: scaleX(1); }
+
+  .tier-card.featured {
+    border-color: var(--teal-border);
+    background: linear-gradient(180deg, rgba(44,122,123,0.06) 0%, var(--card) 100%);
+  }
+
+  .tier-card.featured::before { transform: scaleX(1); }
+
+  .tier-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+
+  .tier-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .tier-audience {
+    font-size: 13px;
+    color: var(--steel);
+    margin-bottom: 16px;
+  }
+
+  .tier-price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 2px;
+  }
+
+  .tier-price-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--steel);
+    margin-bottom: 20px;
+  }
+
+  .tier-features {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tier-features li {
+    font-size: 13px;
+    color: #a09a8c;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .tier-features li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  /* Addons */
+  .addons {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .addon-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .addon-name { color: var(--cream); font-weight: 500; }
+  .addon-price { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--teal); }
+  .addon-desc { color: var(--steel); font-size: 12px; flex: 1; text-align: right; margin-left: 16px; }
+
+  /* Close */
+  .close-section {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .close-headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 24px;
+  }
+
+  .close-story {
+    font-size: 15px;
+    color: #a09a8c;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .receipt-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--steel);
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 14px 40px;
+    background: var(--accent);
+    color: var(--cream);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid rgba(178,53,49,0.5);
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .cta-button:hover {
+    background: #C94440;
+    transform: translateY(-1px);
+  }
+
+  .contact-block {
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--steel);
+    line-height: 2;
+  }
+
+  .contact-block a { color: var(--accent); text-decoration: none; }
+
+  /* Footer */
+  .footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #3a3830;
+    letter-spacing: 1px;
+  }
+
+  /* Section backgrounds */
+  .bg-accent {
+    background: radial-gradient(ellipse at 30% 20%, var(--accent-glow) 0%, transparent 60%), var(--navy);
+  }
+
+  .bg-teal {
+    background: radial-gradient(ellipse at 70% 30%, var(--teal-glow) 0%, transparent 60%), var(--navy);
+  }
+
+  @media (max-width: 700px) {
+    .pain-grid, .stats-grid, .pricing-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 32px; }
+    .section { padding: 48px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SECTION 01 — THE PROBLEM                                      -->
+<!-- ============================================================ -->
+<div class="bg-accent">
+  <div class="section">
+    <div class="eyebrow" style="color: var(--accent);">Dropdown Logistics</div>
+    <h1>EXCELLIGENCE</h1>
+    <p class="subtitle">A governed knowledge graph for Excel intelligence. What one person knows, structured so thousands can learn it.</p>
+
+    <h2 style="font-size: 20px; color: var(--steel); margin-bottom: 24px;">The Problem</h2>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <h3>Flat Lookup</h3>
+        <p>Every Excel resource on the internet does the same thing: name → definition. ExcelJet, Microsoft docs, AI answers. No progression. No dependencies. No architecture. A dictionary for a language that requires grammar.</p>
+      </div>
+      <div class="pain-card">
+        <h3>Invisible Expertise</h3>
+        <p>The difference between someone who uses VLOOKUP and someone who architects MAKEARRAY engines is 200+ hours of trial and error. That knowledge lives in one person's head. When they leave, it walks out the door.</p>
+      </div>
+      <div class="pain-card">
+        <h3>Anti-Pattern Debt</h3>
+        <p>Merged cells, volatile functions, hardcoded values, nested IFs. Every organization has spreadsheets built on these patterns. Nobody has a governed system that identifies them and maps the path to governed alternatives.</p>
+      </div>
+    </div>
+
+    <div class="thesis">
+      The gap isn't knowledge. It's structure. Excel expertise exists in abundance — scattered across tutorials, forums, and individual practice. What doesn't exist is a governed system that connects patterns to prerequisites, progressions to anti-patterns, and beginner concepts to expert architecture through typed, navigable relationships.
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 02 — THE PROOF                                        -->
+<!-- ============================================================ -->
+<div>
+  <div class="section">
+    <div class="eyebrow" style="color: var(--accent);">What We've Already Built</div>
+    <h2>The Proof</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">50</div>
+        <div class="stat-label">Governed Entries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">118</div>
+        <div class="stat-label">Typed Edges</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">574</div>
+        <div class="stat-label">Validation Checks Passed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Failures</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">February 2026</div>
+        <div class="timeline-title">Reddit Validation</div>
+        <div class="timeline-desc">Posted as "Building an Excel Glossary Tool" on r/excel. Reached #1, 13,000+ views, 37 comments, 25 shares, 91% upvote ratio. The governed architecture underneath was invisible. CottageHumble strategy.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">February 27, 2026</div>
+        <div class="timeline-title">Schema Locked</div>
+        <div class="timeline-desc">Nine AI models reviewed the schema independently. Unanimous approval. Zero revisions. 28 governance decisions documented. The architecture was proven before the first entry was written.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">March 2026</div>
+        <div class="timeline-title">Connor's Threshold</div>
+        <div class="timeline-desc">50 entries written and validated across 5 batches. 574 automated checks. Zero failures. The schema survived contact with real content. External validation: "If it survives 50 entries, it's real. If it collapses, it was architecture theater."</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">March 2026</div>
+        <div class="timeline-title">Live Explorer</div>
+        <div class="timeline-desc">Interactive force-directed graph at dropdownlogistics.com/excelligence. Two modes: Explore (click any node for full details) and Path Finder (trace the governed route between any two entries). Shareable URLs per entry.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 03 — THE PRODUCT                                      -->
+<!-- ============================================================ -->
+<div class="bg-teal">
+  <div class="section">
+    <div class="eyebrow" style="color: var(--teal);">The Product</div>
+    <h2>Excelligence</h2>
+    <p class="subtitle">A governed knowledge graph that turns Excel expertise into navigable, assessable, teachable architecture.</p>
+
+    <div class="pricing-grid">
+      <!-- Tier 1 -->
+      <div class="tier-card">
+        <div class="tier-tag">Explorer</div>
+        <div class="tier-name">Community</div>
+        <div class="tier-audience">Individual learners, Excel enthusiasts, students</div>
+        <div class="tier-price">Free</div>
+        <div class="tier-price-detail">Always free. No login required.</div>
+        <ul class="tier-features">
+          <li>Full graph explorer (50+ entries)</li>
+          <li>Path Finder between any two entries</li>
+          <li>Entry detail: intent, examples, failure modes</li>
+          <li>Filter by tier, type, and edge type</li>
+          <li>Shareable entry URLs</li>
+          <li>Anti-pattern library with governed alternatives</li>
+        </ul>
+      </div>
+
+      <!-- Tier 2 (Featured) -->
+      <div class="tier-card featured">
+        <div class="tier-tag">Recommended</div>
+        <div class="tier-name">Professional</div>
+        <div class="tier-audience">Analysts, auditors, controllers, team leads</div>
+        <div class="tier-price">$29<span style="font-size: 16px; font-weight: 400;">/mo</span></div>
+        <div class="tier-price-detail">Per seat · Annual billing available</div>
+        <ul class="tier-features">
+          <li>Everything in Community</li>
+          <li>Guided learning tracks (Auditor, Dashboard, PQ)</li>
+          <li>AI-grounded search (ask in plain language)</li>
+          <li>Companion Excel workbook (Power Query connected)</li>
+          <li>AI Proficiency Assessment (MindFrame integration)</li>
+          <li>Difficulty scoring and personalized next-steps</li>
+          <li>Excel version compatibility filtering</li>
+          <li>Priority access to new entries and tracks</li>
+        </ul>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="tier-card">
+        <div class="tier-tag">Enterprise</div>
+        <div class="tier-name">Institutional</div>
+        <div class="tier-audience">Audit firms, FP&A teams, training departments</div>
+        <div class="tier-price">Custom</div>
+        <div class="tier-price-detail">Annual license · Dedicated onboarding</div>
+        <ul class="tier-features">
+          <li>Everything in Professional</li>
+          <li>Private registry fork (org-specific patterns)</li>
+          <li>Team skill gap analysis dashboard</li>
+          <li>Custom learning tracks per role</li>
+          <li>Workbook Scanner (anti-pattern detection)</li>
+          <li>Certification program (Excelligence Level 1/2/3)</li>
+          <li>API access for internal tool integration</li>
+          <li>Quarterly governance reviews</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Add-ons -->
+    <div class="addons">
+      <div class="eyebrow" style="color: var(--teal); margin-bottom: 16px;">Add-Ons</div>
+      <div class="addon-item">
+        <span class="addon-name">Workbook Audit</span>
+        <span class="addon-desc">Upload any workbook. Receive a governed pattern report with anti-pattern detection and upgrade paths.</span>
+        <span class="addon-price">$500 / workbook</span>
+      </div>
+      <div class="addon-item">
+        <span class="addon-name">Custom Track Design</span>
+        <span class="addon-desc">A learning track built for your team's specific role, toolset, and skill gaps. Mapped to the graph.</span>
+        <span class="addon-price">$2,000 / track</span>
+      </div>
+      <div class="addon-item">
+        <span class="addon-name">Registry Consulting</span>
+        <span class="addon-desc">We build your organization's pattern registry using the Excelligence schema. Your knowledge, governed.</span>
+        <span class="addon-price">$10,000 / engagement</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 04 — THE CLOSE                                        -->
+<!-- ============================================================ -->
+<div>
+  <div class="section">
+    <div class="close-section">
+      <div class="close-headline">
+        The person who spent <span style="color: var(--accent);">ten years auditing systems</span> built the knowledge graph that <span style="color: var(--teal);">teaches them.</span>
+      </div>
+
+      <div class="close-story">
+        Excelligence exists because one auditor kept building Excel systems that nobody could understand after he left the room. Assurance maps, commission engines, trading analytics, campaign dashboards — all built with the same architecture, all documented only in his head. The LET function that powers every DDL dashboard isn't in any tutorial. The MAKEARRAY engine that generates dynamic matrices isn't in any course. The governance rules that prevent merged cells, hardcoded values, and volatile functions aren't in any certification program.
+      </div>
+
+      <div class="close-story">
+        So he built the system that encodes what he knows. Not as a glossary — as a graph. Every pattern connected to its prerequisites. Every anti-pattern connected to its governed alternative. Every entry validated against eight governance rules and 574 automated checks. The schema was locked by a nine-model AI council before the first entry was written. The graph was live before the 50th entry was validated. And the topology revealed things about Excel cognition that no flat reference could show — like the fact that LET, not XLOOKUP, is the structural center of everything.
+      </div>
+
+      <div class="receipt-line">
+        CPA · 10+ Years Internal Audit · 44 Governed Systems · 65 Published Standards · One Person
+      </div>
+
+      <a href="https://www.dropdownlogistics.com/excelligence" class="cta-button">
+        Explore the Graph →
+      </a>
+
+      <div class="contact-block">
+        <div>Operator: Dave Kitchens, CPA</div>
+        <div>Email: <a href="mailto:dave@dropdownlogistics.com">dave@dropdownlogistics.com</a></div>
+        <div>Product: <a href="https://www.dropdownlogistics.com/excelligence">dropdownlogistics.com/excelligence</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                         -->
+<!-- ============================================================ -->
+<div class="footer">
+  <div>EXCELLIGENCE · Dropdown Logistics · Chaos → Structured → Automated</div>
+  <div>Confidential · For discussion purposes only</div>
+</div>
+
+</body>
+</html>

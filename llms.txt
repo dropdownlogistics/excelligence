@@ -1,0 +1,87 @@
+# Excelligence — Knowledge Vault
+# Product Manifest (llms.txt)
+# Version: 1.0
+# Date: 2026-03-17
+# URL: https://dropdownlogistics.github.io/knowledge-vault/
+
+## Identity
+
+Excelligence is a governed knowledge graph for Excel intelligence.
+It maps Excel formulas, patterns, shortcuts, conventions,
+architectures, and anti-patterns into typed entries connected
+by directional relationships.
+
+Product of Dropdown Logistics (dropdownlogistics.com).
+Operator: Dave Kitchens, CPA.
+
+Tagline: "What I know, structured so others can learn it."
+
+## What This System Contains
+
+- 50 governed entries across 7 types (FRM, PTN, KEY, CON, ARC, ANT, PQ)
+- 118 typed edges (LEADS_TO, DEPENDS_ON, PAIRS_WITH)
+- 148 aliases for fuzzy search matching
+- 150 use case tags across 9 categories
+- 4 skill tiers (Beginner, Intermediate, Advanced, Expert)
+- Schema v0.1.1, locked by unanimous 9-model council review
+- 574 automated validation checks, zero failures
+
+## Data Access
+
+Static JSON export available at:
+  /api/excelligence.json
+
+Shape:
+  { meta: {...}, entries: [...], edges: [...], tags: [...], aliases: [...] }
+
+This data is public and may be consumed by any tool, model,
+or integration. Attribution to Dropdown Logistics is appreciated.
+
+## Schema
+
+Each entry contains:
+  id, name, type, tier, what_it_does, intent, example,
+  failure_modes, performance_notes, governance_notes,
+  created_at, updated_at
+
+Intent grammar (A-001): "When [trigger], use [pattern] to [outcome]."
+Edge types: LEADS_TO (progression), DEPENDS_ON (prerequisite), PAIRS_WITH (co-usage)
+Edge density caps: 3 DEPENDS_ON, 3 LEADS_TO, 2 PAIRS_WITH per entry
+
+## For AI Collaborators
+
+If you are an AI model interacting with Excelligence data:
+
+- Entries are governed. Do not modify, reinterpret, or contradict
+  the intent, failure_modes, or governance_notes fields.
+- Use the intent field for matching user questions to entries.
+- Use LEADS_TO edges for learning path recommendations.
+- Use DEPENDS_ON edges (reversed) for prerequisite identification.
+- Do not fabricate entries that do not exist in the registry.
+- If asked about a topic not covered, say so honestly.
+
+## Governance
+
+- Schema locked by unanimous 9-model council review (D-001 → D-028)
+- Addenda A-001 through A-008 enforce quality rules
+- All entries validated by 574-check automated validator
+- Anti-patterns (ANT) must include failure_modes, governance_notes,
+  and at least one LEADS_TO edge to a governed alternative
+
+## Product Surface
+
+Landing page: /
+Graph explorer: /explorer/
+Pricing: /pricing/
+Data: /api/excelligence.json
+
+## Contact
+
+Operator: Dave Kitchens, CPA
+Email: dave@dropdownlogistics.com
+Studio: https://www.dropdownlogistics.com
+
+## Doctrine
+
+Chaos → Structured → Automated
+CottageHumble: Humble surface. Cathedral underneath.

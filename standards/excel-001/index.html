@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STD-EXCEL-001 — Analytical Workbook Standard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--bg:#0d0d12;--card:#10202f;--cream:#F5F1EB;--steel:#6B7B8D;--muted:#5a5648;--dim:#3a3830;--border:rgba(245,241,235,0.07);--crimson:#B23531;--crimson-border:rgba(178,53,49,0.12);--teal:#2C7A7B;--teal-border:rgba(44,122,123,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:linear-gradient(165deg,var(--bg) 0%,#12121a 50%,#0d1117 100%);color:var(--cream);font-family:'Source Serif 4',serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--crimson);margin-bottom:8px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:8px}
+h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:var(--cream);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--crimson-border);scroll-margin-top:24px}
+h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--cream);margin:24px 0 8px}
+p{font-size:15px;color:#a09a8c;margin-bottom:16px;line-height:1.7}
+.subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel);margin-bottom:32px}
+.version-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--crimson);color:var(--cream);border-radius:4px;margin-right:8px}
+.status-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--teal);color:var(--cream);border-radius:4px}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:3px;color:var(--cream)}
+pre{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;margin:12px 0 20px;line-height:1.6;color:#a09a8c}
+.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:16px 0}
+.rule-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--crimson);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
+th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;text-align:left;padding:10px 12px;background:var(--card);color:var(--steel);border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);color:#a09a8c;vertical-align:top}
+.layer-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:12px}
+.layer-box{padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-weight:500}
+.layer-arrow{color:var(--crimson)}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:32px 0}
+.toc a{color:var(--cream);text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:13px;display:block;padding:4px 0}
+.toc a:hover{color:var(--crimson)}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--steel);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.download-bar{background:var(--card);border:1px solid var(--teal-border);border-radius:8px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin:24px 0}
+.download-bar span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel)}
+.download-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 16px;background:var(--teal);color:var(--cream);border:none;border-radius:4px;cursor:pointer;text-decoration:none}
+.footer{text-align:center;padding:32px 24px 48px;border-top:1px solid var(--crimson-border);margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:1px}
+.footer a{color:var(--crimson);text-decoration:none}
+.note{font-size:13px;color:var(--steel);font-style:italic;padding:12px 16px;border-left:3px solid var(--crimson);margin:16px 0;background:rgba(178,53,49,0.03)}
+@media(max-width:600px){h1{font-size:26px}h2{font-size:18px}.layer-flow{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<section style="padding:64px 0 0">
+<div class="wrap">
+  <div class="eyebrow">Dropdown Logistics · Knowledge Vault</div>
+  <h1>STD-EXCEL-001</h1>
+  <p style="font-family:'Space Grotesk',sans-serif;font-size:18px;color:var(--cream);margin-bottom:8px">Analytical Workbook Standard</p>
+  <div class="subtitle">
+    <span class="version-badge">v0.2</span>
+    <span class="status-badge">Ratification Ready</span>
+    &nbsp;·&nbsp; 2026-03-16 &nbsp;·&nbsp; Council: 3 LOCK · 6 REVISE · 0 REJECT
+  </div>
+
+  <p>An analytical workbook answers a business question through aggregation, trend analysis, or visualization of a structured dataset. This standard defines the architecture, naming conventions, formula patterns, and output rules that all DDL analytical workbooks must follow.</p>
+
+  <p class="note">Excel becomes reliable when you treat it like a data system, not a spreadsheet.</p>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <a href="#rule-0">Rule 0 — README Tab</a>
+    <a href="#rule-1">Rule 1 — Workbook Architecture</a>
+    <a href="#rule-2">Rule 2 — Fact Table Standards</a>
+    <a href="#rule-3">Rule 3 — Dimension Layer</a>
+    <a href="#rule-4">Rule 4 — Backend Data Tables</a>
+    <a href="#rule-5">Rule 5 — Statistical Trend Layer</a>
+    <a href="#rule-6">Rule 6 — Dashboard Standards</a>
+    <a href="#rule-7">Rule 7 — Naming Conventions</a>
+    <a href="#rule-8">Rule 8 — Formatting Standards</a>
+    <a href="#rule-9">Rule 9 — Scope Discipline</a>
+  </div>
+
+  <!-- RULE 0 -->
+  <h2 id="rule-0">Rule 0 — README Tab</h2>
+  <div class="rule-card">
+    <div class="rule-num">Required for Level 2+</div>
+    <p>Every Level 2 and Level 3 workbook must include a README tab as the first (leftmost) tab. It contains: workbook name and version, purpose (one sentence — the business question), grain statement, data source, refresh frequency, owner, date created, and tab inventory.</p>
+    <p>The README tab is the first place a new user opens. If it is missing, the workbook is non-compliant regardless of how well every other rule is followed.</p>
+  </div>
+
+  <!-- RULE 1 -->
+  <h2 id="rule-1">Rule 1 — Workbook Architecture</h2>
+  <p>All analytical workbooks follow a layered architecture. Data flows in one direction only — no reverse references.</p>
+
+  <div class="layer-flow">
+    <span class="layer-box">SOURCE</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">FACT</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">DIM</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">DATA_TABLES</span>
+    <span class="layer-arrow">→</span>
+    <span class="layer-box">DASHBOARD</span>
+  </div>
+
+  <table>
+    <tr><th>Layer</th><th>Purpose</th></tr>
+    <tr><td><code>SOURCE</code></td><td>Raw imported data. No transformations.</td></tr>
+    <tr><td><code>FACT</code></td><td>Cleaned, keyed, time-normalized fact table.</td></tr>
+    <tr><td><code>DIM</code></td><td>One tab per dimension. Spill-generated.</td></tr>
+    <tr><td><code>DATA_TABLES</code></td><td>All aggregations and matrices. No raw data.</td></tr>
+    <tr><td><code>DASHBOARD</code></td><td>Final presentation. No calculations.</td></tr>
+  </table>
+
+  <h3>Three Implementation Levels</h3>
+  <table>
+    <tr><th>Level</th><th>Architecture</th><th>When to Use</th></tr>
+    <tr><td>Level 1</td><td>FACT → DASHBOARD</td><td>Low rows (&lt;2K), single question, single operator, short-lived, exploratory. ALL conditions must be true.</td></tr>
+    <tr><td>Level 2</td><td>SOURCE → FACT → DIM → DATA_TABLES → DASHBOARD</td><td>DDL default. Multiple dimensions, repeated reporting, stakeholder consumption, or any shared artifact.</td></tr>
+    <tr><td>Level 3</td><td>SOURCE → STAGING → FACT → DIM → METRICS → DATA_TABLES → DASHBOARD</td><td>Multiple fact tables, reusable metric library, cross-domain reporting.</td></tr>
+  </table>
+
+  <p class="note">A DASHBOARD formula referencing tbl_Fact or SOURCE directly is a Rule 1 violation — findable in 30 seconds by auditing DASHBOARD formulas.</p>
+
+  <!-- RULE 2 -->
+  <h2 id="rule-2">Rule 2 — Fact Table Standards</h2>
+
+  <h3>2a. Grain Definition</h3>
+  <p>Every fact table must have a documented row grain in cell B1:</p>
+  <pre>GRAIN: One row = one [entity] per [time period].</pre>
+  <p>Grain is determined before any formulas are written. If grain is disputed, stop the build and resolve first. Grain errors are structural errors, not formula errors.</p>
+
+  <h3>2b. Surrogate Key</h3>
+  <p>Every fact row receives a synthetic key. Format: <code>&lt;Entity&gt;-0000</code></p>
+  <pre>Step 1: Generate — ="LOAN-" &amp; TEXT(ROW()-1, "0000")
+Step 2: Immediately Paste Special → Values Only
+Step 3: New records use MAX(key column)+1</pre>
+  <p class="note">Never leave surrogate keys as live ROW()-based formulas. If rows are inserted, deleted, or sorted, keys shift silently — breaking every downstream reference.</p>
+
+  <h3>2c. Time Normalization</h3>
+  <p>Required time columns: <code>Month</code> (date, first of month), <code>MnthTxt</code> ("September 2025"), <code>YrTxt</code> ("2025"), <code>MnthYrTxt</code> ("Sep 2025").</p>
+
+  <h3>2d. Table Format</h3>
+  <p>Fact datasets must be Excel Tables (<code>Ctrl+T</code>), not ranges. Naming: <code>tbl_Fact&lt;Entity&gt;</code>.</p>
+
+  <!-- RULE 3 -->
+  <h2 id="rule-3">Rule 3 — Dimension Layer</h2>
+
+  <h3>3a. Generation Pattern</h3>
+  <p>Dimensions are generated from fact tables using dynamic array spills. Never manually maintained lists.</p>
+  <pre>=LET(
+  x,       tbl_Fact[Field],
+  cleaned, TRIM(UPPER(x)),
+  u,       SORT(UNIQUE(cleaned)),
+  FILTER(u, u&lt;&gt;"")
+)</pre>
+  <p>Wrap in IFERROR for empty source protection: <code>=IFERROR(LET(…), {"No Data"})</code></p>
+
+  <h3>3b–3d. Naming</h3>
+  <p>Each dimension on its own tab. Naming: <code>dim&lt;Entity&gt;&lt;Attribute&gt;</code>. Named range uses spill operator: <code>dimMonth = dimMonth!$B$3#</code></p>
+
+  <!-- RULE 4 -->
+  <h2 id="rule-4">Rule 4 — Backend Data Tables</h2>
+
+  <h3>4b. Single-Dimension Aggregation</h3>
+  <pre>=MAP(dimMonth, LAMBDA(m, COUNTIFS(tbl_FactLoans[Month], m)))</pre>
+
+  <h3>4c. Matrix Aggregation (MAKEARRAY)</h3>
+  <pre>=LET(
+  rowDim, dimLoanType,
+  colDim, dimMonth,
+  MAKEARRAY(ROWS(rowDim), ROWS(colDim), LAMBDA(r, c,
+    COUNTIFS(
+      tbl_Fact[LoanType], INDEX(rowDim, r),
+      tbl_Fact[Month], INDEX(colDim, c)
+    )
+  ))
+)</pre>
+  <p>MAKEARRAY fallback: A manually constructed COUNTIFS grid is compliant but not preferred. Document the fallback with a comment on the DATA_TABLES sheet.</p>
+
+  <h3>4d. Count and Amount Matrices</h3>
+  <p>For entities with economic magnitude, build both count-based (volume) and amount-based (magnitude) matrices.</p>
+
+  <!-- RULE 5 -->
+  <h2 id="rule-5">Rule 5 — Statistical Trend Layer</h2>
+  <p>Required when period count ≥ 6. Below 6 periods: MoM % change only.</p>
+
+  <table>
+    <tr><th>Metric</th><th>Formula Pattern</th></tr>
+    <tr><td>MoM % Change</td><td><code>=IFERROR((Current / Prior) - 1, "")</code></td></tr>
+    <tr><td>Rolling Average</td><td><code>=IFERROR(AVERAGE(range), "")</code></td></tr>
+    <tr><td>Deviation %</td><td><code>=IFERROR((Value / RollingAvg) - 1, "")</code></td></tr>
+    <tr><td>Threshold Flag</td><td><code>=IF(ABS(Dev) >= threshold, "Outside", "Within")</code></td></tr>
+  </table>
+
+  <table>
+    <tr><th>Frequency</th><th>Window</th><th>Adjustment</th></tr>
+    <tr><td>Daily</td><td>7</td><td>14 if high volatility</td></tr>
+    <tr><td>Weekly</td><td>4</td><td>Align with fiscal month</td></tr>
+    <tr><td>Monthly</td><td>3</td><td>6 for seasonal/noisy data</td></tr>
+    <tr><td>Quarterly</td><td>4</td><td>Maximum 8</td></tr>
+  </table>
+
+  <!-- RULE 6 -->
+  <h2 id="rule-6">Rule 6 — Dashboard Standards</h2>
+  <p>Dashboard tabs contain only chart objects, formatted display tables, labels, and KPI cards referencing DATA_TABLES ranges. No business logic, aggregation formulas, COUNTIFS, or SUMIFS on DASHBOARD.</p>
+
+  <h3>Three Analytical Questions (Minimum)</h3>
+  <table>
+    <tr><th>#</th><th>Question</th><th>Example</th></tr>
+    <tr><td>1</td><td>Total trend</td><td>How is the overall number moving?</td></tr>
+    <tr><td>2</td><td>Category mix</td><td>What is the composition?</td></tr>
+    <tr><td>3</td><td>Magnitude</td><td>What is the dollar or volume impact?</td></tr>
+  </table>
+
+  <!-- RULE 7 -->
+  <h2 id="rule-7">Rule 7 — Naming Conventions</h2>
+  <table>
+    <tr><th>Object</th><th>Convention</th><th>Example</th></tr>
+    <tr><td>Fact table</td><td><code>tbl_Fact&lt;Entity&gt;</code></td><td>tbl_FactLoans</td></tr>
+    <tr><td>Dimension spill</td><td><code>dim&lt;Entity&gt;&lt;Attr&gt;</code></td><td>dimLoanType</td></tr>
+    <tr><td>Matrix table</td><td><code>mtx_&lt;R&gt;_&lt;C&gt;_&lt;M&gt;</code></td><td>mtx_LoanType_Month_Count</td></tr>
+    <tr><td>Surrogate key</td><td><code>&lt;Entity&gt;-0000</code></td><td>LOAN-0001</td></tr>
+    <tr><td>Parameter cell</td><td><code>sel_&lt;Name&gt;</code></td><td>sel_Threshold</td></tr>
+  </table>
+
+  <!-- RULE 8 -->
+  <h2 id="rule-8">Rule 8 — Formatting Standards</h2>
+  <p>README tab first (leftmost). Headers at B2. Column A and Row 1 reserved as padding. Minimum 3 blank rows between tables on DATA_TABLES. Zebra striping via conditional format: <code>=ISEVEN(ROW())</code>.</p>
+
+  <!-- RULE 9 -->
+  <h2 id="rule-9">Rule 9 — Scope Discipline</h2>
+  <p>V1 rule: Build only what answers the stakeholder question. All future enhancements go into a Surface Area List tab — the explicit backlog. Items on it are not forgotten — they are deferred.</p>
+
+  <div class="download-bar">
+    <span>STD-EXCEL-001 · Analytical Workbook Standard · v0.2</span>
+    <a href="../api/STD-EXCEL-001.txt" class="download-btn" download>Download .txt</a>
+  </div>
+</div>
+</section>
+
+<div class="wrap footer">
+  <div>STD-EXCEL-001 · Dropdown Logistics · Chaos → Structured → Automated</div>
+  <div style="margin-top:8px">A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product · <a href="../">Knowledge Vault</a></div>
+</div>
+
+</body>
+</html>
