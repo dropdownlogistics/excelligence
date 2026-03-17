@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excelligence — Radial Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--orange:#D4834A;--violet:#8a6cc9;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12);--frm:#6B9DC2;--ptn:#4A9E6B;--key:#C49A3C;--con:#8a6cc9;--arc:#B23531;--ant:#D4834A;--pq:#4AADAD}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+nav{display:flex;align-items:center;gap:16px;padding:10px 24px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;z-index:10}
+.nav-logo{font-size:15px;font-weight:700;color:var(--cream);text-decoration:none;letter-spacing:.03em}
+.nav-logo span{color:var(--crimson)}
+.nav-sep{width:1px;height:18px;background:var(--border2)}
+.nav-crumb{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.nav-crumb a{color:var(--dim);text-decoration:none;transition:color .15s}
+.nav-crumb a:hover{color:var(--cream)}
+.nav-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.filter-chip{padding:4px 11px;border-radius:12px;border:1px solid var(--border2);background:transparent;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s}
+.filter-chip.active{color:var(--navy);font-weight:600}
+.filter-chip[data-type="FRM"].active{background:var(--frm);border-color:var(--frm)}
+.filter-chip[data-type="PTN"].active{background:var(--ptn);border-color:var(--ptn)}
+.filter-chip[data-type="KEY"].active{background:var(--key);border-color:var(--key)}
+.filter-chip[data-type="CON"].active{background:var(--con);border-color:var(--con)}
+.filter-chip[data-type="ARC"].active{background:var(--arc);border-color:var(--arc)}
+.filter-chip[data-type="ANT"].active{background:var(--ant);border-color:var(--ant)}
+.filter-chip[data-type="PQ"].active{background:var(--pq);border-color:var(--pq)}
+.edge-chip{padding:4px 11px;border-radius:12px;border:1px solid var(--border2);background:transparent;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s}
+.edge-chip.active-leads{background:var(--green);border-color:var(--green);color:var(--navy)}
+.edge-chip.active-depends{background:var(--crimson);border-color:var(--crimson);color:var(--cream)}
+.edge-chip.active-pairs{background:var(--amber);border-color:var(--amber);color:var(--navy)}
+.stats-display{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)}
+.nav-link-small{font-size:11px;color:var(--dim);text-decoration:none;transition:color .15s;letter-spacing:.03em}
+.nav-link-small:hover{color:var(--cream)}
+#main{flex:1;display:flex;overflow:hidden}
+#canvas-wrap{flex:1;position:relative;overflow:hidden}
+#radial-canvas{width:100%;height:100%;cursor:crosshair}
+#tooltip{position:fixed;background:var(--card2);border:1px solid var(--border2);border-radius:7px;padding:10px 14px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .1s;max-width:240px;z-index:200}
+#tooltip .tt-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);margin-bottom:3px}
+#tooltip .tt-name{font-weight:700;font-size:14px;color:var(--cream);margin-bottom:4px}
+#tooltip .tt-tier{font-size:11px;color:var(--dim)}
+#tooltip .tt-what{font-family:'Source Serif 4',serif;font-size:12px;color:rgba(245,241,235,.7);line-height:1.5;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+#panel{width:300px;border-left:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+#panel-inner{flex:1;overflow-y:auto;padding:18px 18px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.panel-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:32px;gap:10px;color:var(--dim);font-size:12px;line-height:1.6}
+.panel-placeholder .ph{font-size:28px;opacity:.25;margin-bottom:4px}
+.panel-selected{display:none}
+.p-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:4px}
+.p-name{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:10px;line-height:1.2}
+.p-badges{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.badge{padding:3px 9px;border-radius:10px;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:600}
+.badge-tier{background:rgba(255,255,255,.07);color:var(--dim);border:1px solid var(--border2)}
+.p-section{margin-bottom:14px}
+.p-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.p-body{font-size:12px;color:rgba(245,241,235,.78);line-height:1.6;font-family:'Source Serif 4',serif}
+.p-code{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.edge-items{display:flex;flex-direction:column;gap:3px}
+.edge-item{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:4px;background:rgba(255,255,255,.03);cursor:pointer;transition:background .1s;font-size:11px}
+.edge-item:hover{background:rgba(255,255,255,.07)}
+.e-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.e-type{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;width:72px;flex-shrink:0}
+.e-name{color:var(--cream)}
+.governance-note{background:rgba(178,53,49,.07);border-left:2px solid var(--crimson);padding:7px 9px;border-radius:0 4px 4px 0;font-size:11px;color:rgba(245,241,235,.72);line-height:1.55}
+.failure-note{background:rgba(212,131,74,.07);border-left:2px solid var(--orange);padding:7px 9px;border-radius:0 4px 4px 0;font-size:11px;color:rgba(245,241,235,.72);line-height:1.55}
+#legend{position:absolute;bottom:16px;left:16px;background:rgba(13,27,42,.88);border:1px solid var(--border2);border-radius:8px;padding:10px 13px;backdrop-filter:blur(8px);pointer-events:none}
+.leg-title{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.leg-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:10px;color:rgba(245,241,235,.65)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leg-line{width:16px;height:2px;flex-shrink:0}
+.leg-dash{background:repeating-linear-gradient(90deg,var(--amber) 0,var(--amber) 3px,transparent 3px,transparent 6px);height:1.5px;width:16px}
+#tier-labels{position:absolute;top:16px;left:16px;pointer-events:none}
+.tier-label-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:12px;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600;border:1px solid;margin-bottom:5px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../" class="nav-logo">Excel<span>ligence</span></a>
+  <div class="nav-sep"></div>
+  <div class="nav-crumb">
+    <a href="../">Home</a>
+    <span style="opacity:.4">›</span>
+    <span style="color:var(--cream)">Radial Map</span>
+  </div>
+  <div class="nav-sep"></div>
+  <button class="filter-chip active" data-type="FRM" onclick="toggleType('FRM')">FRM</button>
+  <button class="filter-chip active" data-type="PTN" onclick="toggleType('PTN')">PTN</button>
+  <button class="filter-chip active" data-type="KEY" onclick="toggleType('KEY')">KEY</button>
+  <button class="filter-chip active" data-type="CON" onclick="toggleType('CON')">CON</button>
+  <button class="filter-chip active" data-type="ARC" onclick="toggleType('ARC')">ARC</button>
+  <button class="filter-chip active" data-type="ANT" onclick="toggleType('ANT')">ANT</button>
+  <button class="filter-chip active" data-type="PQ"  onclick="toggleType('PQ')">PQ</button>
+  <div class="nav-sep"></div>
+  <button class="edge-chip active-leads"   data-edge="LEADS_TO"   onclick="toggleEdge('LEADS_TO')">LEADS_TO</button>
+  <button class="edge-chip active-depends" data-edge="DEPENDS_ON" onclick="toggleEdge('DEPENDS_ON')">DEPENDS_ON</button>
+  <button class="edge-chip active-pairs"   data-edge="PAIRS_WITH" onclick="toggleEdge('PAIRS_WITH')">PAIRS_WITH</button>
+  <div class="nav-right">
+    <span class="stats-display" id="stats-display">55 entries · 130 edges</span>
+    <div class="nav-sep"></div>
+    <a href="../explorer/" class="nav-link-small">Force Graph →</a>
+    <a href="../" class="nav-link-small">← Home</a>
+  </div>
+</nav>
+
+<div id="main">
+  <div id="canvas-wrap">
+    <svg id="radial-canvas"></svg>
+    <div id="tooltip">
+      <div class="tt-id" id="tt-id"></div>
+      <div class="tt-name" id="tt-name"></div>
+      <div class="tt-tier" id="tt-tier"></div>
+      <div class="tt-what" id="tt-what"></div>
+    </div>
+    <div id="legend">
+      <div class="leg-title">Types</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--frm)"></div>FRM Formula</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--ptn)"></div>PTN Pattern</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--key)"></div>KEY Shortcut</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--con)"></div>CON Convention</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--arc)"></div>ARC Architecture</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--ant)"></div>ANT Anti-Pattern</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--pq)"></div>PQ Power Query</div>
+      <div style="height:6px"></div>
+      <div class="leg-title">Edges</div>
+      <div class="leg-row"><div class="leg-line" style="background:var(--green)"></div>LEADS_TO</div>
+      <div class="leg-row"><div class="leg-line" style="background:var(--crimson)"></div>DEPENDS_ON</div>
+      <div class="leg-row"><div class="leg-dash"></div>PAIRS_WITH</div>
+      <div style="height:6px"></div>
+      <div class="leg-title">Tiers (rings)</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--blue);opacity:.5"></div>Beginner (inner)</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--green);opacity:.5"></div>Intermediate</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--amber);opacity:.5"></div>Advanced</div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--crimson);opacity:.5"></div>Expert (outer)</div>
+    </div>
+  </div>
+
+  <div id="panel">
+    <div id="panel-inner">
+      <div class="panel-placeholder" id="panel-placeholder">
+        <div class="ph">◎</div>
+        <p>Click any node to see its full entry — intent, example, edges, governance notes.</p>
+      </div>
+      <div class="panel-selected" id="panel-selected">
+        <div class="p-id" id="p-id"></div>
+        <div class="p-name" id="p-name"></div>
+        <div class="p-badges" id="p-badges"></div>
+        <div class="p-section">
+          <div class="p-label">What It Does</div>
+          <div class="p-body" id="p-what"></div>
+        </div>
+        <div class="p-section">
+          <div class="p-label">Intent</div>
+          <div class="p-body" id="p-intent"></div>
+        </div>
+        <div class="p-section" id="p-ex-section">
+          <div class="p-label">Example</div>
+          <div class="p-code" id="p-example"></div>
+        </div>
+        <div class="p-section" id="p-edges-section">
+          <div class="p-label">Connections</div>
+          <div class="edge-items" id="p-edges"></div>
+        </div>
+        <div class="p-section" id="p-gov-section">
+          <div class="p-label">Governance</div>
+          <div class="governance-note" id="p-gov"></div>
+        </div>
+        <div class="p-section" id="p-fail-section">
+          <div class="p-label">Failure Modes</div>
+          <div class="failure-note" id="p-fail"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPE_COLORS={FRM:'#6B9DC2',PTN:'#4A9E6B',KEY:'#C49A3C',CON:'#8a6cc9',ARC:'#B23531',ANT:'#D4834A',PQ:'#4AADAD'};
+const TIER_COLORS={Beginner:'#6B9DC2',Intermediate:'#4A9E6B',Advanced:'#C49A3C',Expert:'#B23531'};
+const EDGE_COLORS={LEADS_TO:'#4A9E6B',DEPENDS_ON:'#B23531',PAIRS_WITH:'#C49A3C'};
+
+let REGISTRY=null,allEntries=[],allEdges=[],allTags=[],allAliases=[];
+let activeTypes=new Set(['FRM','PTN','KEY','CON','ARC','ANT','PQ']);
+let activeEdges=new Set(['LEADS_TO','DEPENDS_ON','PAIRS_WITH']);
+let selectedId=null;
+let svg,gEdges,gNodes,positions={};
+let zoomBehavior,gMain;
+
+async function loadData(){
+  try{const r=await fetch('../api/excelligence.json');REGISTRY=await r.json();}
+  catch(e){try{const r=await fetch('api/excelligence.json');REGISTRY=await r.json();}catch(e2){return;}}
+  allEntries=REGISTRY.entries||[];allEdges=REGISTRY.edges||[];
+  allTags=REGISTRY.tags||[];allAliases=REGISTRY.aliases||[];
+  initRadial();
+}
+
+function getRadius(W,H){
+  const base=Math.min(W,H)*0.48;
+  return{
+    Beginner:base*0.26,
+    Intermediate:base*0.52,
+    Advanced:base*0.76,
+    Expert:base*0.96
+  };
+}
+
+function computePositions(W,H){
+  const cx=W/2,cy=H/2;
+  const radii=getRadius(W,H);
+  const byTier={Beginner:[],Intermediate:[],Advanced:[],Expert:[]};
+  allEntries.filter(e=>activeTypes.has(e.type)).forEach(e=>{if(byTier[e.tier])byTier[e.tier].push(e);});
+
+  positions={};
+  Object.entries(byTier).forEach(([tier,items])=>{
+    const r=radii[tier];
+    // Sort by type for visual grouping
+    items.sort((a,b)=>a.type.localeCompare(b.type)||a.id.localeCompare(b.id));
+    items.forEach((e,i)=>{
+      const offset=tier==='Beginner'?-Math.PI*0.1:tier==='Expert'?Math.PI*0.05:0;
+      const angle=(2*Math.PI*i/items.length)-Math.PI/2+offset;
+      positions[e.id]={x:cx+r*Math.cos(angle),y:cy+r*Math.sin(angle),entry:e,r};
+    });
+  });
+  return{cx,cy,radii};
+}
+
+function initRadial(){
+  const wrap=document.getElementById('canvas-wrap');
+  const W=wrap.clientWidth,H=wrap.clientHeight;
+  svg=d3.select('#radial-canvas').attr('width',W).attr('height',H);
+
+  zoomBehavior=d3.zoom().scaleExtent([0.3,3]).on('zoom',e=>gMain.attr('transform',e.transform));
+  svg.call(zoomBehavior);
+  gMain=svg.append('g');
+  gEdges=gMain.append('g');
+  gNodes=gMain.append('g');
+  drawRadial(W,H);
+}
+
+function drawRadial(W,H){
+  gEdges.selectAll('*').remove();
+  gNodes.selectAll('*').remove();
+
+  const{cx,cy,radii}=computePositions(W,H);
+
+  // Background rings
+  Object.entries(radii).forEach(([tier,r])=>{
+    gMain.selectAll(`.ring-${tier}`).remove();
+    gMain.insert('circle','g').attr('cx',cx).attr('cy',cy).attr('r',r)
+      .attr('fill','none').attr('stroke',TIER_COLORS[tier])
+      .attr('stroke-opacity',.07).attr('stroke-width',1).attr('stroke-dasharray','3,5');
+    // Tier label at top of ring
+    const a=-Math.PI/2-0.08;
+    gMain.insert('text','g').attr('x',cx+(r-12)*Math.cos(a)).attr('y',cy+(r-12)*Math.sin(a))
+      .attr('text-anchor','middle').attr('fill',TIER_COLORS[tier]).attr('fill-opacity',.22)
+      .attr('font-size','9px').attr('font-family','Space Grotesk,sans-serif')
+      .attr('font-weight','700').attr('letter-spacing','0.1em').text(tier.toUpperCase());
+  });
+
+  // Center
+  gMain.insert('text','g').attr('x',cx).attr('y',cy-5).attr('text-anchor','middle')
+    .attr('fill','rgba(245,241,235,0.1)').attr('font-size','12px')
+    .attr('font-weight','700').attr('font-family','Space Grotesk,sans-serif')
+    .attr('letter-spacing','0.12em').text('EXCEL');
+  gMain.insert('text','g').attr('x',cx).attr('y',cy+10).attr('text-anchor','middle')
+    .attr('fill','rgba(245,241,235,0.07)').attr('font-size','9px')
+    .attr('font-family','JetBrains Mono,monospace').text('LIGENCE');
+
+  // Edges
+  const visIds=new Set(Object.keys(positions));
+  allEdges.filter(e=>visIds.has(e.source)&&visIds.has(e.target)&&activeEdges.has(e.type)).forEach(e=>{
+    const s=positions[e.source],t=positions[e.target];
+    const mx=(s.x+t.x)/2,my=(s.y+t.y)/2;
+    const dx=mx-cx,dy=my-cy;
+    const pull=0.42;
+    gEdges.append('path')
+      .attr('d',`M${s.x},${s.y} Q${mx-dx*pull},${my-dy*pull} ${t.x},${t.y}`)
+      .attr('class',`edge edge-${e.source} edge-${e.target} etype-${e.type}`)
+      .attr('fill','none')
+      .attr('stroke',EDGE_COLORS[e.type]||'#888')
+      .attr('stroke-opacity',e.type==='LEADS_TO'?.12:e.type==='DEPENDS_ON'?.1:.08)
+      .attr('stroke-width',e.type==='PAIRS_WITH'?.8:1)
+      .attr('stroke-dasharray',e.type==='PAIRS_WITH'?'2,3':null);
+  });
+
+  // Nodes
+  const tt=document.getElementById('tooltip');
+  Object.values(positions).forEach((pos,idx)=>{
+    const e=pos.entry;
+    const color=TYPE_COLORS[e.type]||'#888';
+    const nr=e.tier==='Expert'?8:e.tier==='Advanced'?6.5:e.tier==='Intermediate'?5.5:5;
+    const g=gNodes.append('g').attr('transform',`translate(${pos.x},${pos.y})`).style('cursor','pointer').attr('data-id',e.id);
+
+    g.append('circle').attr('r',nr).attr('fill',color).attr('fill-opacity',.82)
+      .attr('stroke',color).attr('stroke-opacity',.3).attr('stroke-width',1.5)
+      .attr('class',`node node-${e.id}`).attr('opacity',0)
+      .transition().delay(idx*5).duration(450).attr('opacity',1);
+
+    // Node label for expert tier
+    if(e.tier==='Expert'){
+      g.append('text').attr('dy',nr+11).attr('text-anchor','middle')
+        .attr('font-size','8px').attr('fill','rgba(245,241,235,0.55)')
+        .attr('font-family','Space Grotesk,sans-serif').attr('pointer-events','none')
+        .text(e.name.length>14?e.name.slice(0,13)+'…':e.name);
+    }
+
+    g.on('mouseover',function(event){
+      if(selectedId!==e.id){
+        d3.selectAll('.edge').attr('stroke-opacity',.025);
+        d3.selectAll(`.edge-${e.id}`).attr('stroke-opacity',.7).attr('stroke-width',2);
+        d3.select(this).select('circle').attr('r',nr*1.6).attr('fill-opacity',1);
+      }
+      document.getElementById('tt-id').textContent=e.id;
+      document.getElementById('tt-name').textContent=e.name;
+      document.getElementById('tt-tier').textContent=e.tier+' · '+e.type;
+      document.getElementById('tt-what').textContent=e.what_it_does?.slice(0,100)+(e.what_it_does?.length>100?'…':'');
+      tt.style.opacity='1';tt.style.left=(event.clientX+16)+'px';tt.style.top=(event.clientY-12)+'px';
+    })
+    .on('mousemove',function(event){
+      tt.style.left=(event.clientX+16)+'px';tt.style.top=(event.clientY-12)+'px';
+    })
+    .on('mouseout',function(){
+      if(selectedId!==e.id){
+        resetEdgeOpacity();
+        d3.select(this).select('circle').attr('r',nr).attr('fill-opacity',.82);
+      }
+      tt.style.opacity='0';
+    })
+    .on('click',function(event){
+      event.stopPropagation();
+      selectNode(e.id,nr,color);
+    });
+  });
+
+  // If something was selected, re-highlight it
+  if(selectedId&&positions[selectedId])highlightSelected(selectedId);
+}
+
+function resetEdgeOpacity(){
+  d3.selectAll('.edge.etype-LEADS_TO').attr('stroke-opacity',.12).attr('stroke-width',1);
+  d3.selectAll('.edge.etype-DEPENDS_ON').attr('stroke-opacity',.1).attr('stroke-width',1);
+  d3.selectAll('.edge.etype-PAIRS_WITH').attr('stroke-opacity',.08).attr('stroke-width',.8);
+}
+
+function highlightSelected(id){
+  d3.selectAll('.edge').attr('stroke-opacity',.02);
+  d3.selectAll(`.edge-${id}`).attr('stroke-opacity',.75).attr('stroke-width',2.2);
+  d3.selectAll('.node').attr('opacity',.25);
+  d3.select(`.node-${id}`).attr('opacity',1).attr('r',function(){return parseFloat(d3.select(this).attr('r'))*1.4;});
+  // Connected nodes
+  const connIds=new Set([id]);
+  allEdges.forEach(e=>{if(e.source===id)connIds.add(e.target);if(e.target===id)connIds.add(e.source);});
+  connIds.forEach(cid=>{d3.select(`.node-${cid}`).attr('opacity',1);});
+}
+
+function selectNode(id,nr,color){
+  selectedId=id;
+  highlightSelected(id);
+  showPanel(id);
+}
+
+function showPanel(id){
+  const entry=allEntries.find(e=>e.id===id);
+  if(!entry)return;
+  document.getElementById('panel-placeholder').style.display='none';
+  const sel=document.getElementById('panel-selected');sel.style.display='block';
+  document.getElementById('p-id').textContent=entry.id;
+  document.getElementById('p-name').textContent=entry.name;
+
+  const badges=document.getElementById('p-badges');
+  badges.innerHTML=`<span class="badge" style="background:${TYPE_COLORS[entry.type]};color:#0D1B2A">${entry.type}</span><span class="badge badge-tier">${entry.tier}</span>`;
+
+  document.getElementById('p-what').textContent=entry.what_it_does||'';
+  document.getElementById('p-intent').textContent=entry.intent||'';
+
+  const exSec=document.getElementById('p-ex-section');
+  if(entry.example){document.getElementById('p-example').textContent=entry.example;exSec.style.display='';}
+  else exSec.style.display='none';
+
+  const edgesList=document.getElementById('p-edges');
+  const outE=allEdges.filter(e=>e.source===id);
+  const inE=allEdges.filter(e=>e.target===id);
+  const allE=[...outE,...inE];
+  const edgesSec=document.getElementById('p-edges-section');
+  if(allE.length){
+    const edgeDotColors={LEADS_TO:'var(--green)',DEPENDS_ON:'var(--crimson)',PAIRS_WITH:'var(--amber)'};
+    edgesList.innerHTML=allE.map(e=>{
+      const isOut=e.source===id;
+      const otherId=isOut?e.target:e.source;
+      const other=allEntries.find(x=>x.id===otherId);
+      const label=isOut?e.type:'←'+e.type;
+      return`<div class="edge-item" onclick="selectNode('${otherId}')">
+        <div class="e-dot" style="background:${edgeDotColors[e.type]}"></div>
+        <span class="e-type" style="color:${edgeDotColors[e.type]}">${label}</span>
+        <span class="e-name">${other?other.name:otherId}</span>
+      </div>`;
+    }).join('');
+    edgesSec.style.display='';
+  }else edgesSec.style.display='none';
+
+  const govSec=document.getElementById('p-gov-section');
+  if(entry.governance_notes){document.getElementById('p-gov').textContent=entry.governance_notes;govSec.style.display='';}
+  else govSec.style.display='none';
+
+  const failSec=document.getElementById('p-fail-section');
+  if(entry.failure_modes){document.getElementById('p-fail').textContent=entry.failure_modes;failSec.style.display='';}
+  else failSec.style.display='none';
+
+  document.getElementById('panel-inner').scrollTop=0;
+}
+
+function toggleType(type){
+  const btn=document.querySelector(`.filter-chip[data-type="${type}"]`);
+  if(activeTypes.has(type)){if(activeTypes.size===1)return;activeTypes.delete(type);btn.classList.remove('active');}
+  else{activeTypes.add(type);btn.classList.add('active');}
+  const wrap=document.getElementById('canvas-wrap');
+  drawRadial(wrap.clientWidth,wrap.clientHeight);
+  updateStats();
+}
+
+function toggleEdge(type){
+  const btn=document.querySelector(`.edge-chip[data-edge="${type}"]`);
+  const cls=type==='LEADS_TO'?'active-leads':type==='DEPENDS_ON'?'active-depends':'active-pairs';
+  if(activeEdges.has(type)){if(activeEdges.size===1)return;activeEdges.delete(type);btn.classList.remove(cls);}
+  else{activeEdges.add(type);btn.classList.add(cls);}
+  const wrap=document.getElementById('canvas-wrap');
+  drawRadial(wrap.clientWidth,wrap.clientHeight);
+  updateStats();
+}
+
+function updateStats(){
+  const visCount=allEntries.filter(e=>activeTypes.has(e.type)).length;
+  const edgeCount=allEdges.filter(e=>activeEdges.has(e.type)&&activeTypes.has((allEntries.find(x=>x.id===e.source)||{}).type)&&activeTypes.has((allEntries.find(x=>x.id===e.target)||{}).type)).length;
+  document.getElementById('stats-display').textContent=`${visCount} entries · ${edgeCount} edges`;
+}
+
+svg?.on('click',()=>{
+  selectedId=null;
+  resetEdgeOpacity();
+  d3.selectAll('.node').attr('opacity',1);
+  document.getElementById('panel-placeholder').style.display='flex';
+  document.getElementById('panel-selected').style.display='none';
+});
+
+window.addEventListener('resize',()=>{
+  const wrap=document.getElementById('canvas-wrap');
+  const W=wrap.clientWidth,H=wrap.clientHeight;
+  d3.select('#radial-canvas').attr('width',W).attr('height',H);
+  gMain.selectAll('*').remove();
+  gEdges=gMain.append('g');gNodes=gMain.append('g');
+  drawRadial(W,H);
+});
+
+loadData();
+</script>
+</body>
+</html>
