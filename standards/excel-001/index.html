@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang=&ldquo;en&ldquo;>
+<html lang="en">
 <head>
-<meta charset=&ldquo;UTF-8&ldquo;>
-<link rel=&ldquo;icon&ldquo; type=&ldquo;image/svg+xml&ldquo; href=&ldquo;/favicon.svg&ldquo;>
-<meta name=&ldquo;viewport&ldquo; content=&ldquo;width=device-width, initial-scale=1.0&ldquo;>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STD-EXCEL-001 &mdash; Analytical Workbook Standard &middot; Excelligence</title>
-<link rel=&ldquo;preconnect&ldquo; href=&ldquo;https://fonts.googleapis.com&ldquo;>
-<link href=&ldquo;https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap&ldquo; rel=&ldquo;stylesheet&ldquo;>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
@@ -58,58 +58,58 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
 <body>
 
 <nav>
-  <a href=&ldquo;../../&ldquo; class=&ldquo;nav-logo&ldquo;>Excel<span>ligence</span></a>
-  <div class=&ldquo;nav-sep&ldquo;></div>
-  <div class=&ldquo;nav-crumb&ldquo;>
-    <a href=&ldquo;../../&ldquo;>Home</a><span style=&ldquo;opacity:.4&ldquo;>›</span>
-    <a href=&ldquo;../&ldquo;>Standards</a><span style=&ldquo;opacity:.4&ldquo;>›</span>
-    <span style=&ldquo;color:var(--cream)&ldquo;>STD-EXCEL-001</span>
+  <a href="../../" class="nav-logo">Excel<span>ligence</span></a>
+  <div class="nav-sep"></div>
+  <div class="nav-crumb">
+    <a href="../../">Home</a><span style="opacity:.4">›</span>
+    <a href="../">Standards</a><span style="opacity:.4">›</span>
+    <span style="color:var(--cream)">STD-EXCEL-001</span>
   </div>
-  <div class=&ldquo;nav-right&ldquo;><a href=&ldquo;../../explorer/&ldquo; class=&ldquo;nav-cta&ldquo;>Enter the Graph &rarr;</a></div>
+  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph &rarr;</a></div>
 </nav>
 
-<div class=&ldquo;doc-wrap&ldquo;>
-  <div class=&ldquo;doc-eyebrow&ldquo;>Excelligence &middot; Standards</div>
-  <h1 class=&ldquo;doc-title&ldquo;>STD-EXCEL-001</h1>
-  <div class=&ldquo;doc-subtitle&ldquo;>Analytical Workbook Standard</div>
-  <div class=&ldquo;doc-meta&ldquo;>
-    <span class=&ldquo;meta-badge badge-v&ldquo;>v0.2</span>
-    <span class=&ldquo;meta-badge badge-s&ldquo;>Ratification Ready</span>
-    <span class=&ldquo;meta-sep&ldquo;>&middot;</span>
-    <span style=&ldquo;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)&ldquo;>2026-03-16 &middot; Council: 3 LOCK &middot; 6 REVISE &middot; 0 REJECT</span>
+<div class="doc-wrap">
+  <div class="doc-eyebrow">Excelligence &middot; Standards</div>
+  <h1 class="doc-title">STD-EXCEL-001</h1>
+  <div class="doc-subtitle">Analytical Workbook Standard</div>
+  <div class="doc-meta">
+    <span class="meta-badge badge-v">v0.2</span>
+    <span class="meta-badge badge-s">Ratification Ready</span>
+    <span class="meta-sep">&middot;</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 &middot; Council: 3 LOCK &middot; 6 REVISE &middot; 0 REJECT</span>
   </div>
-  <p class=&ldquo;doc-intro&ldquo;>An analytical workbook answers a business question through aggregation, trend analysis, or visualization of a structured dataset. This standard defines the architecture, naming conventions, formula patterns, and output rules that all DDL analytical workbooks must follow.</p>
-  <div class=&ldquo;note&ldquo;>Excel becomes reliable when you treat it like a data system, not a spreadsheet.</div>
+  <p class="doc-intro">An analytical workbook answers a business question through aggregation, trend analysis, or visualization of a structured dataset. This standard defines the architecture, naming conventions, formula patterns, and output rules that all DDL analytical workbooks must follow.</p>
+  <div class="note">Excel becomes reliable when you treat it like a data system, not a spreadsheet.</div>
 
-  <div class=&ldquo;toc&ldquo;>
-    <div class=&ldquo;toc-label&ldquo;>Contents</div>
-    <a href=&ldquo;#rule-0&ldquo;>Rule 0 &mdash; README Tab</a>
-    <a href=&ldquo;#rule-1&ldquo;>Rule 1 &mdash; Workbook Architecture</a>
-    <a href=&ldquo;#rule-2&ldquo;>Rule 2 &mdash; Fact Table Standards</a>
-    <a href=&ldquo;#rule-3&ldquo;>Rule 3 &mdash; Dimension Layer</a>
-    <a href=&ldquo;#rule-4&ldquo;>Rule 4 &mdash; Backend Data Tables</a>
-    <a href=&ldquo;#rule-5&ldquo;>Rule 5 &mdash; Statistical Trend Layer</a>
-    <a href=&ldquo;#rule-6&ldquo;>Rule 6 &mdash; Dashboard Standards</a>
-    <a href=&ldquo;#rule-7&ldquo;>Rule 7 &mdash; Naming Conventions</a>
-    <a href=&ldquo;#rule-8&ldquo;>Rule 8 &mdash; Formatting Standards</a>
-    <a href=&ldquo;#rule-9&ldquo;>Rule 9 &mdash; Scope Discipline</a>
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <a href="#rule-0">Rule 0 &mdash; README Tab</a>
+    <a href="#rule-1">Rule 1 &mdash; Workbook Architecture</a>
+    <a href="#rule-2">Rule 2 &mdash; Fact Table Standards</a>
+    <a href="#rule-3">Rule 3 &mdash; Dimension Layer</a>
+    <a href="#rule-4">Rule 4 &mdash; Backend Data Tables</a>
+    <a href="#rule-5">Rule 5 &mdash; Statistical Trend Layer</a>
+    <a href="#rule-6">Rule 6 &mdash; Dashboard Standards</a>
+    <a href="#rule-7">Rule 7 &mdash; Naming Conventions</a>
+    <a href="#rule-8">Rule 8 &mdash; Formatting Standards</a>
+    <a href="#rule-9">Rule 9 &mdash; Scope Discipline</a>
   </div>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-0&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 0</span><h2 class=&ldquo;rule-title&ldquo;>README Tab</h2></div>
-  <div class=&ldquo;rule-card&ldquo;>
-    <div class=&ldquo;rule-card-label&ldquo;>Required for Level 2+</div>
+  <div class="rule-header" id="rule-0"><span class="rule-num-badge">Rule 0</span><h2 class="rule-title">README Tab</h2></div>
+  <div class="rule-card">
+    <div class="rule-card-label">Required for Level 2+</div>
     <p>Every Level 2 and Level 3 workbook must include a README tab as the first (leftmost) tab. It contains: workbook name and version, purpose (one sentence &mdash; the business question), grain statement, data source, refresh frequency, owner, date created, and tab inventory.</p>
-    <p style=&ldquo;margin-bottom:0&ldquo;>The README tab is the first place a new user opens. If it is missing, the workbook is non-compliant regardless of how well every other rule is followed.</p>
+    <p style="margin-bottom:0">The README tab is the first place a new user opens. If it is missing, the workbook is non-compliant regardless of how well every other rule is followed.</p>
   </div>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-1&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 1</span><h2 class=&ldquo;rule-title&ldquo;>Workbook Architecture</h2></div>
+  <div class="rule-header" id="rule-1"><span class="rule-num-badge">Rule 1</span><h2 class="rule-title">Workbook Architecture</h2></div>
   <p>All analytical workbooks follow a layered architecture. Data flows in one direction only &mdash; no reverse references.</p>
-  <div class=&ldquo;layer-flow&ldquo;>
-    <span class=&ldquo;layer-box&ldquo;>SOURCE</span><span class=&ldquo;layer-arrow&ldquo;>&rarr;</span>
-    <span class=&ldquo;layer-box&ldquo;>FACT</span><span class=&ldquo;layer-arrow&ldquo;>&rarr;</span>
-    <span class=&ldquo;layer-box&ldquo;>DIM</span><span class=&ldquo;layer-arrow&ldquo;>&rarr;</span>
-    <span class=&ldquo;layer-box&ldquo;>DATA_TABLES</span><span class=&ldquo;layer-arrow&ldquo;>&rarr;</span>
-    <span class=&ldquo;layer-box&ldquo;>DASHBOARD</span>
+  <div class="layer-flow">
+    <span class="layer-box">SOURCE</span><span class="layer-arrow">&rarr;</span>
+    <span class="layer-box">FACT</span><span class="layer-arrow">&rarr;</span>
+    <span class="layer-box">DIM</span><span class="layer-arrow">&rarr;</span>
+    <span class="layer-box">DATA_TABLES</span><span class="layer-arrow">&rarr;</span>
+    <span class="layer-box">DASHBOARD</span>
   </div>
   <table>
     <tr><th>Layer</th><th>Purpose</th></tr>
@@ -126,9 +126,9 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
     <tr><td>Level 2</td><td><code>SOURCE &rarr; FACT &rarr; DIM &rarr; DATA_TABLES &rarr; DASHBOARD</code></td><td>DDL default. Multiple dimensions, repeated reporting, stakeholder consumption, or any shared artifact.</td></tr>
     <tr><td>Level 3</td><td><code>SOURCE &rarr; STAGING &rarr; FACT &rarr; DIM &rarr; METRICS &rarr; DATA_TABLES &rarr; DASHBOARD</code></td><td>Multiple fact tables, reusable metric library, cross-domain reporting.</td></tr>
   </table>
-  <div class=&ldquo;note&ldquo;>A DASHBOARD formula referencing tbl_Fact or SOURCE directly is a Rule 1 violation &mdash; findable in 30 seconds by auditing DASHBOARD formulas.</div>
+  <div class="note">A DASHBOARD formula referencing tbl_Fact or SOURCE directly is a Rule 1 violation &mdash; findable in 30 seconds by auditing DASHBOARD formulas.</div>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-2&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 2</span><h2 class=&ldquo;rule-title&ldquo;>Fact Table Standards</h2></div>
+  <div class="rule-header" id="rule-2"><span class="rule-num-badge">Rule 2</span><h2 class="rule-title">Fact Table Standards</h2></div>
   <h3>2a. Grain Definition</h3>
   <p>Every fact table must have a documented row grain in cell B1:</p>
   <pre>GRAIN: One row = one [entity] per [time period].</pre>
@@ -138,13 +138,13 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <pre>Step 1: Generate  &mdash; =&ldquo;LOAN-&ldquo; & TEXT(ROW()-1, &ldquo;0000&ldquo;)
 Step 2: Immediately Paste Special &rarr; Values Only
 Step 3: New records use MAX(key column)+1</pre>
-  <div class=&ldquo;note&ldquo;>Never leave surrogate keys as live ROW()-based formulas. If rows are inserted, deleted, or sorted, keys shift silently &mdash; breaking every downstream reference.</div>
+  <div class="note">Never leave surrogate keys as live ROW()-based formulas. If rows are inserted, deleted, or sorted, keys shift silently &mdash; breaking every downstream reference.</div>
   <h3>2c. Time Normalization</h3>
   <p>Required time columns: <code>Month</code> (date, first of month), <code>MnthTxt</code> (&ldquo;September 2025&ldquo;), <code>YrTxt</code> (&ldquo;2025&ldquo;), <code>MnthYrTxt</code> (&ldquo;Sep 2025&ldquo;).</p>
   <h3>2d. Table Format</h3>
   <p>Fact datasets must be Excel Tables (<code>Ctrl+T</code>), not ranges. Naming: <code>tbl_Fact&lt;Entity&gt;</code>.</p>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-3&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 3</span><h2 class=&ldquo;rule-title&ldquo;>Dimension Layer</h2></div>
+  <div class="rule-header" id="rule-3"><span class="rule-num-badge">Rule 3</span><h2 class="rule-title">Dimension Layer</h2></div>
   <h3>3a. Generation Pattern</h3>
   <p>Dimensions are generated from fact tables using dynamic array spills. Never manually maintained lists.</p>
   <pre>=LET(
@@ -157,7 +157,7 @@ Step 3: New records use MAX(key column)+1</pre>
   <h3>3b&ndash;3d. Naming</h3>
   <p>Each dimension on its own tab. Naming: <code>dim&lt;Entity&gt;&lt;Attribute&gt;</code>. Named range uses spill operator: <code>dimMonth = dimMonth!$B$3#</code></p>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-4&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 4</span><h2 class=&ldquo;rule-title&ldquo;>Backend Data Tables</h2></div>
+  <div class="rule-header" id="rule-4"><span class="rule-num-badge">Rule 4</span><h2 class="rule-title">Backend Data Tables</h2></div>
   <h3>4b. Single-Dimension Aggregation</h3>
   <pre>=MAP(dimMonth, LAMBDA(m, COUNTIFS(tbl_FactLoans[Month], m)))</pre>
   <h3>4c. Matrix Aggregation (MAKEARRAY)</h3>
@@ -175,7 +175,7 @@ Step 3: New records use MAX(key column)+1</pre>
   <h3>4d. Count and Amount Matrices</h3>
   <p>For entities with economic magnitude, build both count-based (volume) and amount-based (magnitude) matrices.</p>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-5&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 5</span><h2 class=&ldquo;rule-title&ldquo;>Statistical Trend Layer</h2></div>
+  <div class="rule-header" id="rule-5"><span class="rule-num-badge">Rule 5</span><h2 class="rule-title">Statistical Trend Layer</h2></div>
   <p>Required when period count &ge; 6. Below 6 periods: MoM % change only.</p>
   <table>
     <tr><th>Metric</th><th>Formula Pattern</th></tr>
@@ -192,7 +192,7 @@ Step 3: New records use MAX(key column)+1</pre>
     <tr><td>Quarterly</td><td>4</td><td>Maximum 8</td></tr>
   </table>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-6&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 6</span><h2 class=&ldquo;rule-title&ldquo;>Dashboard Standards</h2></div>
+  <div class="rule-header" id="rule-6"><span class="rule-num-badge">Rule 6</span><h2 class="rule-title">Dashboard Standards</h2></div>
   <p>Dashboard tabs contain only chart objects, formatted display tables, labels, and KPI cards referencing DATA_TABLES ranges. No business logic, aggregation formulas, COUNTIFS, or SUMIFS on DASHBOARD.</p>
   <h3>Three Analytical Questions (Minimum)</h3>
   <table>
@@ -202,7 +202,7 @@ Step 3: New records use MAX(key column)+1</pre>
     <tr><td>3</td><td>Magnitude</td><td>What is the dollar or volume impact?</td></tr>
   </table>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-7&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 7</span><h2 class=&ldquo;rule-title&ldquo;>Naming Conventions</h2></div>
+  <div class="rule-header" id="rule-7"><span class="rule-num-badge">Rule 7</span><h2 class="rule-title">Naming Conventions</h2></div>
   <table>
     <tr><th>Object</th><th>Convention</th><th>Example</th></tr>
     <tr><td>Fact table</td><td><code>tbl_Fact&lt;Entity&gt;</code></td><td>tbl_FactLoans</td></tr>
@@ -212,27 +212,27 @@ Step 3: New records use MAX(key column)+1</pre>
     <tr><td>Parameter cell</td><td><code>sel_&lt;Name&gt;</code></td><td>sel_Threshold</td></tr>
   </table>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-8&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 8</span><h2 class=&ldquo;rule-title&ldquo;>Formatting Standards</h2></div>
+  <div class="rule-header" id="rule-8"><span class="rule-num-badge">Rule 8</span><h2 class="rule-title">Formatting Standards</h2></div>
   <p>README tab first (leftmost). Headers at B2. Column A and Row 1 reserved as padding. Minimum 3 blank rows between tables on DATA_TABLES. Zebra striping via conditional format: <code>=ISEVEN(ROW())</code>.</p>
 
-  <div class=&ldquo;rule-header&ldquo; id=&ldquo;rule-9&ldquo;><span class=&ldquo;rule-num-badge&ldquo;>Rule 9</span><h2 class=&ldquo;rule-title&ldquo;>Scope Discipline</h2></div>
+  <div class="rule-header" id="rule-9"><span class="rule-num-badge">Rule 9</span><h2 class="rule-title">Scope Discipline</h2></div>
   <p>V1 rule: Build only what answers the stakeholder question. All future enhancements go into a Surface Area List tab &mdash; the explicit backlog. Items on it are not forgotten &mdash; they are deferred.</p>
 
-  <div class=&ldquo;std-footer-bar&ldquo;>
+  <div class="std-footer-bar">
     <span>STD-EXCEL-001 &middot; Analytical Workbook Standard &middot; v0.2</span>
-    <div style=&ldquo;display:flex;gap:16px&ldquo;>
-      <a href=&ldquo;../excel-002/&ldquo; class=&ldquo;std-footer-link&ldquo;>STD-EXCEL-002 &rarr;</a>
-      <a href=&ldquo;../../explorer/&ldquo; class=&ldquo;std-footer-link&ldquo;>Graph Explorer &rarr;</a>
+    <div style="display:flex;gap:16px">
+      <a href="../excel-002/" class="std-footer-link">STD-EXCEL-002 &rarr;</a>
+      <a href="../../explorer/" class="std-footer-link">Graph Explorer &rarr;</a>
     </div>
   </div>
 </div>
 
 <footer>
-  <div class=&ldquo;footer-left&ldquo;><strong>Excelligence</strong> &middot; STD-EXCEL-001 &middot; A <a href=&ldquo;https://www.dropdownlogistics.com&ldquo;>Dropdown Logistics</a> product</div>
-  <div class=&ldquo;footer-right&ldquo;>
-    <a href=&ldquo;../../&ldquo;>Home</a><a href=&ldquo;../../explorer/&ldquo;>Explorer</a>
-    <a href=&ldquo;../../radial/&ldquo;>Radial</a><a href=&ldquo;../../paths/&ldquo;>Paths</a><a href=&ldquo;../excel-002/&ldquo;>STD-002</a>
-    <a href=&ldquo;../../tools/cf-patterns/&ldquo;>CF Patterns</a>
+  <div class="footer-left"><strong>Excelligence</strong> &middot; STD-EXCEL-001 &middot; A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-right">
+    <a href="../../">Home</a><a href="../../explorer/">Explorer</a>
+    <a href="../../radial/">Radial</a><a href="../../paths/">Paths</a><a href="../excel-002/">STD-002</a>
+    <a href="../../tools/cf-patterns/">CF Patterns</a>
   </div>
 </footer>
 </body>
