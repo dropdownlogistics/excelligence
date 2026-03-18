@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STD-EXCEL-002 — Operational Workbook Standard · Excelligence</title>
+<title>STD-EXCEL-002 â€” Operational Workbook Standard Â· Excelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -68,24 +69,24 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <a href="../../" class="nav-logo">Excel<span>ligence</span></a>
   <div class="nav-sep"></div>
   <div class="nav-crumb">
-    <a href="../../">Home</a><span style="opacity:.4">›</span>
-    <a href="../">Standards</a><span style="opacity:.4">›</span>
+    <a href="../../">Home</a><span style="opacity:.4">â€º</span>
+    <a href="../">Standards</a><span style="opacity:.4">â€º</span>
     <span style="color:var(--cream)">STD-EXCEL-002</span>
   </div>
-  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph →</a></div>
+  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph â†’</a></div>
 </nav>
 
 <div class="doc-wrap">
-  <div class="doc-eyebrow">Excelligence · Standards</div>
+  <div class="doc-eyebrow">Excelligence Â· Standards</div>
   <h1 class="doc-title">STD-EXCEL-002</h1>
   <div class="doc-subtitle">Operational Workbook Standard</div>
   <div class="doc-meta">
     <span class="meta-badge badge-v">v0.2</span>
     <span class="meta-badge badge-s">Ratification Ready</span>
-    <span class="meta-sep">·</span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 · Council: 4 LOCK · 5 REVISE · 0 REJECT</span>
+    <span class="meta-sep">Â·</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 Â· Council: 4 LOCK Â· 5 REVISE Â· 0 REJECT</span>
   </div>
-  <p class="doc-intro">An operational workbook executes a repeatable process — generating outputs, tracking status, or automating communication. This standard defines the structure, documentation, and output rules that all DDL operational workbooks must follow.</p>
+  <p class="doc-intro">An operational workbook executes a repeatable process â€” generating outputs, tracking status, or automating communication. This standard defines the structure, documentation, and output rules that all DDL operational workbooks must follow.</p>
 
   <div class="distinction-card">
     <div class="distinction-label">Core Distinction</div>
@@ -93,27 +94,27 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
       <tr><th>Analytical Workbook</th><th>Operational Workbook</th></tr>
       <tr><td>Answers a question</td><td>Executes a process</td></tr>
     </table>
-    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'JetBrains Mono',monospace">Decision test: Which failure hurts more? Wrong output → operational. Wrong conclusion → analytical.</p>
+    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'JetBrains Mono',monospace">Decision test: Which failure hurts more? Wrong output â†’ operational. Wrong conclusion â†’ analytical.</p>
   </div>
 
   <div class="toc">
     <div class="toc-label">Contents</div>
-    <a href="#rule-1">Rule 1 — Workbook Architecture</a>
-    <a href="#rule-2">Rule 2 — Input Layer Standards</a>
-    <a href="#rule-3">Rule 3 — Logic Layer Standards</a>
-    <a href="#rule-4">Rule 4 — Output Layer Standards</a>
-    <a href="#rule-5">Rule 5 — Control Parameters</a>
-    <a href="#rule-6">Rule 6 — Process Documentation</a>
-    <a href="#rule-7">Rule 7 — Naming Conventions</a>
-    <a href="#rule-8">Rule 8 — Formatting Standards</a>
+    <a href="#rule-1">Rule 1 â€” Workbook Architecture</a>
+    <a href="#rule-2">Rule 2 â€” Input Layer Standards</a>
+    <a href="#rule-3">Rule 3 â€” Logic Layer Standards</a>
+    <a href="#rule-4">Rule 4 â€” Output Layer Standards</a>
+    <a href="#rule-5">Rule 5 â€” Control Parameters</a>
+    <a href="#rule-6">Rule 6 â€” Process Documentation</a>
+    <a href="#rule-7">Rule 7 â€” Naming Conventions</a>
+    <a href="#rule-8">Rule 8 â€” Formatting Standards</a>
   </div>
 
   <!-- RULE 1 -->
   <div class="rule-header" id="rule-1"><span class="rule-num-badge">Rule 1</span><h2 class="rule-title">Workbook Architecture</h2></div>
   <p>All operational workbooks follow a 3-layer structure with unidirectional data flow.</p>
   <div class="layer-flow">
-    <span class="layer-box">INPUT</span><span class="layer-arrow">→</span>
-    <span class="layer-box">LOGIC</span><span class="layer-arrow">→</span>
+    <span class="layer-box">INPUT</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">LOGIC</span><span class="layer-arrow">â†’</span>
     <span class="layer-box">OUTPUT</span>
   </div>
   <table>
@@ -126,32 +127,32 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <p><strong>STAGING:</strong> For workbooks receiving external data requiring validation before it qualifies as INPUT. Raw imports, CSV dumps, or multi-source merges land in STAGING.</p>
   <p><strong>CONTROL:</strong> Parameter cells, run instructions, and configuration values that govern the process.</p>
   <div class="layer-flow">
-    <span class="layer-box">CONTROL</span><span class="layer-arrow">→</span>
-    <span class="layer-box optional">STAGING</span><span class="layer-arrow">→</span>
-    <span class="layer-box">INPUT</span><span class="layer-arrow">→</span>
-    <span class="layer-box">LOGIC</span><span class="layer-arrow">→</span>
+    <span class="layer-box">CONTROL</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box optional">STAGING</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">INPUT</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">LOGIC</span><span class="layer-arrow">â†’</span>
     <span class="layer-box">OUTPUT</span>
   </div>
   <div class="rule-card">
     <div class="rule-card-label">Violation Boundary</div>
     <table style="margin-bottom:10px">
       <tr><th>Allowed in OUTPUT</th><th>Violation in OUTPUT</th></tr>
-      <tr><td><code>=INPUT!A3</code> — value passthrough</td><td><code>=INPUT!D3 * 1.1</code> — arithmetic</td></tr>
-      <tr><td><code>TEXT()</code>, <code>UPPER()</code>, <code>TRIM()</code> — formatting</td><td><code>=IF(INPUT!C3&gt;0,…)</code> — conditional logic</td></tr>
+      <tr><td><code>=INPUT!A3</code> â€” value passthrough</td><td><code>=INPUT!D3 * 1.1</code> â€” arithmetic</td></tr>
+      <tr><td><code>TEXT()</code>, <code>UPPER()</code>, <code>TRIM()</code> â€” formatting</td><td><code>=IF(INPUT!C3&gt;0,â€¦)</code> â€” conditional logic</td></tr>
     </table>
     <p style="font-size:12px;color:var(--dim);margin:0;font-family:'Source Serif 4',serif">Display references are allowed. Anything that changes the underlying value belongs in LOGIC.</p>
   </div>
 
   <!-- RULE 2 -->
   <div class="rule-header" id="rule-2"><span class="rule-num-badge">Rule 2</span><h2 class="rule-title">Input Layer Standards</h2></div>
-  <p>The INPUT tab is the only place operators enter data. Every input column must have data validation. No free-form text fields — use dropdown lists, date pickers, or number constraints everywhere possible.</p>
+  <p>The INPUT tab is the only place operators enter data. Every input column must have data validation. No free-form text fields â€” use dropdown lists, date pickers, or number constraints everywhere possible.</p>
   <p>INPUT columns must be named and typed. A column that accepts "any value" is an uncontrolled input. Document every column in the CONTROL tab header with: column name, data type, allowed values, and what breaks if invalid data enters.</p>
   <div class="note">The cost of strict INPUT validation is paid once during build. The cost of loose INPUT validation is paid on every run, every edge case, and every exception log entry.</div>
 
   <!-- RULE 3 -->
   <div class="rule-header" id="rule-3"><span class="rule-num-badge">Rule 3</span><h2 class="rule-title">Logic Layer Standards</h2></div>
   <h3>3a. Structure</h3>
-  <p>LOGIC reads exclusively from INPUT (or STAGING → INPUT). LOGIC never references OUTPUT. Every column in LOGIC derives a single value type — status, formatted output, flag, or calculation.</p>
+  <p>LOGIC reads exclusively from INPUT (or STAGING â†’ INPUT). LOGIC never references OUTPUT. Every column in LOGIC derives a single value type â€” status, formatted output, flag, or calculation.</p>
   <h3>3b. Status Derivation</h3>
   <pre>=IFS(
   INPUT[@Status]="Exception", "Exception",
@@ -165,21 +166,21 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
 "Your commission for " & InputTab[@Period] & " is " &
 TEXT(InputTab[@Amount], "$#,##0.00") & "."</pre>
   <h3>3d. Rule Documentation</h3>
-  <p>Every formula in LOGIC that encodes a business rule must have a comment explaining the rule — not the syntax.</p>
+  <p>Every formula in LOGIC that encodes a business rule must have a comment explaining the rule â€” not the syntax.</p>
   <h3>3e. Error Handling (Mandatory)</h3>
   <div class="rule-card">
     <div class="rule-card-label">Post-Council Addition (5 seats)</div>
     <p>Every LOGIC formula that could produce a standard Excel error must be wrapped in IFERROR. The fallback must be a visible, human-readable string:</p>
     <pre>"DATA MISSING"
 "REVIEW REQUIRED"
-"ERROR — SEE INPUT"</pre>
-    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'Source Serif 4',serif">Blank cells and zero values are not acceptable error fallbacks in operational workbooks — they hide failures that propagate silently to OUTPUT.</p>
+"ERROR â€” SEE INPUT"</pre>
+    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'Source Serif 4',serif">Blank cells and zero values are not acceptable error fallbacks in operational workbooks â€” they hide failures that propagate silently to OUTPUT.</p>
   </div>
 
   <!-- RULE 4 -->
   <div class="rule-header" id="rule-4"><span class="rule-num-badge">Rule 4</span><h2 class="rule-title">Output Layer Standards</h2></div>
   <h3>4a. OUTPUT Is Read-Only</h3>
-  <p>OUTPUT tabs contain generated content only. No manual edits. If generated content is wrong: fix INPUT or LOGIC → verify OUTPUT regenerates correctly → copy and send.</p>
+  <p>OUTPUT tabs contain generated content only. No manual edits. If generated content is wrong: fix INPUT or LOGIC â†’ verify OUTPUT regenerates correctly â†’ copy and send.</p>
   <div class="warn">Once operators learn they can edit OUTPUT, LOGIC becomes optional. Within cycles, OUTPUT becomes a manually-authored tab and the architecture collapses. Protect this rule.</div>
   <div class="rule-card">
     <div class="rule-card-label">Governed Exception Path</div>
@@ -192,24 +193,24 @@ TEXT(InputTab[@Amount], "$#,##0.00") & "."</pre>
   <p>Every record displays a current status reflecting the complete process lifecycle:</p>
   <div class="status-flow">
     <span class="status-node" style="background:rgba(107,123,141,.15);color:#8a9ab0">Draft</span>
-    <span class="status-arrow">→</span>
+    <span class="status-arrow">â†’</span>
     <span class="status-node" style="background:rgba(107,157,194,.15);color:var(--blue)">Ready</span>
-    <span class="status-arrow">→</span>
+    <span class="status-arrow">â†’</span>
     <span class="status-node" style="background:rgba(74,158,107,.15);color:var(--green)">Sent</span>
-    <span class="status-arrow">→</span>
+    <span class="status-arrow">â†’</span>
     <span class="status-node" style="background:rgba(74,158,107,.25);color:var(--green)">Complete</span>
   </div>
   <div style="margin-top:8px;display:flex;align-items:center;gap:10px">
     <span class="status-node" style="background:rgba(178,53,49,.15);color:var(--crimson)">Exception</span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">Manual flag · requires rationale</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">Manual flag Â· requires rationale</span>
   </div>
-  <p style="margin-top:14px">Backward transitions (e.g., Sent → Ready) are allowed but must be logged in the exception log with reason.</p>
-  <h3>4c–4d. Output Quality</h3>
-  <p>Generated outputs must be fully formed (no placeholders), validated against INPUT, and identifiable by Record ID. "Copy and send" is the standard — not "copy, edit, then send."</p>
+  <p style="margin-top:14px">Backward transitions (e.g., Sent â†’ Ready) are allowed but must be logged in the exception log with reason.</p>
+  <h3>4câ€“4d. Output Quality</h3>
+  <p>Generated outputs must be fully formed (no placeholders), validated against INPUT, and identifiable by Record ID. "Copy and send" is the standard â€” not "copy, edit, then send."</p>
 
   <!-- RULE 5 -->
   <div class="rule-header" id="rule-5"><span class="rule-num-badge">Rule 5</span><h2 class="rule-title">Control Parameters</h2></div>
-  <h3>5a–5c. Parameter Cells</h3>
+  <h3>5aâ€“5c. Parameter Cells</h3>
   <p>All values that govern process behavior reside on the CONTROL tab as named parameter cells. Naming: <code>sel_&lt;ParameterName&gt;</code>. Every parameter must have adjacent documentation explaining what it controls, valid values, and behavior when changed.</p>
   <h3>5d. Exception Log</h3>
   <div class="rule-card">
@@ -255,19 +256,19 @@ TEXT(InputTab[@Amount], "$#,##0.00") & "."</pre>
     <tr><td>STAGING</td><td><span class="tab-color-dot" style="background:#FB923C"></span>Light Orange</td></tr>
   </table>
   <h3>Status Visualization</h3>
-  <p>Status fields must use conditional formatting: Draft (gray), Ready (blue), Sent (green), Complete (dark green), Exception (red). Use formula-based CF rules for all status columns — not the built-in "highlight cells" shortcut.</p>
+  <p>Status fields must use conditional formatting: Draft (gray), Ready (blue), Sent (green), Complete (dark green), Exception (red). Use formula-based CF rules for all status columns â€” not the built-in "highlight cells" shortcut.</p>
 
   <div class="std-footer-bar">
-    <span>STD-EXCEL-002 · Operational Workbook Standard · v0.2</span>
+    <span>STD-EXCEL-002 Â· Operational Workbook Standard Â· v0.2</span>
     <div style="display:flex;gap:16px">
-      <a href="../excel-001/" class="std-footer-link">← STD-EXCEL-001</a>
-      <a href="../../explorer/" class="std-footer-link">Graph Explorer →</a>
+      <a href="../excel-001/" class="std-footer-link">â† STD-EXCEL-001</a>
+      <a href="../../explorer/" class="std-footer-link">Graph Explorer â†’</a>
     </div>
   </div>
 </div>
 
 <footer>
-  <div class="footer-left"><strong>Excelligence</strong> · STD-EXCEL-002 · A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-left"><strong>Excelligence</strong> Â· STD-EXCEL-002 Â· A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
   <div class="footer-right">
     <a href="../../">Home</a><a href="../../explorer/">Explorer</a>
     <a href="../../radial/">Radial</a><a href="../../paths/">Paths</a><a href="../excel-001/">STD-001</a>
@@ -276,3 +277,4 @@ TEXT(InputTab[@Amount], "$#,##0.00") & "."</pre>
 </footer>
 </body>
 </html>
+

@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STD-EXCEL-001 — Analytical Workbook Standard · Excelligence</title>
+<title>STD-EXCEL-001 â€” Analytical Workbook Standard Â· Excelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -60,54 +61,54 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <a href="../../" class="nav-logo">Excel<span>ligence</span></a>
   <div class="nav-sep"></div>
   <div class="nav-crumb">
-    <a href="../../">Home</a><span style="opacity:.4">›</span>
-    <a href="../">Standards</a><span style="opacity:.4">›</span>
+    <a href="../../">Home</a><span style="opacity:.4">â€º</span>
+    <a href="../">Standards</a><span style="opacity:.4">â€º</span>
     <span style="color:var(--cream)">STD-EXCEL-001</span>
   </div>
-  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph →</a></div>
+  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph â†’</a></div>
 </nav>
 
 <div class="doc-wrap">
-  <div class="doc-eyebrow">Excelligence · Standards</div>
+  <div class="doc-eyebrow">Excelligence Â· Standards</div>
   <h1 class="doc-title">STD-EXCEL-001</h1>
   <div class="doc-subtitle">Analytical Workbook Standard</div>
   <div class="doc-meta">
     <span class="meta-badge badge-v">v0.2</span>
     <span class="meta-badge badge-s">Ratification Ready</span>
-    <span class="meta-sep">·</span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 · Council: 3 LOCK · 6 REVISE · 0 REJECT</span>
+    <span class="meta-sep">Â·</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 Â· Council: 3 LOCK Â· 6 REVISE Â· 0 REJECT</span>
   </div>
   <p class="doc-intro">An analytical workbook answers a business question through aggregation, trend analysis, or visualization of a structured dataset. This standard defines the architecture, naming conventions, formula patterns, and output rules that all DDL analytical workbooks must follow.</p>
   <div class="note">Excel becomes reliable when you treat it like a data system, not a spreadsheet.</div>
 
   <div class="toc">
     <div class="toc-label">Contents</div>
-    <a href="#rule-0">Rule 0 — README Tab</a>
-    <a href="#rule-1">Rule 1 — Workbook Architecture</a>
-    <a href="#rule-2">Rule 2 — Fact Table Standards</a>
-    <a href="#rule-3">Rule 3 — Dimension Layer</a>
-    <a href="#rule-4">Rule 4 — Backend Data Tables</a>
-    <a href="#rule-5">Rule 5 — Statistical Trend Layer</a>
-    <a href="#rule-6">Rule 6 — Dashboard Standards</a>
-    <a href="#rule-7">Rule 7 — Naming Conventions</a>
-    <a href="#rule-8">Rule 8 — Formatting Standards</a>
-    <a href="#rule-9">Rule 9 — Scope Discipline</a>
+    <a href="#rule-0">Rule 0 â€” README Tab</a>
+    <a href="#rule-1">Rule 1 â€” Workbook Architecture</a>
+    <a href="#rule-2">Rule 2 â€” Fact Table Standards</a>
+    <a href="#rule-3">Rule 3 â€” Dimension Layer</a>
+    <a href="#rule-4">Rule 4 â€” Backend Data Tables</a>
+    <a href="#rule-5">Rule 5 â€” Statistical Trend Layer</a>
+    <a href="#rule-6">Rule 6 â€” Dashboard Standards</a>
+    <a href="#rule-7">Rule 7 â€” Naming Conventions</a>
+    <a href="#rule-8">Rule 8 â€” Formatting Standards</a>
+    <a href="#rule-9">Rule 9 â€” Scope Discipline</a>
   </div>
 
   <div class="rule-header" id="rule-0"><span class="rule-num-badge">Rule 0</span><h2 class="rule-title">README Tab</h2></div>
   <div class="rule-card">
     <div class="rule-card-label">Required for Level 2+</div>
-    <p>Every Level 2 and Level 3 workbook must include a README tab as the first (leftmost) tab. It contains: workbook name and version, purpose (one sentence — the business question), grain statement, data source, refresh frequency, owner, date created, and tab inventory.</p>
+    <p>Every Level 2 and Level 3 workbook must include a README tab as the first (leftmost) tab. It contains: workbook name and version, purpose (one sentence â€” the business question), grain statement, data source, refresh frequency, owner, date created, and tab inventory.</p>
     <p style="margin-bottom:0">The README tab is the first place a new user opens. If it is missing, the workbook is non-compliant regardless of how well every other rule is followed.</p>
   </div>
 
   <div class="rule-header" id="rule-1"><span class="rule-num-badge">Rule 1</span><h2 class="rule-title">Workbook Architecture</h2></div>
-  <p>All analytical workbooks follow a layered architecture. Data flows in one direction only — no reverse references.</p>
+  <p>All analytical workbooks follow a layered architecture. Data flows in one direction only â€” no reverse references.</p>
   <div class="layer-flow">
-    <span class="layer-box">SOURCE</span><span class="layer-arrow">→</span>
-    <span class="layer-box">FACT</span><span class="layer-arrow">→</span>
-    <span class="layer-box">DIM</span><span class="layer-arrow">→</span>
-    <span class="layer-box">DATA_TABLES</span><span class="layer-arrow">→</span>
+    <span class="layer-box">SOURCE</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">FACT</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">DIM</span><span class="layer-arrow">â†’</span>
+    <span class="layer-box">DATA_TABLES</span><span class="layer-arrow">â†’</span>
     <span class="layer-box">DASHBOARD</span>
   </div>
   <table>
@@ -121,11 +122,11 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <h3>Three Implementation Levels</h3>
   <table>
     <tr><th>Level</th><th>Architecture</th><th>When to Use</th></tr>
-    <tr><td>Level 1</td><td><code>FACT → DASHBOARD</code></td><td>Low rows (&lt;2K), single question, single operator, exploratory. ALL conditions must be true.</td></tr>
-    <tr><td>Level 2</td><td><code>SOURCE → FACT → DIM → DATA_TABLES → DASHBOARD</code></td><td>DDL default. Multiple dimensions, repeated reporting, stakeholder consumption, or any shared artifact.</td></tr>
-    <tr><td>Level 3</td><td><code>SOURCE → STAGING → FACT → DIM → METRICS → DATA_TABLES → DASHBOARD</code></td><td>Multiple fact tables, reusable metric library, cross-domain reporting.</td></tr>
+    <tr><td>Level 1</td><td><code>FACT â†’ DASHBOARD</code></td><td>Low rows (&lt;2K), single question, single operator, exploratory. ALL conditions must be true.</td></tr>
+    <tr><td>Level 2</td><td><code>SOURCE â†’ FACT â†’ DIM â†’ DATA_TABLES â†’ DASHBOARD</code></td><td>DDL default. Multiple dimensions, repeated reporting, stakeholder consumption, or any shared artifact.</td></tr>
+    <tr><td>Level 3</td><td><code>SOURCE â†’ STAGING â†’ FACT â†’ DIM â†’ METRICS â†’ DATA_TABLES â†’ DASHBOARD</code></td><td>Multiple fact tables, reusable metric library, cross-domain reporting.</td></tr>
   </table>
-  <div class="note">A DASHBOARD formula referencing tbl_Fact or SOURCE directly is a Rule 1 violation — findable in 30 seconds by auditing DASHBOARD formulas.</div>
+  <div class="note">A DASHBOARD formula referencing tbl_Fact or SOURCE directly is a Rule 1 violation â€” findable in 30 seconds by auditing DASHBOARD formulas.</div>
 
   <div class="rule-header" id="rule-2"><span class="rule-num-badge">Rule 2</span><h2 class="rule-title">Fact Table Standards</h2></div>
   <h3>2a. Grain Definition</h3>
@@ -134,10 +135,10 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <p>Grain is determined before any formulas are written. Grain errors are structural errors, not formula errors.</p>
   <h3>2b. Surrogate Key</h3>
   <p>Every fact row receives a synthetic key. Format: <code>&lt;Entity&gt;-0000</code></p>
-  <pre>Step 1: Generate  — ="LOAN-" & TEXT(ROW()-1, "0000")
-Step 2: Immediately Paste Special → Values Only
+  <pre>Step 1: Generate  â€” ="LOAN-" & TEXT(ROW()-1, "0000")
+Step 2: Immediately Paste Special â†’ Values Only
 Step 3: New records use MAX(key column)+1</pre>
-  <div class="note">Never leave surrogate keys as live ROW()-based formulas. If rows are inserted, deleted, or sorted, keys shift silently — breaking every downstream reference.</div>
+  <div class="note">Never leave surrogate keys as live ROW()-based formulas. If rows are inserted, deleted, or sorted, keys shift silently â€” breaking every downstream reference.</div>
   <h3>2c. Time Normalization</h3>
   <p>Required time columns: <code>Month</code> (date, first of month), <code>MnthTxt</code> ("September 2025"), <code>YrTxt</code> ("2025"), <code>MnthYrTxt</code> ("Sep 2025").</p>
   <h3>2d. Table Format</h3>
@@ -152,8 +153,8 @@ Step 3: New records use MAX(key column)+1</pre>
   u,       SORT(UNIQUE(cleaned)),
   FILTER(u, u&lt;&gt;"")
 )</pre>
-  <p>Wrap in IFERROR for empty source protection: <code>=IFERROR(LET(…), {"No Data"})</code></p>
-  <h3>3b–3d. Naming</h3>
+  <p>Wrap in IFERROR for empty source protection: <code>=IFERROR(LET(â€¦), {"No Data"})</code></p>
+  <h3>3bâ€“3d. Naming</h3>
   <p>Each dimension on its own tab. Naming: <code>dim&lt;Entity&gt;&lt;Attribute&gt;</code>. Named range uses spill operator: <code>dimMonth = dimMonth!$B$3#</code></p>
 
   <div class="rule-header" id="rule-4"><span class="rule-num-badge">Rule 4</span><h2 class="rule-title">Backend Data Tables</h2></div>
@@ -175,7 +176,7 @@ Step 3: New records use MAX(key column)+1</pre>
   <p>For entities with economic magnitude, build both count-based (volume) and amount-based (magnitude) matrices.</p>
 
   <div class="rule-header" id="rule-5"><span class="rule-num-badge">Rule 5</span><h2 class="rule-title">Statistical Trend Layer</h2></div>
-  <p>Required when period count ≥ 6. Below 6 periods: MoM % change only.</p>
+  <p>Required when period count â‰¥ 6. Below 6 periods: MoM % change only.</p>
   <table>
     <tr><th>Metric</th><th>Formula Pattern</th></tr>
     <tr><td>MoM % Change</td><td><code>=IFERROR((Current / Prior) - 1, "")</code></td></tr>
@@ -215,19 +216,19 @@ Step 3: New records use MAX(key column)+1</pre>
   <p>README tab first (leftmost). Headers at B2. Column A and Row 1 reserved as padding. Minimum 3 blank rows between tables on DATA_TABLES. Zebra striping via conditional format: <code>=ISEVEN(ROW())</code>.</p>
 
   <div class="rule-header" id="rule-9"><span class="rule-num-badge">Rule 9</span><h2 class="rule-title">Scope Discipline</h2></div>
-  <p>V1 rule: Build only what answers the stakeholder question. All future enhancements go into a Surface Area List tab — the explicit backlog. Items on it are not forgotten — they are deferred.</p>
+  <p>V1 rule: Build only what answers the stakeholder question. All future enhancements go into a Surface Area List tab â€” the explicit backlog. Items on it are not forgotten â€” they are deferred.</p>
 
   <div class="std-footer-bar">
-    <span>STD-EXCEL-001 · Analytical Workbook Standard · v0.2</span>
+    <span>STD-EXCEL-001 Â· Analytical Workbook Standard Â· v0.2</span>
     <div style="display:flex;gap:16px">
-      <a href="../excel-002/" class="std-footer-link">STD-EXCEL-002 →</a>
-      <a href="../../explorer/" class="std-footer-link">Graph Explorer →</a>
+      <a href="../excel-002/" class="std-footer-link">STD-EXCEL-002 â†’</a>
+      <a href="../../explorer/" class="std-footer-link">Graph Explorer â†’</a>
     </div>
   </div>
 </div>
 
 <footer>
-  <div class="footer-left"><strong>Excelligence</strong> · STD-EXCEL-001 · A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-left"><strong>Excelligence</strong> Â· STD-EXCEL-001 Â· A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
   <div class="footer-right">
     <a href="../../">Home</a><a href="../../explorer/">Explorer</a>
     <a href="../../radial/">Radial</a><a href="../../paths/">Paths</a><a href="../excel-002/">STD-002</a>
@@ -236,3 +237,4 @@ Step 3: New records use MAX(key column)+1</pre>
 </footer>
 </body>
 </html>
+

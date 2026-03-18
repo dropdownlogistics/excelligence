@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learning Paths — Excelligence</title>
+<title>Learning Paths â€” Excelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -101,7 +102,7 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <a href="/" class="nav-logo">Excel<span>ligence</span></a>
   <div class="nav-sep"></div>
   <div class="nav-crumb">
-    <a href="/">Home</a><span style="opacity:.4">›</span>
+    <a href="/">Home</a><span style="opacity:.4">â€º</span>
     <span style="color:var(--cream)">Learning Paths</span>
   </div>
   <div class="nav-right"><a href="/explorer/" class="nav-cta">Enter the Graph &rarr;</a></div>
@@ -160,14 +161,14 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
           </div>
           <h3 class="step-name">Ctrl+T (Table Conversion)</h3>
           <p class="step-what">Converts a data range into a structured Excel Table, enabling auto-expanding ranges, structured references, built-in filtering, consistent formatting, and Power Query readiness.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
             <div class="step-section-label">Intent</div>
             <div class="step-section-body">When you need structured references, auto-expansion, and Power Query readiness, use Ctrl+T to convert a range into a proper Excel Table.</div>
           </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select any cell in your data range → Ctrl+T → Confirm range → Rename table in Table Design tab.
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select any cell in your data range â†’ Ctrl+T â†’ Confirm range â†’ Rename table in Table Design tab.
 Result: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)</div></div>
           <div class="step-section"><div class="step-governance">Every data range in every DDL workbook must be a Table. This is the single most impactful Excel action. The foundation everything else builds on.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
@@ -190,7 +191,7 @@ Result: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)</div></div>
           </div>
           <h3 class="step-name">No Blank Rows or Columns</h3>
           <p class="step-what">Ensures that data ranges contain no empty rows or columns within the data boundary, preventing silent failures in tables, filters, sorts, pivot tables, and range detection.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -198,13 +199,13 @@ Result: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)</div></div>
             <div class="step-section-body">When you structure any data range, use continuous rows and columns with no internal blanks to ensure Excel correctly detects the data boundary for all operations.</div>
           </div>
           <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">WRONG: Data in A1:D10 with row 5 completely blank
-→ Ctrl+Shift+End selects A1:D4 (stops at blank)
-→ Pivot table only reads rows 1-4
-→ COUNTA returns wrong count
+â†’ Ctrl+Shift+End selects A1:D4 (stops at blank)
+â†’ Pivot table only reads rows 1-4
+â†’ COUNTA returns wrong count
 
 RIGHT: Data in A1:D10 with no blank rows
-→ All operations detect the full range correctly</div></div>
-          <div class="step-section"><div class="step-governance">No blank rows or columns within any DDL data range. Period. This is the most common cause of 'my formula works but the answer is wrong' in Excel. If you need visual separation, use borders or conditional formatting — never blank rows.</div></div>
+â†’ All operations detect the full range correctly</div></div>
+          <div class="step-section"><div class="step-governance">No blank rows or columns within any DDL data range. Period. This is the most common cause of 'my formula works but the answer is wrong' in Excel. If you need visual separation, use borders or conditional formatting â€” never blank rows.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
         </div>
       </div>
@@ -225,14 +226,14 @@ RIGHT: Data in A1:D10 with no blank rows
           </div>
           <h3 class="step-name">Center Across Selection</h3>
           <p class="step-what">Centers text visually across multiple columns without merging cells, preserving sorting, filtering, references, and copy-paste operations.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
             <div class="step-section-label">Intent</div>
             <div class="step-section-body">When you need centered text spanning multiple columns, use Center Across Selection to achieve visual alignment without merging cells.</div>
           </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select cells A1:D1 → Format Cells (Ctrl+1) → Alignment tab → Horizontal → Center Across Selection → OK.
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select cells A1:D1 â†’ Format Cells (Ctrl+1) â†’ Alignment tab â†’ Horizontal â†’ Center Across Selection â†’ OK.
 Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addressable.</div></div>
           <div class="step-section"><div class="step-governance">The approved alternative to merged cells (ANT-0001). Mandatory in any DDL workbook where visual centering is needed. Resolves the most common formatting anti-pattern.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
@@ -255,7 +256,7 @@ Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addre
           </div>
           <h3 class="step-name">XLOOKUP</h3>
           <p class="step-what">Retrieves a value from a range or array based on a lookup key, returning exact or approximate matches without requiring a column index number.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -284,7 +285,7 @@ Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addre
           </div>
           <h3 class="step-name">IF/IFS</h3>
           <p class="step-what">Evaluates a condition and returns one value if true and another if false. IFS extends this to multiple conditions without nesting, improving readability for multi-branch logic.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -327,8 +328,8 @@ Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addre
             <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
           </div>
           <h3 class="step-name">README Tab Convention</h3>
-          <p class="step-what">Establishes a dedicated README sheet as the first tab in every governed workbook, documenting purpose, owner, schema, change log, and usage instructions — making the workbook self-describing.</p>
-          <div class="step-chevron">▾</div>
+          <p class="step-what">Establishes a dedicated README sheet as the first tab in every governed workbook, documenting purpose, owner, schema, change log, and usage instructions â€” making the workbook self-describing.</p>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -337,11 +338,11 @@ Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addre
           </div>
           <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Tab name: README (or _README to sort first)
 Required sections:
-  Purpose — one sentence
-  Owner — name + date
-  Sheet Index — list all tabs + their role
-  Change Log — date, author, change
-  Governance Notes — any rules or constraints</div></div>
+  Purpose â€” one sentence
+  Owner â€” name + date
+  Sheet Index â€” list all tabs + their role
+  Change Log â€” date, author, change
+  Governance Notes â€” any rules or constraints</div></div>
           <div class="step-section"><div class="step-governance">Mandatory on all DDL workbooks per STD-EXCEL-001 Rule 0. A workbook without a README is ungoverned by definition. README must be updated on every structural change.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
         </div>
@@ -362,8 +363,8 @@ Required sections:
             <span class="step-tier-badge" style="color:#C49A3C;border-color:#C49A3C30">Advanced</span>
           </div>
           <h3 class="step-name">Consistent Grain</h3>
-          <p class="step-what">Enforces that every row in a data table represents the same unit of measurement — one transaction, one period, one entity — preventing aggregation errors and ambiguous analysis.</p>
-          <div class="step-chevron">▾</div>
+          <p class="step-what">Enforces that every row in a data table represents the same unit of measurement â€” one transaction, one period, one entity â€” preventing aggregation errors and ambiguous analysis.</p>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -374,8 +375,8 @@ Required sections:
 WRONG: Row 1 = daily total, Row 2 = individual sale, Row 3 = monthly summary
 
 Test: "Can I SUM this column and get a meaningful number?"
-If yes → grain is consistent. If no → grain is mixed.</div></div>
-          <div class="step-section"><div class="step-governance">Every DDL fact table must have documented grain. STD-FACT-001 enforces this — one row = one fact at one grain. Mixed grain is the most common cause of 'the numbers don't add up' in enterprise spreadsheets.</div></div>
+If yes â†’ grain is consistent. If no â†’ grain is mixed.</div></div>
+          <div class="step-section"><div class="step-governance">Every DDL fact table must have documented grain. STD-FACT-001 enforces this â€” one row = one fact at one grain. Mixed grain is the most common cause of 'the numbers don't add up' in enterprise spreadsheets.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
         </div>
       </div>
@@ -396,7 +397,7 @@ If yes → grain is consistent. If no → grain is mixed.</div></div>
           </div>
           <h3 class="step-name">Star Schema Layout</h3>
           <p class="step-what">Organizes workbook data into dimension tables (descriptive attributes) and fact tables (transactional measures), enabling scalable lookups, consistent grain, and pivot-ready architecture.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
@@ -426,18 +427,18 @@ Lookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name
             <span class="step-tier-badge" style="color:#4A9E6B;border-color:#4A9E6B30">Intermediate</span>
           </div>
           <h3 class="step-name">Surrogate Key Generation</h3>
-          <p class="step-what">Generates a stable, system-assigned integer key for each row using ROW() offset or a counter column, decoupled from any business attribute — providing a reliable join key that survives source data changes.</p>
-          <div class="step-chevron">▾</div>
+          <p class="step-what">Generates a stable, system-assigned integer key for each row using ROW() offset or a counter column, decoupled from any business attribute â€” providing a reliable join key that survives source data changes.</p>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
             <div class="step-section-label">Intent</div>
             <div class="step-section-body">When a fact table row needs a stable, non-business join key, use surrogate key generation to produce an integer ID that never changes even when source attributes do.</div>
           </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=ROW()-1   // in a table starting at row 2 — simple offset
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=ROW()-1   // in a table starting at row 2 â€” simple offset
 =TEXT(ROW()-1,"00000")  // zero-padded for display
 // Or: named column SK_ID with sequence starting at 1</div></div>
-          <div class="step-section"><div class="step-governance">Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys — they couple your workbook to upstream naming conventions.</div></div>
+          <div class="step-section"><div class="step-governance">Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys â€” they couple your workbook to upstream naming conventions.</div></div>
           <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
         </div>
       </div>
@@ -458,7 +459,7 @@ Lookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name
           </div>
           <h3 class="step-name">MAKEARRAY Engine</h3>
           <p class="step-what">Generates a dynamic grid of calculated values across two dimensions using MAKEARRAY with LAMBDA, building self-constructing matrices that eliminate manual cell-by-cell formulas.</p>
-          <div class="step-chevron">▾</div>
+          <div class="step-chevron">â–¾</div>
         </div>
         <div class="step-card-body">
           <div class="step-section">
