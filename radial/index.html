@@ -101,6 +101,7 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 24px;border-bottom:1px
     <span class="stats-display" id="stats-display">65 entries · 156 edges</span>
     <div class="nav-sep"></div>
     <a href="../explorer/" class="nav-link-small">Force Graph →</a>
+    <a href="../paths/" class="nav-link-small">Paths</a>
     <a href="../" class="nav-link-small">← Home</a>
   </div>
 </nav>
@@ -271,6 +272,7 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 24px;border-bottom:1px
     <span class="stats-display" id="stats-display">65 entries · 156 edges</span>
     <div class="nav-sep"></div>
     <a href="../explorer/" class="nav-link-small">Force Graph →</a>
+    <a href="../paths/" class="nav-link-small">Paths</a>
     <a href="../" class="nav-link-small">← Home</a>
   </div>
 </nav>
@@ -626,7 +628,7 @@ document.getElementById('radial-canvas').addEventListener('click',function(){
 });
 
 window.addEventListener('resize',function(){buildScene();});
-buildScene();
+document.addEventListener('DOMContentLoaded',function(){buildScene();});
 </script>
 </body>
 </html>
