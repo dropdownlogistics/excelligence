@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Paths — Excelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh}
+nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,27,42,0.95);backdrop-filter:blur(12px);z-index:100;gap:20px}
+.nav-logo{font-size:15px;font-weight:700;color:var(--cream);text-decoration:none}.nav-logo span{color:var(--crimson)}
+.nav-sep{width:1px;height:18px;background:var(--border2)}
+.nav-crumb{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.nav-crumb a{color:var(--dim);text-decoration:none;transition:color .15s}.nav-crumb a:hover{color:var(--cream)}
+.nav-right{margin-left:auto}.nav-cta{padding:6px 16px;background:var(--crimson);border-radius:6px;color:var(--cream);font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s}.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{max-width:860px;margin:0 auto;padding:56px 48px 40px}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.hero-title{font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-.02em;margin-bottom:12px;line-height:1.1}
+.hero-title em{font-family:'Source Serif 4',serif;font-style:italic;color:rgba(245,241,235,.7)}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:16px;color:rgba(245,241,235,.65);line-height:1.7;max-width:580px;margin-bottom:32px}
+
+/* PATH SELECTOR */
+.path-selector{max-width:860px;margin:0 auto;padding:0 48px 48px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.path-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;text-decoration:none;display:block}
+.path-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transition:opacity .2s}
+.path-card.p1::before{background:var(--blue)}
+.path-card.p2::before{background:var(--crimson)}
+.path-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.path-card.active{border-color:var(--border2)}
+.path-card.p1.active{border-color:rgba(107,157,194,.4)}
+.path-card.p2.active{border-color:rgba(178,53,49,.4)}
+.path-card-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.path-card.p1 .path-card-label{color:var(--blue)}
+.path-card.p2 .path-card-label{color:var(--crimson)}
+.path-card-title{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:8px}
+.path-card-desc{font-size:13px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.62);line-height:1.55;margin-bottom:14px}
+.path-card-meta{display:flex;gap:10px;flex-wrap:wrap}
+.path-meta-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--dim)}
+
+/* PATH CONTENT */
+.path-content{max-width:700px;margin:0 auto;padding:0 48px 80px;display:none}
+.path-content.visible{display:block}
+.path-header{margin-bottom:40px}
+.path-header-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.path-header-title{font-size:22px;font-weight:700;color:var(--cream);margin-bottom:6px}
+.path-header-sub{font-family:'Source Serif 4',serif;font-size:14px;color:rgba(245,241,235,.6);line-height:1.6}
+
+/* STEP */
+.path-step{display:flex;gap:0;margin-bottom:0}
+.step-connector{display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0;padding-top:20px}
+.step-num-wrap{flex-shrink:0}
+.step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;flex-shrink:0}
+.step-line{width:1px;flex:1;background:var(--border2);margin-top:8px;min-height:40px}
+
+.step-card{flex:1;margin-bottom:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.step-card:hover{border-color:var(--border2)}
+.step-card.open{border-color:var(--border2)}
+.step-card-header{padding:18px 20px;position:relative}
+.step-chevron{position:absolute;top:18px;right:18px;color:var(--dim);font-size:14px;transition:transform .2s}
+.step-card.open .step-chevron{transform:rotate(180deg)}
+.step-meta{display:flex;gap:7px;align-items:center;margin-bottom:6px}
+.step-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim)}
+.step-type-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;letter-spacing:.03em}
+.step-tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 7px;border-radius:8px;border:1px solid;background:transparent}
+.step-name{font-size:17px;font-weight:700;color:var(--cream);margin-bottom:6px;padding-right:28px}
+.step-what{font-size:13px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.62);line-height:1.55;padding-right:28px}
+
+.step-card-body{display:none;border-top:1px solid var(--border);padding:16px 20px 18px}
+.step-card.open .step-card-body{display:block}
+.step-section{margin-bottom:14px}
+.step-section-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.step-section-body{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(245,241,235,.75);line-height:1.65}
+.step-example{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--amber);line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.step-governance{font-family:'Source Serif 4',serif;font-size:12px;color:rgba(245,241,235,.65);padding:8px 10px;border-left:2px solid var(--crimson);border-radius:0 4px 4px 0;background:rgba(178,53,49,.06);line-height:1.55;font-style:italic}
+.step-explore-link{display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);text-decoration:none;transition:opacity .15s}
+.step-explore-link:hover{opacity:.7}
+
+/* PATH CTA */
+.path-cta{margin-top:32px;padding:24px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;text-align:center}
+.path-cta p{font-family:'Source Serif 4',serif;font-size:15px;color:rgba(245,241,235,.65);margin-bottom:16px;line-height:1.6}
+.path-cta a{display:inline-block;padding:10px 24px;background:var(--crimson);border-radius:6px;color:var(--cream);font-size:13px;font-weight:600;text-decoration:none;transition:opacity .15s}
+.path-cta a:hover{opacity:.85}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);max-width:860px;margin:0 auto 48px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-size:12px;color:var(--dim)}.footer-left strong{color:var(--cream)}.footer-left a{color:var(--dim);text-decoration:none}
+.footer-right{display:flex;gap:18px}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Excel<span>ligence</span></a>
+  <div class="nav-sep"></div>
+  <div class="nav-crumb">
+    <a href="/">Home</a><span style="opacity:.4">›</span>
+    <span style="color:var(--cream)">Learning Paths</span>
+  </div>
+  <div class="nav-right"><a href="/explorer/" class="nav-cta">Enter the Graph &rarr;</a></div>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Excelligence &middot; Learning Paths</div>
+  <h1 class="hero-title">Two paths.<br><em>One governed graph.</em></h1>
+  <p class="hero-sub">Curated entry sequences through the knowledge graph. Each step connects to the next via governed LEADS_TO edges. Click a path to begin. Click any step to expand it.</p>
+</div>
+
+<div class="path-selector">
+  <a class="path-card p1" onclick="selectPath('p1');return false;" href="#">
+    <div class="path-card-label">Path 01 &middot; Beginner</div>
+    <div class="path-card-title">Your First Hour</div>
+    <div class="path-card-desc">Five foundational entries every Excel user needs before anything else. No prerequisites. Start here.</div>
+    <div class="path-card-meta">
+      <span class="path-meta-chip">5 entries</span>
+      <span class="path-meta-chip">Beginner &rarr; Intermediate</span>
+      <span class="path-meta-chip">KEY &middot; CON &middot; FRM</span>
+    </div>
+  </a>
+  <a class="path-card p2" onclick="selectPath('p2');return false;" href="#">
+    <div class="path-card-label">Path 02 &middot; Advanced</div>
+    <div class="path-card-title">The Star Schema Path</div>
+    <div class="path-card-desc">The DDL methodology applied to Excel. From grain definition to institutional-grade matrix architecture. This is how the Assurance Map was built.</div>
+    <div class="path-card-meta">
+      <span class="path-meta-chip">5 entries</span>
+      <span class="path-meta-chip">Beginner &rarr; Expert</span>
+      <span class="path-meta-chip">CON &middot; PTN &middot; ARC</span>
+    </div>
+  </a>
+</div>
+
+<!-- PATH 1 -->
+<div class="path-content" id="path-p1">
+  <div class="path-header">
+    <div class="path-header-label">Path 01 &middot; Your First Hour</div>
+    <div class="path-header-title">Five entries. One solid foundation.</div>
+    <div class="path-header-sub">These are the five things every Excel user should know before learning anything else. Each one is a stone. Together they build the floor everything else stands on.</div>
+  </div>
+
+    <div class="path-step" id="step-KEY-0001">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#C49A3C;color:#0D1B2A">1</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">KEY-0001</span>
+            <span class="step-type-badge" style="background:#C49A3C;color:#0D1B2A">KEY</span>
+            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
+          </div>
+          <h3 class="step-name">Ctrl+T (Table Conversion)</h3>
+          <p class="step-what">Converts a data range into a structured Excel Table, enabling auto-expanding ranges, structured references, built-in filtering, consistent formatting, and Power Query readiness.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need structured references, auto-expansion, and Power Query readiness, use Ctrl+T to convert a range into a proper Excel Table.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select any cell in your data range → Ctrl+T → Confirm range → Rename table in Table Design tab.
+Result: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)</div></div>
+          <div class="step-section"><div class="step-governance">Every data range in every DDL workbook must be a Table. This is the single most impactful Excel action. The foundation everything else builds on.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-CON-0004">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">2</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">CON-0004</span>
+            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
+            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
+          </div>
+          <h3 class="step-name">No Blank Rows or Columns</h3>
+          <p class="step-what">Ensures that data ranges contain no empty rows or columns within the data boundary, preventing silent failures in tables, filters, sorts, pivot tables, and range detection.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you structure any data range, use continuous rows and columns with no internal blanks to ensure Excel correctly detects the data boundary for all operations.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">WRONG: Data in A1:D10 with row 5 completely blank
+→ Ctrl+Shift+End selects A1:D4 (stops at blank)
+→ Pivot table only reads rows 1-4
+→ COUNTA returns wrong count
+
+RIGHT: Data in A1:D10 with no blank rows
+→ All operations detect the full range correctly</div></div>
+          <div class="step-section"><div class="step-governance">No blank rows or columns within any DDL data range. Period. This is the most common cause of 'my formula works but the answer is wrong' in Excel. If you need visual separation, use borders or conditional formatting — never blank rows.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-CON-0001">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">3</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">CON-0001</span>
+            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
+            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
+          </div>
+          <h3 class="step-name">Center Across Selection</h3>
+          <p class="step-what">Centers text visually across multiple columns without merging cells, preserving sorting, filtering, references, and copy-paste operations.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need centered text spanning multiple columns, use Center Across Selection to achieve visual alignment without merging cells.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select cells A1:D1 → Format Cells (Ctrl+1) → Alignment tab → Horizontal → Center Across Selection → OK.
+Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addressable.</div></div>
+          <div class="step-section"><div class="step-governance">The approved alternative to merged cells (ANT-0001). Mandatory in any DDL workbook where visual centering is needed. Resolves the most common formatting anti-pattern.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-FRM-0001">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#6B9DC2;color:#0D1B2A">4</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">FRM-0001</span>
+            <span class="step-type-badge" style="background:#6B9DC2;color:#0D1B2A">FRM</span>
+            <span class="step-tier-badge" style="color:#4A9E6B;border-color:#4A9E6B30">Intermediate</span>
+          </div>
+          <h3 class="step-name">XLOOKUP</h3>
+          <p class="step-what">Retrieves a value from a range or array based on a lookup key, returning exact or approximate matches without requiring a column index number.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need to retrieve a value from another table based on a lookup key, use XLOOKUP to return exact or approximate matches without column index dependency.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=XLOOKUP(A2, Products[SKU], Products[Price], "Not Found", 0)</div></div>
+          <div class="step-section"><div class="step-governance">Replaces VLOOKUP in all new builds. VLOOKUP should never appear in DDL workbooks.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-FRM-0010">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#6B9DC2;color:#0D1B2A">5</div>
+        </div>
+        
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">FRM-0010</span>
+            <span class="step-type-badge" style="background:#6B9DC2;color:#0D1B2A">FRM</span>
+            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
+          </div>
+          <h3 class="step-name">IF/IFS</h3>
+          <p class="step-what">Evaluates a condition and returns one value if true and another if false. IFS extends this to multiple conditions without nesting, improving readability for multi-branch logic.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need conditional logic with multiple branches, use IF or IFS to evaluate conditions and return governed outcomes without deep nesting.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=IF(A2&gt;100, "High", "Low")
+=IFS(A2&gt;100, "High", A2&gt;50, "Medium", TRUE, "Low")</div></div>
+          <div class="step-section"><div class="step-governance">IF is acceptable for binary conditions. For 3+ branches, use IFS or SWITCH instead of nested IF. For 5+ branches with complex logic, wrap in LET for named intermediate values.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+  <div class="path-cta">
+    <p>You&rsquo;ve walked the foundation. The graph has 50 more entries waiting &mdash; and 130 edges connecting them.</p>
+    <a href="/explorer/">Explore the Full Graph &rarr;</a>
+  </div>
+</div>
+
+<!-- PATH 2 -->
+<div class="path-content" id="path-p2">
+  <div class="path-header">
+    <div class="path-header-label">Path 02 &middot; The Star Schema Path</div>
+    <div class="path-header-title">From raw data to governed architecture.</div>
+    <div class="path-header-sub">This is the DDL methodology applied to Excel. Start with documentation and grain discipline. End with a self-constructing matrix that updates as your data changes. This is how the Assurance Map was built.</div>
+  </div>
+
+    <div class="path-step" id="step-CON-0006">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">1</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">CON-0006</span>
+            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
+            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
+          </div>
+          <h3 class="step-name">README Tab Convention</h3>
+          <p class="step-what">Establishes a dedicated README sheet as the first tab in every governed workbook, documenting purpose, owner, schema, change log, and usage instructions — making the workbook self-describing.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When building any workbook intended for reuse or sharing, add a README tab first to document what the workbook does, who owns it, and how it is structured.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Tab name: README (or _README to sort first)
+Required sections:
+  Purpose — one sentence
+  Owner — name + date
+  Sheet Index — list all tabs + their role
+  Change Log — date, author, change
+  Governance Notes — any rules or constraints</div></div>
+          <div class="step-section"><div class="step-governance">Mandatory on all DDL workbooks per STD-EXCEL-001 Rule 0. A workbook without a README is ungoverned by definition. README must be updated on every structural change.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-CON-0002">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">2</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">CON-0002</span>
+            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
+            <span class="step-tier-badge" style="color:#C49A3C;border-color:#C49A3C30">Advanced</span>
+          </div>
+          <h3 class="step-name">Consistent Grain</h3>
+          <p class="step-what">Enforces that every row in a data table represents the same unit of measurement — one transaction, one period, one entity — preventing aggregation errors and ambiguous analysis.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need reliable aggregation and filtering, use consistent grain to ensure every row in a table represents exactly one instance of the same thing.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">CORRECT: Every row = one sale (Date, Product, Qty, Revenue)
+WRONG: Row 1 = daily total, Row 2 = individual sale, Row 3 = monthly summary
+
+Test: "Can I SUM this column and get a meaningful number?"
+If yes → grain is consistent. If no → grain is mixed.</div></div>
+          <div class="step-section"><div class="step-governance">Every DDL fact table must have documented grain. STD-FACT-001 enforces this — one row = one fact at one grain. Mixed grain is the most common cause of 'the numbers don't add up' in enterprise spreadsheets.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-PTN-0001">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#4A9E6B;color:#0D1B2A">3</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">PTN-0001</span>
+            <span class="step-type-badge" style="background:#4A9E6B;color:#0D1B2A">PTN</span>
+            <span class="step-tier-badge" style="color:#C49A3C;border-color:#C49A3C30">Advanced</span>
+          </div>
+          <h3 class="step-name">Star Schema Layout</h3>
+          <p class="step-what">Organizes workbook data into dimension tables (descriptive attributes) and fact tables (transactional measures), enabling scalable lookups, consistent grain, and pivot-ready architecture.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need to organize workbook data for scalable analysis, use star schema layout to separate dimension tables from fact tables, enabling governed lookups and pivot-ready architecture.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Dimension tables: dim_Product (ProductID, Name, Category)
+Fact table: fct_Sales (Date, ProductID, Qty, Revenue)
+Lookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name])</div></div>
+          <div class="step-section"><div class="step-governance">The DDL standard for any workbook with more than one entity type. All Assurance Map, BlindSpot, and dashboard workbooks use this pattern. Non-negotiable at Advanced tier and above.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-PTN-0008">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#4A9E6B;color:#0D1B2A">4</div>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">PTN-0008</span>
+            <span class="step-type-badge" style="background:#4A9E6B;color:#0D1B2A">PTN</span>
+            <span class="step-tier-badge" style="color:#4A9E6B;border-color:#4A9E6B30">Intermediate</span>
+          </div>
+          <h3 class="step-name">Surrogate Key Generation</h3>
+          <p class="step-what">Generates a stable, system-assigned integer key for each row using ROW() offset or a counter column, decoupled from any business attribute — providing a reliable join key that survives source data changes.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When a fact table row needs a stable, non-business join key, use surrogate key generation to produce an integer ID that never changes even when source attributes do.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=ROW()-1   // in a table starting at row 2 — simple offset
+=TEXT(ROW()-1,"00000")  // zero-padded for display
+// Or: named column SK_ID with sequence starting at 1</div></div>
+          <div class="step-section"><div class="step-governance">Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys — they couple your workbook to upstream naming conventions.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="path-step" id="step-ARC-0001">
+      <div class="step-connector">
+        <div class="step-num-wrap">
+          <div class="step-num" style="background:#B23531;color:#0D1B2A">5</div>
+        </div>
+        
+      </div>
+      <div class="step-card" onclick="toggleStep(this)">
+        <div class="step-card-header">
+          <div class="step-meta">
+            <span class="step-id">ARC-0001</span>
+            <span class="step-type-badge" style="background:#B23531;color:#0D1B2A">ARC</span>
+            <span class="step-tier-badge" style="color:#B23531;border-color:#B2353130">Expert</span>
+          </div>
+          <h3 class="step-name">MAKEARRAY Engine</h3>
+          <p class="step-what">Generates a dynamic grid of calculated values across two dimensions using MAKEARRAY with LAMBDA, building self-constructing matrices that eliminate manual cell-by-cell formulas.</p>
+          <div class="step-chevron">▾</div>
+        </div>
+        <div class="step-card-body">
+          <div class="step-section">
+            <div class="step-section-label">Intent</div>
+            <div class="step-section-body">When you need to generate a dynamic grid of calculated values across two dimensions, use MAKEARRAY with LAMBDA to build self-constructing matrices that eliminate manual cell-by-cell formulas.</div>
+          </div>
+          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=LET(
+  rows, COUNTA(RowHeaders),
+  cols, COUNTA(ColHeaders),
+  MAKEARRAY(rows, cols, LAMBDA(r,c,
+    XLOOKUP(INDEX(RowHeaders,r), Data[Key], INDEX(Data,,c+1))
+  ))
+)</div></div>
+          <div class="step-section"><div class="step-governance">The DDL signature architecture. Used in Assurance Map, Keith's audit dashboard, BlindSpot analytics. Every DDL dashboard matrix should use this pattern.</div></div>
+          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
+        </div>
+      </div>
+    </div>
+  <div class="path-cta">
+    <p>You&rsquo;ve walked the star schema path. This is the architecture behind every DDL analytical workbook.</p>
+    <a href="/explorer/">Continue in the Graph &rarr;</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<footer>
+  <div class="footer-left"><strong>Excelligence</strong> &middot; Learning Paths &middot; A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-right">
+    <a href="/">Home</a><a href="/explorer/">Explorer</a>
+    <a href="/radial/">Radial</a><a href="/standards/excel-001/">STD-001</a>
+    <a href="/tools/cf-patterns/">CF Patterns</a>
+  </div>
+</footer>
+
+<script>
+function selectPath(id) {
+  document.querySelectorAll('.path-card').forEach(function(c){ c.classList.remove('active'); });
+  document.querySelectorAll('.path-content').forEach(function(c){ c.classList.remove('visible'); });
+  var card = document.querySelector('.path-card.'+id);
+  if(card) card.classList.add('active');
+  var content = document.getElementById('path-'+id);
+  if(content){ content.classList.add('visible'); content.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+
+function toggleStep(card) {
+  card.classList.toggle('open');
+}
+
+// Auto-open first path
+selectPath('p1');
+// Auto-open first step of each path
+document.querySelectorAll('.step-card').forEach(function(card, i){
+  if(i === 0) card.classList.add('open');
+});
+</script>
+</body>
+</html>
