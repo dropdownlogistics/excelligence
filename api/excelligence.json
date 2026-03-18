@@ -1,8 +1,8 @@
 {
   "meta": {
     "schema_version": "0.2.0",
-    "entry_count": 65,
-    "edge_count": 156,
+    "entry_count": 75,
+    "edge_count": 178,
     "alias_count": 148,
     "tag_count": 150,
     "type_distribution": {
@@ -1134,6 +1134,176 @@
       "excel_version": "365",
       "created_at": "2026-03-17 00:00:00",
       "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "KEY-0005",
+      "name": "Ctrl+Z / Ctrl+Y (Undo/Redo)",
+      "type": "KEY",
+      "tier": "Beginner",
+      "what_it_does": "Ctrl+Z reverses the last action. Ctrl+Y reapplies it. Together they form the primary safety net for all Excel operations, enabling fearless experimentation without risk of permanent data loss.",
+      "intent": "When you make a mistake or want to reverse a recent change, use Ctrl+Z to undo and Ctrl+Y to redo without touching the mouse.",
+      "example": "Ctrl+Z     -- Undo last action (up to 100 steps)\nCtrl+Y     -- Redo (reapply undone action)\nCtrl+Z x3  -- Undo last 3 actions in sequence\n\nNote: Saving the file (Ctrl+S) does NOT clear the undo stack.\nNote: Some VBA macros clear the undo stack on execution.",
+      "failure_modes": "Undo stack is cleared by: saving with certain file formats, running VBA macros, some Power Query refreshes. Undo does not reverse sheet protection changes or name manager edits.",
+      "performance_notes": "Excel maintains up to 100 undo steps by default. Reducing this in advanced settings speeds up large workbooks at the cost of undo history depth.",
+      "governance_notes": "The foundation of safe Excel work. Teach Ctrl+Z before any function. The undo stack is your first audit trail \u2014 it records every change in the session.",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "KEY-0006",
+      "name": "Ctrl+Arrow (Range Navigation)",
+      "type": "KEY",
+      "tier": "Beginner",
+      "what_it_does": "Jumps to the last non-empty cell in the direction of the arrow key, enabling instant navigation to the end of a data range without scrolling or mouse use.",
+      "intent": "When you need to navigate quickly to the edge of a data range or find the last row of a dataset, use Ctrl+Arrow to jump instantly without scrolling.",
+      "example": "Ctrl+Down  -- Jump to last filled cell in column\nCtrl+Right -- Jump to last filled cell in row\nCtrl+End   -- Jump to last used cell in worksheet\nCtrl+Home  -- Jump to cell A1\n\nShift+Ctrl+Down -- Select from current cell to last filled cell\n(Essential for selecting dynamic-length ranges)",
+      "failure_modes": "Blank rows interrupt the jump \u2014 Ctrl+Down stops at the blank, not the true end. In tables (Ctrl+T), Ctrl+Down correctly navigates to the last row of the table regardless of blanks.",
+      "performance_notes": "Zero computational impact. Pure navigation. The speed gain is entirely in human workflow \u2014 eliminates scrolling on large datasets.",
+      "governance_notes": "Shift+Ctrl+Down for dynamic range selection replaces hardcoded range references in many scenarios. Use it before writing any formula that references 'the whole column'.",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "FRM-0021",
+      "name": "ISNUMBER / ISTEXT / ISBLANK",
+      "type": "FRM",
+      "tier": "Intermediate",
+      "what_it_does": "Type-checking functions that return TRUE/FALSE based on whether a cell contains a number, text, or is empty \u2014 enabling conditional logic that responds to data type rather than value.",
+      "intent": "When formula logic must behave differently based on what type of data a cell contains, use ISNUMBER, ISTEXT, or ISBLANK to test the data type before processing.",
+      "example": "=IF(ISNUMBER(A2), A2*Rate, 0)          -- Skip non-numeric\n=IF(ISBLANK(B2), 'Pending', B2)        -- Default for blanks\n=SUMPRODUCT(ISNUMBER(Range)*1)         -- Count numeric cells\n=IF(ISTEXT(A2), UPPER(A2), TEXT(A2,'0')) -- Handle either type",
+      "failure_modes": "ISNUMBER returns FALSE for numbers stored as text \u2014 one of the most common silent data quality failures. Use ISNUMBER(VALUE(A2)) to catch text-formatted numbers.",
+      "performance_notes": "All IS-functions evaluate instantly. SUMPRODUCT(ISNUMBER(range)*1) is the fastest way to count numeric cells without a helper column.",
+      "governance_notes": "Use type-checking functions to make formulas defensive against mixed data types in input columns. A formula that crashes on text input is a formula waiting to fail in production.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "FRM-0022",
+      "name": "EDATE / EOMONTH",
+      "type": "FRM",
+      "tier": "Intermediate",
+      "what_it_does": "EDATE returns a date a specified number of months before or after a start date. EOMONTH returns the last day of the month offset by a given number of months \u2014 both enabling governed date arithmetic.",
+      "intent": "When you need to calculate future or past dates by month rather than by day, use EDATE for same-day offsets and EOMONTH for month-end calculations.",
+      "example": "=EDATE(A2, 3)           -- 3 months after date in A2\n=EDATE(A2, -12)         -- 1 year before date in A2\n=EOMONTH(A2, 0)         -- Last day of same month\n=EOMONTH(A2, 1)         -- Last day of next month\n=EOMONTH(A2, 0)+1       -- First day of next month",
+      "failure_modes": "EDATE returns a serial number \u2014 format the result as a date or wrap in TEXT(). Both functions require the Analysis ToolPak in Excel 2007 and earlier.",
+      "performance_notes": "Both functions are fast and non-volatile. Preferred over manual day-arithmetic (+30, +31) which produces wrong results across month boundaries.",
+      "governance_notes": "Use EOMONTH for all period-end date calculations in DDL workbooks. Never calculate month-end dates with + 30 or + 31 \u2014 month lengths vary. EDATE is the governed alternative to date + 30.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PTN-0014",
+      "name": "KPI Card Pattern",
+      "type": "PTN",
+      "tier": "Intermediate",
+      "what_it_does": "Structures dashboard summary metrics as individual governed cells combining a primary value, a comparison delta (MoM or YoY), a directional indicator, and a label \u2014 creating scannable executive-level summary cards.",
+      "intent": "When a dashboard needs to surface key metrics at a glance, use the KPI card pattern to display each metric with its context (trend, delta, label) in a compact, consistent cell group.",
+      "example": "// KPI card components (4-cell group):\nLabel:    'Revenue'                    -- Static label\nValue:    =SUMIFS(...)                 -- Current period value\nDelta:    =(Current/Prior)-1           -- Period-over-period change\nTrend:    =IF(Delta>0,'\u25b2','\u25bc')         -- Directional indicator\n\n// CF rule on delta cell:\n=C4>0 \u2192 green fill  |  =C4<0 \u2192 red fill",
+      "failure_modes": "Hardcoding the comparison period in the delta formula \u2014 use a named sel_ parameter so the period can change without formula edits. KPI cards that don't show comparison context are data without meaning.",
+      "performance_notes": "KPI cards are simple aggregation formulas. No performance concerns at normal scale.",
+      "governance_notes": "Every DDL dashboard must have at minimum three KPI cards per STD-EXCEL-001 Rule 6. Each card must show: value, period label, and directional delta. A number without context is not a KPI.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PTN-0015",
+      "name": "Lookup Table Pattern",
+      "type": "PTN",
+      "tier": "Intermediate",
+      "what_it_does": "Centralizes reference data (rates, categories, mappings, thresholds) in dedicated, named Excel Tables on a Ref_ sheet, enabling all formulas to look up values by key rather than hardcoding them or duplicating them across sheets.",
+      "intent": "When multiple formulas reference the same set of values (rates, tiers, categories), use the lookup table pattern to centralize that data in a governed Ref_ table so changes propagate everywhere automatically.",
+      "example": "// Ref_CommissionRates table:\nTier     | Rate\nBronze   | 0.05\nSilver   | 0.08\nGold     | 0.12\n\n// Formula using it:\n=XLOOKUP(SalesRep[Tier],\n  Ref_CommissionRates[Tier],\n  Ref_CommissionRates[Rate], 0)",
+      "failure_modes": "Lookup tables without a Ref_ prefix get confused with fact tables. Missing rows in the lookup table cause silent #N/A failures \u2014 always include an if_not_found argument in XLOOKUP.",
+      "performance_notes": "Small lookup tables (under 1K rows) have no performance cost. For large lookup tables, sort by key and use binary search mode in XLOOKUP.",
+      "governance_notes": "Every set of values used in more than one formula must live in a lookup table. This is the intersection of the star schema principle (PTN-0001) and the anti-hardcoding rule (ANT-0003). Named ranges on lookup columns enable self-documenting formulas.",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "CON-0008",
+      "name": "Tab Color Coding",
+      "type": "CON",
+      "tier": "Beginner",
+      "what_it_does": "Assigns consistent colors to worksheet tabs based on their layer role (INPUT=blue, LOGIC=gray, OUTPUT=green, CONTROL=yellow, STAGING=orange, DASHBOARD=purple) making workbook structure immediately visible from the tab bar.",
+      "intent": "When a workbook has multiple tabs serving different architectural roles, use tab color coding to make the layer structure visible without opening each sheet.",
+      "example": "Right-click tab \u2192 Tab Color\nINPUT:     Light Blue   (#BDD7EE)\nLOGIC:     Light Gray   (#D9D9D9)\nOUTPUT:    Light Green  (#E2EFDA)\nCONTROL:   Light Yellow (#FFEB9C)\nSTAGING:   Light Orange (#FCE4D6)\nDASHBOARD: Light Purple (#E2C9FF)\nREADME:    No color (white \u2014 first tab)",
+      "failure_modes": "Inconsistent color assignments across workbooks defeat the purpose. Establish the convention once (in a README or standards doc) and apply it everywhere.",
+      "performance_notes": "Zero computational impact. Tab colors are display metadata only.",
+      "governance_notes": "Required in all DDL operational workbooks per STD-EXCEL-002 Rule 8. A person who has never seen the workbook should understand its architecture from the tab bar alone. The color is the documentation.",
+      "difficulty_score": 1,
+      "usage_frequency": "Weekly",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "CON-0009",
+      "name": "Column Header Convention",
+      "type": "CON",
+      "tier": "Beginner",
+      "what_it_does": "Establishes consistent rules for column header formatting: PascalCase or snake_case naming, no spaces, no special characters, type suffix for ambiguous columns (e.g., _Date, _ID, _Amt), and a single frozen header row at row 1 of every table.",
+      "intent": "When naming columns in any Excel Table or data range, use the column header convention to ensure names are Power Query-compatible, formula-referenceable, and self-describing.",
+      "example": "CORRECT:\n  SalesRep_ID    OrderDate      Revenue_Amt\n  Product_Name   Status         Commission_Rate\n\nWRONG:\n  Sales Rep ID   (spaces -- breaks structured refs)\n  date           (ambiguous -- which date?)\n  col1           (meaningless)\n  Revenue ($)    (special chars -- breaks PQ)",
+      "failure_modes": "Column headers with spaces require bracket escaping in structured references: =Table[[Sales Rep]]  \u2014 error-prone and unreadable. Special characters break Power Query column references silently.",
+      "performance_notes": "No computational impact. The value is entirely in formula readability, Power Query compatibility, and reduced debugging time.",
+      "governance_notes": "All DDL table columns must use PascalCase or snake_case with no spaces. Type suffixes (_ID, _Date, _Amt, _Flag, _Txt) are required for columns whose type is not obvious from the name alone.",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "ANT-0008",
+      "name": "Rainbow Formatting",
+      "type": "ANT",
+      "tier": "Beginner",
+      "what_it_does": "Applies inconsistent, arbitrary cell colors, font colors, and highlight patterns as personal annotation rather than governed visual signals \u2014 creating visual noise that obscures structure and confuses other users.",
+      "intent": "When you need to visually annotate a workbook, use governed conditional formatting rules and tab color conventions instead of manual rainbow formatting that carries no transferable meaning.",
+      "example": "WRONG:\nYellow = 'I need to check this'\nGreen  = 'Looks good'\nRed    = 'Problem -- maybe'\nBlue   = 'Sent to someone'\n(Meaning exists only in the builder's head)\n\nRIGHT:\nConditional formatting rule: =Status='Exception' \u2192 red\nAll colors derive from data, not manual annotation",
+      "failure_modes": "Manual colors are invisible to formulas, Power Query, and any automated process. A filter cannot find 'yellow cells' without VBA. Manual colors also survive copy-paste, spreading meaningless formatting throughout downstream workbooks.",
+      "performance_notes": "Manual cell formatting has negligible performance cost, but the human cost of decoding undocumented color conventions is unbounded.",
+      "governance_notes": "Manual cell coloring is banned in DDL workbooks except for the three governed uses: input cell indicators (blue fill), tab color coding (CON-0008), and temporary build scaffolding (removed before sharing). All permanent visual signals must come from conditional formatting rules.",
+      "difficulty_score": 1,
+      "usage_frequency": "Situational",
+      "excel_version": "2007+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "ARC-0008",
+      "name": "Workbook Versioning Pattern",
+      "type": "ARC",
+      "tier": "Intermediate",
+      "what_it_does": "Establishes a governed file naming and internal versioning system for Excel workbooks: filename includes version suffix (_v1, _v2), a VERSION cell on the README tab tracks the current version, and a change log records every structural modification.",
+      "intent": "When a workbook will go through multiple iterations or be shared with stakeholders, use the workbook versioning pattern to make the current state unambiguous and all changes traceable.",
+      "example": "Filename: Excelligence_Registry_v012.xlsx\n\nREADME tab VERSION cell:\n  Version:     v0.1.2\n  Released:    2026-03-17\n  Status:      Active\n\nChange Log table columns:\n  Version | Date | Author | Change | Reason",
+      "failure_modes": "Version numbers in filename only (not inside the workbook) \u2014 the file can be renamed without updating internal state. Change logs without mandatory entries become optional and therefore useless.",
+      "performance_notes": "No performance impact. The versioning infrastructure is metadata \u2014 it has zero effect on calculation speed.",
+      "governance_notes": "Every DDL workbook that is shared externally or has more than one version must use this pattern. The README tab VERSION cell is the single source of truth for what version is open. Filename can lie. The cell cannot.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
     }
   ],
   "edges": [
@@ -1916,6 +2086,116 @@
       "source": "PTN-0006",
       "target": "PTN-0013",
       "type": "LEADS_TO"
+    },
+    {
+      "source": "KEY-0005",
+      "target": "KEY-0001",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "KEY-0006",
+      "target": "CON-0004",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "KEY-0006",
+      "target": "KEY-0001",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0021",
+      "target": "PTN-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0021",
+      "target": "FRM-0010",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0022",
+      "target": "FRM-0002",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0022",
+      "target": "PTN-0012",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0014",
+      "target": "FRM-0011",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0014",
+      "target": "PTN-0007",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PTN-0014",
+      "target": "ARC-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0015",
+      "target": "FRM-0001",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0015",
+      "target": "PTN-0001",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PTN-0015",
+      "target": "ANT-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "CON-0008",
+      "target": "ARC-0006",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "CON-0008",
+      "target": "CON-0006",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "CON-0009",
+      "target": "KEY-0001",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "CON-0009",
+      "target": "PTN-0001",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "CON-0009",
+      "target": "PQ-0003",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "ANT-0008",
+      "target": "PTN-0007",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "ANT-0008",
+      "target": "CON-0008",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "ARC-0008",
+      "target": "CON-0006",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "ARC-0008",
+      "target": "CON-0007",
+      "type": "PAIRS_WITH"
     }
   ],
   "tags": [
@@ -2893,6 +3173,156 @@
       "entry_id": "PTN-0013",
       "tag_id": 54,
       "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "tag_id": 55,
+      "tag_name": "Navigation"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "tag_id": 56,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "tag_id": 57,
+      "tag_name": "Debugging"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "tag_id": 58,
+      "tag_name": "Navigation"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "tag_id": 59,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "tag_id": 60,
+      "tag_name": "Performance"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "tag_id": 61,
+      "tag_name": "Debugging"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "tag_id": 62,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "tag_id": 63,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "tag_id": 64,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "tag_id": 65,
+      "tag_name": "Auditing"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "tag_id": 66,
+      "tag_name": "Dashboard"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "tag_id": 67,
+      "tag_name": "Dashboard"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "tag_id": 68,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "tag_id": 69,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "tag_id": 70,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "tag_id": 71,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "tag_id": 72,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "CON-0008",
+      "tag_id": 73,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "CON-0008",
+      "tag_id": 74,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "CON-0008",
+      "tag_id": 75,
+      "tag_name": "Documentation"
+    },
+    {
+      "entry_id": "CON-0009",
+      "tag_id": 76,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "CON-0009",
+      "tag_id": 77,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "CON-0009",
+      "tag_id": 78,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "tag_id": 79,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "tag_id": 80,
+      "tag_name": "Debugging"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "tag_id": 81,
+      "tag_name": "Dashboard"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "tag_id": 82,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "tag_id": 83,
+      "tag_name": "Documentation"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "tag_id": 84,
+      "tag_name": "Auditing"
     }
   ],
   "aliases": [
@@ -3671,6 +4101,126 @@
     {
       "entry_id": "PTN-0013",
       "alias": "linked dropdowns"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "alias": "undo"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "alias": "redo"
+    },
+    {
+      "entry_id": "KEY-0005",
+      "alias": "ctrl z"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "alias": "ctrl arrow"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "alias": "jump to end"
+    },
+    {
+      "entry_id": "KEY-0006",
+      "alias": "navigate range"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "alias": "type check"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "alias": "isblank isnumber"
+    },
+    {
+      "entry_id": "FRM-0021",
+      "alias": "data type test"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "alias": "month offset"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "alias": "end of month"
+    },
+    {
+      "entry_id": "FRM-0022",
+      "alias": "date arithmetic"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "alias": "kpi card"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "alias": "metric card"
+    },
+    {
+      "entry_id": "PTN-0014",
+      "alias": "summary metric"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "alias": "reference table"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "alias": "lookup table"
+    },
+    {
+      "entry_id": "PTN-0015",
+      "alias": "ref table"
+    },
+    {
+      "entry_id": "CON-0008",
+      "alias": "tab colors"
+    },
+    {
+      "entry_id": "CON-0008",
+      "alias": "sheet colors"
+    },
+    {
+      "entry_id": "CON-0008",
+      "alias": "color coding tabs"
+    },
+    {
+      "entry_id": "CON-0009",
+      "alias": "column naming"
+    },
+    {
+      "entry_id": "CON-0009",
+      "alias": "header naming"
+    },
+    {
+      "entry_id": "CON-0009",
+      "alias": "column headers"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "alias": "manual coloring"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "alias": "cell colors"
+    },
+    {
+      "entry_id": "ANT-0008",
+      "alias": "highlight cells"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "alias": "version control excel"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "alias": "workbook version"
+    },
+    {
+      "entry_id": "ARC-0008",
+      "alias": "file versioning"
     }
   ]
 }
