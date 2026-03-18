@@ -3,69 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STD-EXCEL-002 — Operational Workbook Standard</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>STD-EXCEL-002 — Operational Workbook Standard · Excelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0D1B2A;--bg:#0d0d12;--card:#10202f;--cream:#F5F1EB;--steel:#6B7B8D;--muted:#5a5648;--dim:#3a3830;--border:rgba(245,241,235,0.07);--crimson:#B23531;--crimson-border:rgba(178,53,49,0.12);--teal:#2C7A7B;--teal-border:rgba(44,122,123,0.15)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:linear-gradient(165deg,var(--bg) 0%,#12121a 50%,#0d1117 100%);color:var(--cream);font-family:'Source Serif 4',serif;line-height:1.7;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding:0 24px}
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--crimson);margin-bottom:8px}
-h1{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:8px}
-h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:var(--cream);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--crimson-border);scroll-margin-top:24px}
-h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--cream);margin:24px 0 8px}
-p{font-size:15px;color:#a09a8c;margin-bottom:16px;line-height:1.7}
-.subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel);margin-bottom:32px}
-.version-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--crimson);color:var(--cream);border-radius:4px;margin-right:8px}
-.status-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;background:var(--teal);color:var(--cream);border-radius:4px}
-code{font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:3px;color:var(--cream)}
-pre{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;margin:12px 0 20px;line-height:1.6;color:#a09a8c}
-.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:16px 0}
-.rule-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--crimson);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
-table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
-th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;text-align:left;padding:10px 12px;background:var(--card);color:var(--steel);border-bottom:1px solid var(--border)}
-td{padding:8px 12px;border-bottom:1px solid var(--border);color:#a09a8c;vertical-align:top}
-.layer-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:12px}
-.layer-box{padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-weight:500}
-.layer-arrow{color:var(--crimson)}
-.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:32px 0}
-.toc a{color:var(--cream);text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:13px;display:block;padding:4px 0}
-.toc a:hover{color:var(--crimson)}
-.toc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--steel);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
-.download-bar{background:var(--card);border:1px solid var(--teal-border);border-radius:8px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin:24px 0}
-.download-bar span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel)}
-.download-btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 16px;background:var(--teal);color:var(--cream);border:none;border-radius:4px;cursor:pointer;text-decoration:none}
-.footer{text-align:center;padding:32px 24px 48px;border-top:1px solid var(--crimson-border);margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:1px}
-.footer a{color:var(--crimson);text-decoration:none}
-.note{font-size:13px;color:var(--steel);font-style:italic;padding:12px 16px;border-left:3px solid var(--crimson);margin:16px 0;background:rgba(178,53,49,0.03)}
-.status-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0}
-.status-node{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 12px;border-radius:6px;font-weight:500}
-.status-arrow{font-family:'JetBrains Mono',monospace;color:var(--dim);font-size:10px;padding:0 6px}
-@media(max-width:600px){h1{font-size:26px}h2{font-size:18px}.layer-flow,.status-flow{flex-direction:column;align-items:flex-start}}
+:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;line-height:1.6}
+nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,27,42,0.95);backdrop-filter:blur(12px);z-index:100;gap:20px}
+.nav-logo{font-size:15px;font-weight:700;color:var(--cream);text-decoration:none}.nav-logo span{color:var(--crimson)}
+.nav-sep{width:1px;height:18px;background:var(--border2)}
+.nav-crumb{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.nav-crumb a{color:var(--dim);text-decoration:none;transition:color .15s}.nav-crumb a:hover{color:var(--cream)}
+.nav-right{margin-left:auto}
+.nav-cta{padding:6px 16px;background:var(--crimson);border-radius:6px;color:var(--cream);font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s}.nav-cta:hover{opacity:.85}
+.doc-wrap{max-width:780px;margin:0 auto;padding:56px 48px 80px}
+.doc-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.doc-title{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:8px;line-height:1.1}
+.doc-subtitle{font-size:18px;color:rgba(245,241,235,.7);font-family:'Source Serif 4',serif;margin-bottom:16px}
+.doc-meta{display:flex;gap:8px;align-items:center;margin-bottom:28px;flex-wrap:wrap}
+.meta-badge{padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em}
+.badge-v{background:var(--crimson);color:var(--cream)}.badge-s{background:rgba(74,173,173,.15);border:1px solid rgba(74,173,173,.3);color:var(--teal)}
+.meta-sep{color:var(--dim);font-size:12px}
+.doc-intro{font-family:'Source Serif 4',serif;font-size:16px;color:rgba(245,241,235,.72);line-height:1.75;margin-bottom:24px}
+.distinction-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:20px 0 28px}
+.distinction-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:0 0 40px}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.toc a{font-size:13px;color:rgba(245,241,235,.65);text-decoration:none;display:block;padding:4px 0;border-bottom:1px solid var(--border);transition:color .15s}.toc a:last-child{border-bottom:none}.toc a:hover{color:var(--cream)}
+.rule-header{display:flex;align-items:flex-start;gap:16px;margin:48px 0 16px;padding-top:32px;border-top:1px solid var(--border);scroll-margin-top:80px}
+.rule-num-badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;background:rgba(74,173,173,.1);border:1px solid rgba(74,173,173,.25);color:var(--teal);white-space:nowrap;flex-shrink:0;margin-top:3px}
+.rule-title{font-size:clamp(18px,2.5vw,22px);font-weight:700;color:var(--cream);letter-spacing:-.01em}
+.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:14px 0}
+.rule-card-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+p{font-family:'Source Serif 4',serif;font-size:15px;color:rgba(245,241,235,.72);line-height:1.75;margin-bottom:14px}
+h3{font-size:15px;font-weight:600;color:var(--cream);margin:22px 0 8px;letter-spacing:-.01em}
+.note{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(245,241,235,.7);padding:10px 14px;border-left:2px solid var(--teal);border-radius:0 6px 6px 0;background:rgba(74,173,173,.06);margin:14px 0;line-height:1.6;font-style:italic}
+.warn{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(245,241,235,.7);padding:10px 14px;border-left:2px solid var(--crimson);border-radius:0 6px 6px 0;background:rgba(178,53,49,.06);margin:14px 0;line-height:1.6;font-style:italic}
+pre{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;overflow-x:auto;margin:10px 0 16px;line-height:1.7;color:var(--amber)}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,255,255,.06);padding:2px 7px;border-radius:4px;color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}
+th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:9px 12px;background:var(--card);color:var(--dim);border-bottom:1px solid var(--border2)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);color:rgba(245,241,235,.68);vertical-align:top;font-family:'Source Serif 4',serif;font-size:13px;line-height:1.5}
+td code{font-size:11px}
+.layer-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:12px}
+.layer-box{padding:6px 14px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--cream);font-weight:600}
+.layer-box.optional{opacity:.5}
+.layer-arrow{color:var(--teal);font-size:14px;font-weight:700}
+.status-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:14px 0}
+.status-node{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 12px;border-radius:6px;font-weight:600}
+.status-arrow{color:var(--dim);font-size:12px;padding:0 2px}
+.tab-color-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.std-footer-bar{margin-top:48px;padding:20px 24px;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:space-between}
+.std-footer-bar span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)}
+.std-footer-link{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s;font-family:'JetBrains Mono',monospace}.std-footer-link:hover{color:var(--cream)}
+footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-size:12px;color:var(--dim)}.footer-left strong{color:var(--cream)}.footer-left a{color:var(--dim);text-decoration:none}
+.footer-right{display:flex;gap:18px}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
 </style>
 </head>
 <body>
 
-<section style="padding:64px 0 0">
-<div class="wrap">
-  <div class="eyebrow">Dropdown Logistics · Knowledge Vault</div>
-  <h1>STD-EXCEL-002</h1>
-  <p style="font-family:'Space Grotesk',sans-serif;font-size:18px;color:var(--cream);margin-bottom:8px">Operational Workbook Standard</p>
-  <div class="subtitle">
-    <span class="version-badge">v0.2</span>
-    <span class="status-badge">Ratification Ready</span>
-    &nbsp;·&nbsp; 2026-03-16 &nbsp;·&nbsp; Council: 4 LOCK · 5 REVISE · 0 REJECT
+<nav>
+  <a href="../../" class="nav-logo">Excel<span>ligence</span></a>
+  <div class="nav-sep"></div>
+  <div class="nav-crumb">
+    <a href="../../">Home</a><span style="opacity:.4">›</span>
+    <a href="../">Standards</a><span style="opacity:.4">›</span>
+    <span style="color:var(--cream)">STD-EXCEL-002</span>
   </div>
+  <div class="nav-right"><a href="../../explorer/" class="nav-cta">Enter the Graph →</a></div>
+</nav>
 
-  <p>An operational workbook executes a repeatable process — generating outputs, tracking status, or automating communication. This standard defines the structure, documentation, and output rules that all DDL operational workbooks must follow.</p>
+<div class="doc-wrap">
+  <div class="doc-eyebrow">Excelligence · Standards</div>
+  <h1 class="doc-title">STD-EXCEL-002</h1>
+  <div class="doc-subtitle">Operational Workbook Standard</div>
+  <div class="doc-meta">
+    <span class="meta-badge badge-v">v0.2</span>
+    <span class="meta-badge badge-s">Ratification Ready</span>
+    <span class="meta-sep">·</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">2026-03-16 · Council: 4 LOCK · 5 REVISE · 0 REJECT</span>
+  </div>
+  <p class="doc-intro">An operational workbook executes a repeatable process — generating outputs, tracking status, or automating communication. This standard defines the structure, documentation, and output rules that all DDL operational workbooks must follow.</p>
 
-  <div class="rule-card">
-    <div class="rule-num">Core Distinction</div>
-    <table>
+  <div class="distinction-card">
+    <div class="distinction-label">Core Distinction</div>
+    <table style="margin-bottom:10px">
       <tr><th>Analytical Workbook</th><th>Operational Workbook</th></tr>
       <tr><td>Answers a question</td><td>Executes a process</td></tr>
     </table>
-    <p style="font-size:13px;color:var(--steel);margin:0">Decision test: Which failure hurts more? Wrong output → operational. Wrong conclusion → analytical.</p>
+    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'JetBrains Mono',monospace">Decision test: Which failure hurts more? Wrong output → operational. Wrong conclusion → analytical.</p>
   </div>
 
   <div class="toc">
@@ -81,149 +109,111 @@ td{padding:8px 12px;border-bottom:1px solid var(--border);color:#a09a8c;vertical
   </div>
 
   <!-- RULE 1 -->
-  <h2 id="rule-1">Rule 1 — Workbook Architecture</h2>
+  <div class="rule-header" id="rule-1"><span class="rule-num-badge">Rule 1</span><h2 class="rule-title">Workbook Architecture</h2></div>
   <p>All operational workbooks follow a 3-layer structure with unidirectional data flow.</p>
-
   <div class="layer-flow">
-    <span class="layer-box">INPUT</span>
-    <span class="layer-arrow">→</span>
-    <span class="layer-box">LOGIC</span>
-    <span class="layer-arrow">→</span>
+    <span class="layer-box">INPUT</span><span class="layer-arrow">→</span>
+    <span class="layer-box">LOGIC</span><span class="layer-arrow">→</span>
     <span class="layer-box">OUTPUT</span>
   </div>
-
   <table>
     <tr><th>Layer</th><th>Purpose</th></tr>
     <tr><td><code>INPUT</code></td><td>Structured data entry. Validated. Never free-form.</td></tr>
     <tr><td><code>LOGIC</code></td><td>Process rules, formulas, status derivation.</td></tr>
     <tr><td><code>OUTPUT</code></td><td>Generated content ready for use or export.</td></tr>
   </table>
-
   <h3>Optional Layers</h3>
   <p><strong>STAGING:</strong> For workbooks receiving external data requiring validation before it qualifies as INPUT. Raw imports, CSV dumps, or multi-source merges land in STAGING.</p>
   <p><strong>CONTROL:</strong> Parameter cells, run instructions, and configuration values that govern the process.</p>
-
   <div class="layer-flow">
-    <span class="layer-box">CONTROL</span>
-    <span class="layer-arrow">→</span>
-    <span class="layer-box" style="opacity:0.5">STAGING</span>
-    <span class="layer-arrow">→</span>
-    <span class="layer-box">INPUT</span>
-    <span class="layer-arrow">→</span>
-    <span class="layer-box">LOGIC</span>
-    <span class="layer-arrow">→</span>
+    <span class="layer-box">CONTROL</span><span class="layer-arrow">→</span>
+    <span class="layer-box optional">STAGING</span><span class="layer-arrow">→</span>
+    <span class="layer-box">INPUT</span><span class="layer-arrow">→</span>
+    <span class="layer-box">LOGIC</span><span class="layer-arrow">→</span>
     <span class="layer-box">OUTPUT</span>
   </div>
-
   <div class="rule-card">
-    <div class="rule-num">Violation Boundary</div>
-    <table>
+    <div class="rule-card-label">Violation Boundary</div>
+    <table style="margin-bottom:10px">
       <tr><th>Allowed in OUTPUT</th><th>Violation in OUTPUT</th></tr>
       <tr><td><code>=INPUT!A3</code> — value passthrough</td><td><code>=INPUT!D3 * 1.1</code> — arithmetic</td></tr>
-      <tr><td><code>TEXT()</code>, <code>UPPER()</code>, <code>TRIM()</code> — formatting</td><td><code>=IF(INPUT!C3>0,…)</code> — conditional logic</td></tr>
+      <tr><td><code>TEXT()</code>, <code>UPPER()</code>, <code>TRIM()</code> — formatting</td><td><code>=IF(INPUT!C3&gt;0,…)</code> — conditional logic</td></tr>
     </table>
-    <p style="font-size:12px;color:var(--steel);margin:0">Display references are allowed. Anything that changes the underlying value belongs in LOGIC.</p>
+    <p style="font-size:12px;color:var(--dim);margin:0;font-family:'Source Serif 4',serif">Display references are allowed. Anything that changes the underlying value belongs in LOGIC.</p>
   </div>
 
   <!-- RULE 2 -->
-  <h2 id="rule-2">Rule 2 — Input Layer Standards</h2>
-
-  <h3>2a. Structure</h3>
-  <p>INPUT tabs contain structured, validated data organized as an Excel Table. Naming: <code>tbl_Input&lt;Process&gt;</code>.</p>
-
-  <h3>2b. Data Validation</h3>
-  <p>Every input field with a constrained set of values must use Excel Data Validation (dropdown list or range reference).</p>
-
-  <h3>2c. Required Metadata Fields</h3>
-  <table>
-    <tr><th>Field</th><th>Format</th><th>Purpose</th></tr>
-    <tr><td>Record ID</td><td><code>&lt;Process&gt;-0001</code></td><td>Surrogate key</td></tr>
-    <tr><td>Status</td><td>See Rule 4b</td><td>Process lifecycle tracking</td></tr>
-    <tr><td>Date</td><td>Created or process date</td><td>Temporal anchor</td></tr>
-    <tr><td>Reviewer / Owner</td><td>Name or ID</td><td>Accountability</td></tr>
-  </table>
-
-  <h3>2d–2e. Discipline</h3>
-  <p>No calculations in INPUT (exception: auto-populated Record IDs and timestamps). Use conditional formatting to highlight invalid or incomplete entries — errors should be visible before reaching LOGIC.</p>
+  <div class="rule-header" id="rule-2"><span class="rule-num-badge">Rule 2</span><h2 class="rule-title">Input Layer Standards</h2></div>
+  <p>The INPUT tab is the only place operators enter data. Every input column must have data validation. No free-form text fields — use dropdown lists, date pickers, or number constraints everywhere possible.</p>
+  <p>INPUT columns must be named and typed. A column that accepts "any value" is an uncontrolled input. Document every column in the CONTROL tab header with: column name, data type, allowed values, and what breaks if invalid data enters.</p>
+  <div class="note">The cost of strict INPUT validation is paid once during build. The cost of loose INPUT validation is paid on every run, every edge case, and every exception log entry.</div>
 
   <!-- RULE 3 -->
-  <h2 id="rule-3">Rule 3 — Logic Layer Standards</h2>
-
-  <h3>3a–3b. Process Rules</h3>
-  <p>The LOGIC layer is where all process rules live. Status fields that can be determined from data must be formula-driven — not manually typed.</p>
-  <pre>Draft → Ready:
-=IF(AND(required fields populated), "Ready", "Draft")
-
-Ready → Sent:  operator sets manually after sending
-Sent → Complete: operator confirms after verification
-Exception: operator sets with required rationale</pre>
-
+  <div class="rule-header" id="rule-3"><span class="rule-num-badge">Rule 3</span><h2 class="rule-title">Logic Layer Standards</h2></div>
+  <h3>3a. Structure</h3>
+  <p>LOGIC reads exclusively from INPUT (or STAGING → INPUT). LOGIC never references OUTPUT. Every column in LOGIC derives a single value type — status, formatted output, flag, or calculation.</p>
+  <h3>3b. Status Derivation</h3>
+  <pre>=IFS(
+  INPUT[@Status]="Exception", "Exception",
+  INPUT[@SentDate]&lt;&gt;"",       "Sent",
+  INPUT[@ReadyFlag]="Yes",    "Ready",
+  TRUE,                        "Draft"
+)</pre>
+  <p>Exception: operator sets with required rationale.</p>
   <h3>3c. Output Generation</h3>
-  <pre>="Dear " &amp; InputTab[@Name] &amp; "," &amp; CHAR(10) &amp;
-"Your commission for " &amp; InputTab[@Period] &amp; " is " &amp;
-TEXT(InputTab[@Amount], "$#,##0.00") &amp; "."</pre>
-
+  <pre>="Dear " & InputTab[@Name] & "," & CHAR(10) &
+"Your commission for " & InputTab[@Period] & " is " &
+TEXT(InputTab[@Amount], "$#,##0.00") & "."</pre>
   <h3>3d. Rule Documentation</h3>
   <p>Every formula in LOGIC that encodes a business rule must have a comment explaining the rule — not the syntax.</p>
-
   <h3>3e. Error Handling (Mandatory)</h3>
   <div class="rule-card">
-    <div class="rule-num">Post-Council Addition (5 seats)</div>
+    <div class="rule-card-label">Post-Council Addition (5 seats)</div>
     <p>Every LOGIC formula that could produce a standard Excel error must be wrapped in IFERROR. The fallback must be a visible, human-readable string:</p>
     <pre>"DATA MISSING"
 "REVIEW REQUIRED"
 "ERROR — SEE INPUT"</pre>
-    <p style="font-size:13px;color:var(--steel);margin:0">Blank cells and zero values are not acceptable error fallbacks in operational workbooks — they hide failures that propagate silently to OUTPUT.</p>
+    <p style="font-size:13px;color:var(--dim);margin:0;font-family:'Source Serif 4',serif">Blank cells and zero values are not acceptable error fallbacks in operational workbooks — they hide failures that propagate silently to OUTPUT.</p>
   </div>
 
   <!-- RULE 4 -->
-  <h2 id="rule-4">Rule 4 — Output Layer Standards</h2>
-
+  <div class="rule-header" id="rule-4"><span class="rule-num-badge">Rule 4</span><h2 class="rule-title">Output Layer Standards</h2></div>
   <h3>4a. OUTPUT Is Read-Only</h3>
   <p>OUTPUT tabs contain generated content only. No manual edits. If generated content is wrong: fix INPUT or LOGIC → verify OUTPUT regenerates correctly → copy and send.</p>
-
-  <p class="note">Once operators learn they can edit OUTPUT, LOGIC becomes optional. Within cycles, OUTPUT becomes a manually-authored tab and the architecture collapses. Protect this rule.</p>
-
+  <div class="warn">Once operators learn they can edit OUTPUT, LOGIC becomes optional. Within cycles, OUTPUT becomes a manually-authored tab and the architecture collapses. Protect this rule.</div>
   <div class="rule-card">
-    <div class="rule-num">Governed Exception Path</div>
+    <div class="rule-card-label">Governed Exception Path</div>
     <p>When time constraints make fix-and-regenerate infeasible, a manual correction to OUTPUT is allowed only when:</p>
     <p>1. The correction is logged in the CONTROL tab exception log (record ID, field edited, original value, edited value, reason, date).</p>
     <p>2. The record status is updated to Exception.</p>
-    <p>3. The root cause is fixed in INPUT or LOGIC before the next run.</p>
-    <p style="font-size:13px;color:var(--steel);margin:0">The exception path is both a pressure valve and a feedback loop. Frequent use signals that LOGIC does not handle enough cases.</p>
+    <p style="margin-bottom:0">3. The root cause is fixed in INPUT or LOGIC before the next run.</p>
   </div>
-
   <h3>4b. Status Tracking</h3>
   <p>Every record displays a current status reflecting the complete process lifecycle:</p>
-
   <div class="status-flow">
-    <span class="status-node" style="background:rgba(107,123,141,0.15);color:var(--steel)">Draft</span>
+    <span class="status-node" style="background:rgba(107,123,141,.15);color:#8a9ab0">Draft</span>
     <span class="status-arrow">→</span>
-    <span class="status-node" style="background:rgba(59,130,246,0.15);color:#3B82F6">Ready</span>
+    <span class="status-node" style="background:rgba(107,157,194,.15);color:var(--blue)">Ready</span>
     <span class="status-arrow">→</span>
-    <span class="status-node" style="background:rgba(16,185,129,0.15);color:#10B981">Sent</span>
+    <span class="status-node" style="background:rgba(74,158,107,.15);color:var(--green)">Sent</span>
     <span class="status-arrow">→</span>
-    <span class="status-node" style="background:rgba(5,150,105,0.15);color:#059669">Complete</span>
+    <span class="status-node" style="background:rgba(74,158,107,.25);color:var(--green)">Complete</span>
   </div>
-  <div style="margin-top:8px">
-    <span class="status-node" style="background:rgba(239,68,68,0.15);color:#EF4444">Exception</span>
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">Manual flag · requires rationale</span>
+  <div style="margin-top:8px;display:flex;align-items:center;gap:10px">
+    <span class="status-node" style="background:rgba(178,53,49,.15);color:var(--crimson)">Exception</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim)">Manual flag · requires rationale</span>
   </div>
-
-  <p style="margin-top:16px">Backward transitions (e.g., Sent → Ready) are allowed but must be logged in the exception log with reason.</p>
-
+  <p style="margin-top:14px">Backward transitions (e.g., Sent → Ready) are allowed but must be logged in the exception log with reason.</p>
   <h3>4c–4d. Output Quality</h3>
   <p>Generated outputs must be fully formed (no placeholders), validated against INPUT, and identifiable by Record ID. "Copy and send" is the standard — not "copy, edit, then send."</p>
 
   <!-- RULE 5 -->
-  <h2 id="rule-5">Rule 5 — Control Parameters</h2>
-
+  <div class="rule-header" id="rule-5"><span class="rule-num-badge">Rule 5</span><h2 class="rule-title">Control Parameters</h2></div>
   <h3>5a–5c. Parameter Cells</h3>
   <p>All values that govern process behavior reside on the CONTROL tab as named parameter cells. Naming: <code>sel_&lt;ParameterName&gt;</code>. Every parameter must have adjacent documentation explaining what it controls, valid values, and behavior when changed.</p>
-
   <h3>5d. Exception Log</h3>
   <div class="rule-card">
-    <div class="rule-num">Required on CONTROL Tab</div>
+    <div class="rule-card-label">Required on CONTROL Tab</div>
     <table>
       <tr><th>Column</th><th>Purpose</th></tr>
       <tr><td>Date</td><td>When the exception occurred</td></tr>
@@ -234,16 +224,16 @@ TEXT(InputTab[@Amount], "$#,##0.00") &amp; "."</pre>
       <tr><td>Reason</td><td>Why the exception was necessary</td></tr>
       <tr><td>Operator</td><td>Who made the change</td></tr>
     </table>
-    <p style="font-size:12px;color:var(--steel);margin:0">Append-only. Entries are never deleted.</p>
+    <p style="font-size:12px;color:var(--dim);margin:0;font-family:'JetBrains Mono',monospace">Append-only. Entries are never deleted.</p>
   </div>
 
   <!-- RULE 6 -->
-  <h2 id="rule-6">Rule 6 — Process Documentation</h2>
+  <div class="rule-header" id="rule-6"><span class="rule-num-badge">Rule 6</span><h2 class="rule-title">Process Documentation</h2></div>
   <p>Every operational workbook must include a CONTROL tab header with: workbook name and version, process it supports, owner, date last updated, last verified date, and brief description of inputs, outputs, and how to run it.</p>
   <p>Run instructions must be step-by-step and verified as current before every process cycle that includes a structural change. A stale Last Verified date on a recently changed process is a visible signal that documentation discipline has failed.</p>
 
   <!-- RULE 7 -->
-  <h2 id="rule-7">Rule 7 — Naming Conventions</h2>
+  <div class="rule-header" id="rule-7"><span class="rule-num-badge">Rule 7</span><h2 class="rule-title">Naming Conventions</h2></div>
   <table>
     <tr><th>Object</th><th>Convention</th><th>Example</th></tr>
     <tr><td>Input table</td><td><code>tbl_Input&lt;Process&gt;</code></td><td>tbl_InputReview</td></tr>
@@ -254,31 +244,35 @@ TEXT(InputTab[@Amount], "$#,##0.00") &amp; "."</pre>
   </table>
 
   <!-- RULE 8 -->
-  <h2 id="rule-8">Rule 8 — Formatting Standards</h2>
+  <div class="rule-header" id="rule-8"><span class="rule-num-badge">Rule 8</span><h2 class="rule-title">Formatting Standards</h2></div>
   <h3>Tab Color Coding</h3>
   <table>
     <tr><th>Layer</th><th>Tab Color</th></tr>
-    <tr><td>INPUT</td><td style="color:#60A5FA">Light Blue</td></tr>
-    <tr><td>LOGIC</td><td style="color:#9CA3AF">Light Gray</td></tr>
-    <tr><td>OUTPUT</td><td style="color:#34D399">Light Green</td></tr>
-    <tr><td>CONTROL</td><td style="color:#FCD34D">Light Yellow</td></tr>
-    <tr><td>STAGING</td><td style="color:#FB923C">Light Orange</td></tr>
+    <tr><td>INPUT</td><td><span class="tab-color-dot" style="background:#60A5FA"></span>Light Blue</td></tr>
+    <tr><td>LOGIC</td><td><span class="tab-color-dot" style="background:#9CA3AF"></span>Light Gray</td></tr>
+    <tr><td>OUTPUT</td><td><span class="tab-color-dot" style="background:#34D399"></span>Light Green</td></tr>
+    <tr><td>CONTROL</td><td><span class="tab-color-dot" style="background:#FCD34D"></span>Light Yellow</td></tr>
+    <tr><td>STAGING</td><td><span class="tab-color-dot" style="background:#FB923C"></span>Light Orange</td></tr>
   </table>
-
   <h3>Status Visualization</h3>
-  <p>Status fields must use conditional formatting: Draft (gray), Ready (blue), Sent (green), Complete (dark green), Exception (red).</p>
+  <p>Status fields must use conditional formatting: Draft (gray), Ready (blue), Sent (green), Complete (dark green), Exception (red). Use formula-based CF rules for all status columns — not the built-in "highlight cells" shortcut.</p>
 
-  <div class="download-bar">
+  <div class="std-footer-bar">
     <span>STD-EXCEL-002 · Operational Workbook Standard · v0.2</span>
-    <a href="../api/STD-EXCEL-002.txt" class="download-btn" download>Download .txt</a>
+    <div style="display:flex;gap:16px">
+      <a href="../excel-001/" class="std-footer-link">← STD-EXCEL-001</a>
+      <a href="../../explorer/" class="std-footer-link">Graph Explorer →</a>
+    </div>
   </div>
 </div>
-</section>
 
-<div class="wrap footer">
-  <div>STD-EXCEL-002 · Dropdown Logistics · Chaos → Structured → Automated</div>
-  <div style="margin-top:8px">A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product · <a href="../">Knowledge Vault</a></div>
-</div>
-
+<footer>
+  <div class="footer-left"><strong>Excelligence</strong> · STD-EXCEL-002 · A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-right">
+    <a href="../../">Home</a><a href="../../explorer/">Explorer</a>
+    <a href="../../radial/">Radial</a><a href="../excel-001/">STD-001</a>
+    <a href="../../tools/cf-patterns/">CF Patterns</a>
+  </div>
+</footer>
 </body>
 </html>
