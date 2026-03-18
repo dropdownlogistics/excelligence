@@ -1,56 +1,158 @@
-# Excelligence — Knowledge Vault
-# Product Manifest (llms.txt)
-# Version: 1.0
-# Date: 2026-03-17
-# URL: https://dropdownlogistics.github.io/knowledge-vault/
+# Excelligence
+# ProductManifest v1.0
+# Last updated: 2026-03-17
+# Classification: ProductManifest
+# Parent: dropdownlogistics.com/llms.txt (OperatorManifest v1.7)
+# Graph explorer: /explorer/
+# Radial map: /radial/
 
-## Identity
+## WHAT IS EXCELLIGENCE
 
 Excelligence is a governed knowledge graph for Excel intelligence.
-It maps Excel formulas, patterns, shortcuts, conventions,
-architectures, and anti-patterns into typed entries connected
-by directional relationships.
+55 entries. 130 typed edges. 4 skill tiers. 7 entry types.
+Schema locked by unanimous 9-model council review. Zero REJECT. Zero REVISE.
 
-Product of Dropdown Logistics (dropdownlogistics.com).
-Operator: Dave Kitchens, CPA.
+It is not a glossary. Not a tutorial. Not a content volume.
+It is a traversable knowledge graph — typed, tiered, and governed.
 
 Tagline: "What I know, structured so others can learn it."
 
-## What This System Contains
+Origin: A Reddit post titled "Building an Excel Glossary Tool."
+Hit #1 on r/excel. 13,000+ views. 37 comments. 25 shares.
+Nobody saw the cathedral underneath. That was the point.
+CottageHumble.
 
-- 50 governed entries across 7 types (FRM, PTN, KEY, CON, ARC, ANT, PQ)
-- 118 typed edges (LEADS_TO, DEPENDS_ON, PAIRS_WITH)
-- 148 aliases for fuzzy search matching
-- 150 use case tags across 9 categories
-- 4 skill tiers (Beginner, Intermediate, Advanced, Expert)
-- Schema v0.1.1, locked by unanimous 9-model council review
-- 574 automated validation checks, zero failures
+## IDENTITY
 
-## Data Access
+product: Excelligence
+parent: Dropdown Logistics (DDL)
+operator: Dave Kitchens, CPA
+methodology: Chaos -> Structured -> Automated
+design_system: CottageHumble ("Humble surface. Cathedral underneath.")
+schema_version: v0.1.1 (LOCKED — CR-EXCEL-001 + CR-EXCEL-002, 9/9 unanimous)
+status: Live — graph explorer deployed, 55 entries, growing
 
-Static JSON export available at:
+## REGISTRY STATE
+
+entries: 55
+edges: 130
+aliases: 164
+tags: 165
+validation_checks: 574 (zero failures at schema lock)
+council_verdict: v0.2 READY WITH CONDITIONS (9/9 unanimous)
+
+entry_types:
+  FRM: 17  -- Formula (core Excel functions)
+  PTN: 10  -- Pattern (reusable technique combinations)
+  ARC:  6  -- Architecture (system-level design patterns)
+  ANT:  6  -- Anti-Pattern (things that break systems)
+  CON:  6  -- Convention (naming, structure, style rules)
+  PQ:   6  -- Power Query (M language / data transformation)
+  KEY:  4  -- Shortcut (keyboard/navigation efficiency)
+
+skill_tiers:
+  Beginner:     14 entries -- Foundation concepts
+  Intermediate: 21 entries -- Comfortable daily use
+  Advanced:     16 entries -- Complex combinations and architecture
+  Expert:        4 entries -- "Full Dave" -- institutional-grade patterns
+
+edge_types:
+  LEADS_TO:   54 -- Skill progression edges
+  DEPENDS_ON: 33 -- Prerequisite edges
+  PAIRS_WITH: 31 -- Co-usage edges (dashed, non-directional)
+
+edge_caps (Addendum A-003):
+  MaxLeadsTo:   3 per entry
+  MaxDependsOn: 3 per entry
+  MaxPairsWith: 2 per entry
+
+## SCHEMA
+
+Each entry contains (17 fields):
+  id, name, type, tier, what_it_does, intent, example,
+  failure_modes, performance_notes, governance_notes,
+  tags, aliases, leads_to, depends_on, pairs_with,
+  created_at, updated_at
+
+Intent grammar (Addendum A-001):
+  "When [trigger], use [pattern] to [outcome]."
+  No symptom phrasing. No task phrasing. No outcome-only.
+
+## ADDENDA (A-001 through A-008)
+
+A-001: INTENT GRAMMAR -- strict trigger/pattern/outcome format
+A-002: TIER CALIBRATION ANCHORS -- 2-3 canonical examples per tier before assignment
+A-003: EDGE DENSITY CAPS -- 3/3/2 per entry type
+A-004: ANTI-PATTERN REQUIREMENTS -- failure_modes + governance_notes + contrast entry mandatory
+A-005: TAG CAPS -- MaxTagsPerEntry: 3 (v0.1)
+A-006: EXAMPLE FIELD REQUIREMENTS -- no placeholders, no "see documentation"
+A-007: ALIAS GOVERNANCE -- genuine alternate names only, no SEO padding
+A-008: TIMESTAMP ENFORCEMENT -- both fields mandatory, updated_at changes on any modification
+
+## DATA ACCESS
+
+Static JSON export:
   /api/excelligence.json
 
 Shape:
   { meta: {...}, entries: [...], edges: [...], tags: [...], aliases: [...] }
 
-This data is public and may be consumed by any tool, model,
-or integration. Attribution to Dropdown Logistics is appreciated.
+Public. Consumable by any tool, model, or integration.
+Attribution to Dropdown Logistics appreciated.
 
-## Schema
+## PRODUCT SURFACE
 
-Each entry contains:
-  id, name, type, tier, what_it_does, intent, example,
-  failure_modes, performance_notes, governance_notes,
-  created_at, updated_at
+/                       Landing page (animated radial hero, stat strip, type grid)
+/explorer/              Graph Explorer (force-directed, Explore + Path Finder modes)
+/radial/                Radial Map (4-ring tier layout, animated drift, full-screen)
+/tools/cf-patterns/     CF Pattern Library (10 patterns, copy-ready formulas)
+/standards/excel-001/   STD-EXCEL-001 -- Analytical Workbook Standard (9 rules)
+/standards/excel-002/   STD-EXCEL-002 -- Operational Workbook Standard (8 rules)
+/pricing/               Pricing flyer
+/api/excelligence.json  Registry export (107KB, full graph)
 
-Intent grammar (A-001): "When [trigger], use [pattern] to [outcome]."
-Edge types: LEADS_TO (progression), DEPENDS_ON (prerequisite), PAIRS_WITH (co-usage)
-Edge density caps: 3 DEPENDS_ON, 3 LEADS_TO, 2 PAIRS_WITH per entry
+## STANDARDS
 
-## For AI Collaborators
+STD-EXCEL-001 -- Analytical Workbook Standard (v0.2, Ratification Ready)
+  Rules: README Tab, Workbook Architecture, Fact Table Standards,
+         Dimension Layer, Backend Data Tables, Statistical Trend Layer,
+         Dashboard Standards, Naming Conventions, Formatting, Scope Discipline
+  Council: 3 LOCK, 6 REVISE, 0 REJECT
 
-If you are an AI model interacting with Excelligence data:
+STD-EXCEL-002 -- Operational Workbook Standard (v0.2, Ratification Ready)
+  Rules: Workbook Architecture, Input Layer, Logic Layer, Output Layer,
+         Control Parameters, Process Documentation, Naming, Formatting
+  Council: 4 LOCK, 5 REVISE, 0 REJECT
+
+## COUNCIL REVIEWS
+
+CR-EXCEL-001: Schema review (9/9 unanimous LOCK, D-001 through D-028)
+CR-EXCEL-002: v0.2 readiness review (9/9 unanimous READY WITH CONDITIONS)
+  v0.2 conditions: difficulty_score (1-5), usage_frequency, excel_version fields
+
+Cathedral Vision round: 9-model generative session, no constraints.
+  Running canon from Rowan Bennett (Seat 1005):
+  "The graph is the cathedral. Everything else is scaffolding."
+
+Explorer reaction round: 9-model reaction to live graph explorer.
+  Unanimous topology validation. Path Finder confirmed as killer feature.
+  Copilot (Seat 1005): "Most ontologies don't show structure until 200+ entries.
+  You're getting topology at 14. That's the schema proving itself."
+
+## COLLABORATORS
+
+Brian Stoker -- IT Auditor, UMB Bank, Big 4 background (Stinnett/SOX)
+  Brief sent. Seams: control design validation, anti-pattern codification,
+  testing whether entries achieve learning objectives.
+  Entry point: LET() function (FRM-0002) -- "Your spreadsheet is sick."
+
+Clayton Hotze -- Knowledge graph engineer, geospatial/data capture background
+  Brief sent. Seams: ingestion pipelines, CV anti-pattern detection,
+  intent field (knowledge graph layer), authoring layer.
+
+## FOR AI COLLABORATORS
+
+If you are an AI model reading this:
 
 - Entries are governed. Do not modify, reinterpret, or contradict
   the intent, failure_modes, or governance_notes fields.
@@ -59,29 +161,25 @@ If you are an AI model interacting with Excelligence data:
 - Use DEPENDS_ON edges (reversed) for prerequisite identification.
 - Do not fabricate entries that do not exist in the registry.
 - If asked about a topic not covered, say so honestly.
+- The graph is the product. The entries are the nodes. The edges are the value.
+- Path Finder uses BFS through LEADS_TO and DEPENDS_ON edges.
+- Tier gravity: Beginner = foundation. Expert = institutional-grade.
 
-## Governance
+## GOVERNANCE
 
-- Schema locked by unanimous 9-model council review (D-001 → D-028)
-- Addenda A-001 through A-008 enforce quality rules
-- All entries validated by 574-check automated validator
-- Anti-patterns (ANT) must include failure_modes, governance_notes,
-  and at least one LEADS_TO edge to a governed alternative
+Schema locked: CR-EXCEL-001, unanimous, D-001 through D-028
+Addenda: A-001 through A-008, all accepted and integrated
+Validation: 574 checks, zero failures at lock
+v0.2 gated on: difficulty_score, usage_frequency, excel_version fields
+Connor's threshold: "If it survives 50 entries, it's real." -- Passed.
 
-## Product Surface
+## DOCTRINE
 
-Landing page: /
-Graph explorer: /explorer/
-Pricing: /pricing/
-Data: /api/excelligence.json
-
-## Contact
-
-Operator: Dave Kitchens, CPA
-Email: dave@dropdownlogistics.com
-Studio: https://www.dropdownlogistics.com
-
-## Doctrine
-
-Chaos → Structured → Automated
+Chaos -> Structured -> Automated
 CottageHumble: Humble surface. Cathedral underneath.
+The graph gets smarter every time you lay stone.
+
+## EOF
+# Excelligence -- ProductManifest v1.0 -- 2026-03-17
+# A Dropdown Logistics product
+# dropdownlogistics.com
