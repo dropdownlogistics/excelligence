@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools — Excelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh}
+nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,27,42,0.95);backdrop-filter:blur(12px);z-index:100;gap:20px}
+.nav-logo{font-size:15px;font-weight:700;color:var(--cream);text-decoration:none}.nav-logo span{color:var(--crimson)}
+.nav-sep{width:1px;height:18px;background:var(--border2)}
+.nav-crumb{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.nav-crumb a{color:var(--dim);text-decoration:none;transition:color .15s}.nav-crumb a:hover{color:var(--cream)}
+.nav-right{margin-left:auto}.nav-cta{padding:6px 16px;background:var(--crimson);border-radius:6px;color:var(--cream);font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s}.nav-cta:hover{opacity:.85}
+
+.wrap{max-width:860px;margin:0 auto;padding:56px 48px 80px}
+
+.page-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.page-title{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:12px;line-height:1.1}
+.page-title em{font-family:'Source Serif 4',serif;font-style:italic;color:rgba(245,241,235,.7)}
+.page-sub{font-family:'Source Serif 4',serif;font-size:16px;color:rgba(245,241,235,.62);line-height:1.7;max-width:560px;margin-bottom:48px}
+
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:56px}
+
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;display:block;transition:all .18s;position:relative}
+.tool-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.tool-card-top{padding:24px 24px 20px;border-bottom:1px solid var(--border)}
+.tool-card-accent{height:3px;background:var(--crimson);margin:-24px -24px 20px}
+.tool-card-accent.amber{background:var(--amber)}
+.tool-card-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.tool-card-title{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:8px}
+.tool-card-desc{font-size:13px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.62);line-height:1.55}
+.tool-card-bottom{padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.tool-card-chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--dim)}
+.tool-card-arrow{font-size:16px;color:var(--dim);transition:transform .15s}
+.tool-card:hover .tool-card-arrow{transform:translate(3px,-3px)}
+
+.coming-soon-card{background:rgba(255,255,255,.02);border:1px dashed var(--border2);border-radius:12px;padding:28px 24px;display:flex;align-items:center;gap:20px}
+.cs-icon{font-size:28px;opacity:.25;flex-shrink:0}
+.cs-title{font-size:16px;font-weight:600;color:rgba(245,241,235,.4);margin-bottom:4px}
+.cs-desc{font-size:13px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.3);line-height:1.5}
+
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+
+footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-size:12px;color:var(--dim)}.footer-left strong{color:var(--cream)}.footer-left a{color:var(--dim);text-decoration:none}
+.footer-right{display:flex;gap:18px}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Excel<span>ligence</span></a>
+  <div class="nav-sep"></div>
+  <div class="nav-crumb">
+    <a href="/">Home</a><span style="opacity:.4">›</span>
+    <span style="color:var(--cream)">Tools</span>
+  </div>
+  <div class="nav-right"><a href="/explorer/" class="nav-cta">Enter the Graph &rarr;</a></div>
+</nav>
+
+<div class="wrap">
+  <div class="page-label">Excelligence &middot; Tools</div>
+  <h1 class="page-title">The applied layer.<br><em>Working patterns.</em></h1>
+  <p class="page-sub">Tools produced by the registry. Each one is the applied form of one or more governed entries — knowledge you can use today, not just study.</p>
+
+  <div class="section-label">Available Now</div>
+  <div class="tools-grid">
+
+    <a href="/tools/cf-patterns/" class="tool-card">
+      <div class="tool-card-top">
+        <div class="tool-card-accent"></div>
+        <div class="tool-card-eyebrow">PTN-0007 &middot; Conditional Formatting</div>
+        <div class="tool-card-title">CF Pattern Library</div>
+        <div class="tool-card-desc">10 conditional formatting patterns with visual previews, governed formulas, scope guidance, and one-click copy. The applied layer for PTN-0007.</div>
+      </div>
+      <div class="tool-card-bottom">
+        <div class="tool-card-chips">
+          <span class="chip">10 patterns</span>
+          <span class="chip">4 categories</span>
+          <span class="chip">Copy-ready</span>
+        </div>
+        <span class="tool-card-arrow">&#8599;</span>
+      </div>
+    </a>
+
+    <a href="/paths/" class="tool-card">
+      <div class="tool-card-top">
+        <div class="tool-card-accent amber"></div>
+        <div class="tool-card-eyebrow">Guided Learning</div>
+        <div class="tool-card-title">Learning Paths</div>
+        <div class="tool-card-desc">Two curated paths through the knowledge graph. Your First Hour for foundations. The Star Schema Path for institutional-grade architecture.</div>
+      </div>
+      <div class="tool-card-bottom">
+        <div class="tool-card-chips">
+          <span class="chip">2 paths</span>
+          <span class="chip">10 entries</span>
+          <span class="chip">Expandable steps</span>
+        </div>
+        <span class="tool-card-arrow">&#8599;</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label" style="margin-bottom:16px">Coming Next</div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+
+    <div class="coming-soon-card">
+      <div class="cs-icon">⚙</div>
+      <div>
+        <div class="cs-title">Workbook Auditor</div>
+        <div class="cs-desc">Paste a formula or describe a workbook structure — get a governed diagnosis against the registry. Anti-pattern detection. Rule violations. Suggested alternatives.</div>
+      </div>
+    </div>
+
+    <div class="coming-soon-card">
+      <div class="cs-icon">⬡</div>
+      <div>
+        <div class="cs-title">Path Builder</div>
+        <div class="cs-desc">Pick a start entry and an end entry. Get the shortest governed path between them via BFS through LEADS_TO and DEPENDS_ON edges. Custom learning paths on demand.</div>
+      </div>
+    </div>
+
+    <div class="coming-soon-card">
+      <div class="cs-icon">↓</div>
+      <div>
+        <div class="cs-title">STD Downloads</div>
+        <div class="cs-desc">STD-EXCEL-001 and STD-EXCEL-002 as downloadable .txt reference files. Drop them in your workbook folder. The rules travel with the work.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left"><strong>Excelligence</strong> &middot; Tools &middot; A <a href="https://www.dropdownlogistics.com">Dropdown Logistics</a> product</div>
+  <div class="footer-right">
+    <a href="/">Home</a><a href="/explorer/">Explorer</a>
+    <a href="/paths/">Paths</a><a href="/standards/excel-001/">STD-001</a>
+    <a href="/tools/cf-patterns/">CF Patterns</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
   "meta": {
-    "schema_version": "0.1.1",
-    "entry_count": 55,
-    "edge_count": 130,
+    "schema_version": "0.2.0",
+    "entry_count": 65,
+    "edge_count": 156,
     "alias_count": 148,
     "tag_count": 150,
     "type_distribution": {
@@ -22,7 +22,12 @@
     },
     "exported_at": "2026-03-17T15:39:43.916467",
     "source": "Excelligence_Registry_v011_50.xlsx",
-    "product": "Excelligence \u00b7 Dropdown Logistics"
+    "product": "Excelligence \u00b7 Dropdown Logistics",
+    "v2_fields": [
+      "difficulty_score",
+      "usage_frequency",
+      "excel_version"
+    ]
   },
   "entries": [
     {
@@ -37,7 +42,10 @@
       "performance_notes": "Faster than INDEX/MATCH on large datasets. Binary search mode available for sorted data.",
       "governance_notes": "Replaces VLOOKUP in all new builds. VLOOKUP should never appear in DDL workbooks.",
       "created_at": "2026-02-28 20:10:59",
-      "updated_at": "2026-02-28 20:10:59"
+      "updated_at": "2026-02-28 20:10:59",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2019+"
     },
     {
       "id": "FRM-0002",
@@ -51,7 +59,10 @@
       "performance_notes": "Evaluated once per LET block, not per reference. Significant performance gain on complex formulas.",
       "governance_notes": "All formulas with 3+ logical steps should use LET. Non-negotiable in DDL workbooks.",
       "created_at": "2026-02-28 20:10:59",
-      "updated_at": "2026-02-28 20:10:59"
+      "updated_at": "2026-02-28 20:10:59",
+      "difficulty_score": 3,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "ARC-0001",
@@ -65,7 +76,10 @@
       "performance_notes": "O(rows \u00d7 cols) \u2014 scales linearly. Pre-calculate shared values in LET before MAKEARRAY.",
       "governance_notes": "The DDL signature architecture. Used in Assurance Map, Keith's audit dashboard, BlindSpot analytics. Every DDL dashboard matrix should use this pattern.",
       "created_at": "2026-02-28 20:10:59",
-      "updated_at": "2026-02-28 20:10:59"
+      "updated_at": "2026-02-28 20:10:59",
+      "difficulty_score": 5,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "ANT-0001",
@@ -79,7 +93,10 @@
       "performance_notes": "No direct performance impact, but cascading failures from broken references create debugging time cost.",
       "governance_notes": "Merged cells are banned in all DDL workbooks. Zero exceptions. The most fundamental anti-pattern in Excel architecture. \"The merged cells of human interaction.\" \u2014 Marcus Caldwell, 2026.",
       "created_at": "2026-02-28 20:10:59",
-      "updated_at": "2026-02-28 20:10:59"
+      "updated_at": "2026-02-28 20:10:59",
+      "difficulty_score": 1,
+      "usage_frequency": "Situational",
+      "excel_version": "2007+"
     },
     {
       "id": "FRM-0003",
@@ -93,7 +110,10 @@
       "performance_notes": "Comparable to XLOOKUP on modern Excel. Slightly faster on very large datasets with exact match. No binary search equivalent without MATCH type argument.",
       "governance_notes": "Legacy pattern. Acceptable in existing workbooks. All new DDL builds should use XLOOKUP (FRM-0001). INDEX/MATCH is the bridge, not the destination.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "FRM-0004",
@@ -107,7 +127,10 @@
       "performance_notes": "No inherent performance cost. Performance depends on what the LAMBDA contains. Named LAMBDA functions via Name Manager enable reuse without recalculation overhead.",
       "governance_notes": "LAMBDA is the Expert-tier gateway. Combined with LET, it enables MAKEARRAY, MAP, REDUCE, SCAN. All DDL custom functions should be LAMBDA-based, never VBA.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 5,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0005",
@@ -121,7 +144,10 @@
       "performance_notes": "Efficient on datasets under 100K rows. For larger datasets, Power Query filtering is more appropriate. Multiple criteria via array multiplication is faster than nested IFs.",
       "governance_notes": "Preferred over Advanced Filter in all DDL workbooks. Should be combined with structured table references (Ctrl+T) for auto-expanding ranges.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 3,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0006",
@@ -135,7 +161,10 @@
       "performance_notes": "Slower than COUNTIFS/SUMIFS for simple criteria. Justified when criteria involve calculated conditions or cross-array logic that SUMIFS cannot express.",
       "governance_notes": "Use SUMIFS/COUNTIFS when possible. Reserve SUMPRODUCT for multi-array conditional logic that single-function alternatives cannot handle. Always wrap in LET for readability.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0001",
@@ -149,7 +178,10 @@
       "performance_notes": "Reduces redundancy significantly. Lookups against dimension tables are faster than repeated text matching. Pivot tables perform optimally against star schema structures.",
       "governance_notes": "The DDL standard for any workbook with more than one entity type. All Assurance Map, BlindSpot, and dashboard workbooks use this pattern. Non-negotiable at Advanced tier and above.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "KEY-0001",
@@ -163,7 +195,10 @@
       "performance_notes": "Negligible overhead. Tables auto-expand formulas and formatting to new rows. Structured references are recalculated identically to standard references.",
       "governance_notes": "Every data range in every DDL workbook must be a Table. This is the single most impactful Excel action. The foundation everything else builds on.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0001",
@@ -177,7 +212,10 @@
       "performance_notes": "Zero performance impact. Purely a formatting operation.",
       "governance_notes": "The approved alternative to merged cells (ANT-0001). Mandatory in any DDL workbook where visual centering is needed. Resolves the most common formatting anti-pattern.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 1,
+      "usage_frequency": "Weekly",
+      "excel_version": "2007+"
     },
     {
       "id": "ANT-0002",
@@ -191,7 +229,10 @@
       "performance_notes": "A single INDIRECT triggers recalculation of every formula that depends on it, and every formula that depends on those. In large workbooks (50K+ formulas), volatile functions can add seconds to every edit.",
       "governance_notes": "INDIRECT and OFFSET are banned in DDL workbooks. NOW() and TODAY() are permitted only in isolated display cells with no downstream formula dependencies. INDEX is the governed alternative.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 2,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ARC-0002",
@@ -205,7 +246,10 @@
       "performance_notes": "Spill ranges recalculate as a unit. Large spill outputs (10K+ rows) can be slower than equivalent non-spill approaches. Pre-filter before spilling for optimal performance.",
       "governance_notes": "Spill-range architecture is the foundation for all dynamic DDL outputs. Every dashboard, report, and analytics view should use spill ranges. Reserve dedicated output areas \u2014 never place data adjacent to spill zones.",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 4,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "PQ-0001",
@@ -219,7 +263,10 @@
       "performance_notes": "Query folding pushes transformations to the data source when possible. For large files, filter early in the pipeline. Connection-only loads reduce workbook size when data is only needed for other queries.",
       "governance_notes": "Power Query is the governed data ingestion layer for DDL workbooks. Manual copy-paste imports are banned for any repeatable data source. All PQ outputs must load to named Tables (KEY-0001).",
       "created_at": "2026-02-28 21:46:34",
-      "updated_at": "2026-02-28 21:46:34"
+      "updated_at": "2026-02-28 21:46:34",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+"
     },
     {
       "id": "FRM-0007",
@@ -233,7 +280,10 @@
       "performance_notes": "Efficient on datasets under 50K rows. For larger datasets, sort within Power Query before loading. Chaining SORT after FILTER is the standard DDL pipeline.",
       "governance_notes": "Preferred over manual Sort buttons for any repeatable output. SORT + FILTER + TAKE is the canonical DDL data pipeline pattern.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 3,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0008",
@@ -247,7 +297,10 @@
       "performance_notes": "Fast on single columns up to 100K rows. For multi-column unique combinations, performance degrades \u2014 use Power Query DISTINCT instead.",
       "governance_notes": "Use UNIQUE for dropdown source lists and aggregation keys. Combine with SORT for alphabetical output. Never hardcode dropdown lists that could be generated dynamically.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0009",
@@ -261,7 +314,10 @@
       "performance_notes": "Negligible overhead. The column selection happens after the source array is evaluated, so performance depends on the source, not on CHOOSECOLS itself.",
       "governance_notes": "Use CHOOSECOLS to control output shape in dashboard-facing formulas. Prevents exposing internal columns (IDs, keys) in user-visible output. Pairs with FILTER and SORT in the standard pipeline.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0010",
@@ -275,7 +331,10 @@
       "performance_notes": "IFS is marginally faster than nested IF for 4+ conditions because it short-circuits on first match. Neither has meaningful performance impact at normal scale.",
       "governance_notes": "IF is acceptable for binary conditions. For 3+ branches, use IFS or SWITCH instead of nested IF. For 5+ branches with complex logic, wrap in LET for named intermediate values.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0002",
@@ -289,7 +348,10 @@
       "performance_notes": "No performance impact. Named ranges resolve identically to direct cell references. LAMBDA names execute at the same speed as inline formulas.",
       "governance_notes": "All DDL workbook assumptions (tax rates, thresholds, configuration values) must be named ranges \u2014 never hardcoded in formulas. Named ranges are the bridge between Beginner and Advanced Excel.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0003",
@@ -303,7 +365,10 @@
       "performance_notes": "Negligible overhead per formula. But cascading IFERROR wrappers across thousands of cells add measurable recalculation time. Apply defensively, not universally.",
       "governance_notes": "Use IFNA for lookup-specific errors (expected). Use IFERROR sparingly and only for known failure modes. Never wrap formulas in IFERROR to hide problems you haven't diagnosed. Defensive defaults are seatbelts, not blindfolds.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "KEY-0002",
@@ -317,7 +382,10 @@
       "performance_notes": "No computational impact. Efficiency gain is human, not machine \u2014 reduces context switching and mouse travel. Power users report 30-50% speed improvement on repetitive formatting tasks.",
       "governance_notes": "Alt+E, S (Paste Special) is the most important shortcut in DDL workflows. Learn Paste Values, Paste Formats, and Paste Transpose before anything else. Brian Stoker's first impression of the Assurance Map was the Alt shortcuts.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0002",
@@ -331,7 +399,10 @@
       "performance_notes": "No direct performance impact, but mixed grain forces complex workarounds (IF-based aggregation, manual exclusions) that add calculation overhead and debugging time.",
       "governance_notes": "Every DDL fact table must have documented grain. STD-FACT-001 enforces this \u2014 one row = one fact at one grain. Mixed grain is the most common cause of 'the numbers don't add up' in enterprise spreadsheets.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 3,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "ANT-0003",
@@ -345,7 +416,10 @@
       "performance_notes": "No computational difference between hardcoded values and cell references. The cost is entirely in human debugging time and audit risk.",
       "governance_notes": "Hardcoded values are banned in all DDL formulas. Every literal number in a formula is a future audit finding. This is the anti-pattern that SOX auditors find most frequently in spreadsheet-based models.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 1,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ANT-0004",
@@ -359,7 +433,10 @@
       "performance_notes": "IFS is marginally faster than nested IF due to short-circuit evaluation. LET + IFS eliminates recalculation of the test value across branches. Neither matters at small scale \u2014 the gain is in auditability.",
       "governance_notes": "Nested IF beyond 2 levels is banned in DDL workbooks. Use IFS for 3-4 branches. Use SWITCH for value matching. Use LET + IFS for complex conditional logic. The formula should read like a decision table, not a maze.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 2,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ARC-0003",
@@ -373,7 +450,10 @@
       "performance_notes": "The MAKEARRAY recalculates fully on every selector change. For large datasets (50K+ rows), pre-calculate aggregates in a helper table and have the selector choose which pre-built view to display.",
       "governance_notes": "The DDL signature dashboard pattern. Used in Assurance Map (6 views, 2 formulas), Keith's audit dashboard, and BlindSpot analytics. The selector is the interface. The MAKEARRAY is the engine. The fact table is the fuel.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 5,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "PQ-0002",
@@ -387,7 +467,10 @@
       "performance_notes": "Unpivot is computationally light. Pivot with aggregation on large datasets can be slow \u2014 filter before pivoting when possible. Query folding applies to both operations when connected to supported sources.",
       "governance_notes": "Wide-to-tall conversion is mandatory before loading into any DDL fact table. STD-FACT-001 requires consistent grain \u2014 wide formats violate grain by encoding time or categories as columns instead of rows.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53"
+      "updated_at": "2026-03-07 13:35:53",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+"
     },
     {
       "id": "FRM-0011",
@@ -401,7 +484,10 @@
       "performance_notes": "Faster than SUMPRODUCT for simple multi-criteria aggregation. Use SUMIFS over SUMPRODUCT when all criteria are direct column comparisons. SUMPRODUCT is only justified for calculated or cross-array criteria.",
       "governance_notes": "COUNTIFS/SUMIFS is the default aggregation pattern for DDL dashboards. Use SUMPRODUCT only when SUMIFS cannot express the condition. The Selector-Driven Reconfiguration pattern (ARC-0003) uses SUMIFS internally.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "FRM-0012",
@@ -415,7 +501,10 @@
       "performance_notes": "Marginally faster than nested IF for 4+ value matches due to single expression evaluation. No meaningful performance difference at normal scale.",
       "governance_notes": "Use SWITCH for value-to-value mapping (exact match). Use IFS for range-based conditions (greater than, less than). Never use nested IF for either. SWITCH + LET is the governed pattern for complex value mapping.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0013",
@@ -429,7 +518,10 @@
       "performance_notes": "Negligible overhead. Both functions evaluate instantly. The cost is in debugging when implicit conversion fails silently \u2014 explicit TEXT/VALUE prevents that.",
       "governance_notes": "Use TEXT only for display purposes (labels, headers, concatenated strings). Never store data as TEXT when it should be numeric. If XLOOKUP fails with apparent matches, check for text-number mismatch first.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "FRM-0014",
@@ -443,7 +535,10 @@
       "performance_notes": "Efficient for ranges up to 10K cells. For larger concatenation needs, use Power Query Group By with custom aggregation instead.",
       "governance_notes": "Use TEXTJOIN over ampersand chains for any concatenation involving 3+ values or ranges. The delimiter parameter makes the joining rule explicit and auditable.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "PTN-0004",
@@ -457,7 +552,10 @@
       "performance_notes": "Zero computational overhead. Data validation is a UI-layer constraint, not a formula. The performance gain is in preventing bad data from reaching formulas downstream.",
       "governance_notes": "Every DDL workbook with user inputs must use data validation on input cells. Blue fill (#DCE6F1) is the DDL convention for input cells. Named ranges must reference every input cell. No unlabeled input points.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0005",
@@ -471,7 +569,10 @@
       "performance_notes": "Audit log tables should be archived quarterly. For high-frequency change environments, log only to a separate workbook connected via Power Query. Zone 5 meta fields handle per-row audit without a separate log.",
       "governance_notes": "Every DDL workbook with external users must have either a Zone 5 meta layer (STD-FACT-001) or a dedicated audit log sheet. The meta zone IS the audit trail for fact tables. Separate audit logs are for configuration and input tracking.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "KEY-0003",
@@ -485,7 +586,10 @@
       "performance_notes": "Zero computational impact. This is a UI debugging tool. The time saved in understanding formula dependencies is the primary value.",
       "governance_notes": "F2 is the first step in formula auditing. Before changing any formula, press F2 to see what it references. This is how you verify that a formula points where you think it points. Teach this before any function.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0003",
@@ -499,7 +603,10 @@
       "performance_notes": "Zero computational impact. The value is entirely in human navigation speed and workbook comprehension. A 20-sheet workbook with prefixed tabs is navigable in seconds.",
       "governance_notes": "Every DDL workbook must use prefixed sheet names. STD-FACT-001 mandates Fact_[ProjectName] for fact tables. Dim_, Dash_, Ref_, Config_, and Log_ are reserved prefixes. Never use Sheet1, Sheet2, Sheet3.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "ANT-0005",
@@ -513,7 +620,10 @@
       "performance_notes": "Circular references with iterative calculation enabled force Excel to recalculate the entire chain on every edit. This is the most common cause of unexplained workbook slowness after volatile functions.",
       "governance_notes": "Circular references are banned in DDL workbooks. Iterative calculation must remain OFF. If a model requires iterative solving (rare), document it explicitly and isolate it in a dedicated sheet with a warning header.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ARC-0004",
@@ -527,7 +637,10 @@
       "performance_notes": "Each function in the chain evaluates sequentially. For large datasets (100K+ rows), FILTER is the bottleneck \u2014 add the most restrictive criteria first. LET prevents redundant evaluation of the filtered result.",
       "governance_notes": "This is the standard DDL data pipeline for dashboard outputs. Always wrap in LET for readability. Always include defensive defaults (IFERROR or if_empty) for the FILTER step. The pipeline replaces manual sort-copy-paste workflows permanently.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 4,
+      "usage_frequency": "Daily",
+      "excel_version": "365"
     },
     {
       "id": "PQ-0003",
@@ -541,7 +654,10 @@
       "performance_notes": "Type enforcement is a metadata operation \u2014 near-zero performance cost. The cost of NOT enforcing types is debugging hours when a number column silently loads as text.",
       "governance_notes": "Every Power Query output must have explicit type enforcement as the final transform step before loading. Never rely solely on auto-detect. Type enforcement is the PQ equivalent of schema validation.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+"
     },
     {
       "id": "PQ-0004",
@@ -555,7 +671,10 @@
       "performance_notes": "Append is a metadata operation until the query is loaded. Performance depends on the size of the source queries, not the append step itself. For 10+ sources, consider a folder-based ingestion pattern instead of manual append.",
       "governance_notes": "All appended sources must share identical column structure. Use staging queries to normalize column names and types before appending. Verify grain consistency (CON-0002) after append \u2014 mixed grain from different sources is the most common append failure.",
       "created_at": "2026-03-08 01:31:57",
-      "updated_at": "2026-03-08 01:31:57"
+      "updated_at": "2026-03-08 01:31:57",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+"
     },
     {
       "id": "FRM-0015",
@@ -569,7 +688,10 @@
       "performance_notes": "Both evaluate after the source array, so performance depends on the source. TAKE is significantly faster than INDEX-based row limiting on large spill ranges.",
       "governance_notes": "TAKE replaces all INDEX-based row-limiting patterns in DDL workbooks. FILTER\u2192SORT\u2192TAKE is the canonical pipeline (ARC-0004). DROP is used for header removal when chaining array outputs.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0016",
@@ -583,7 +705,10 @@
       "performance_notes": "Both are lightweight assembly operations. Performance depends on the source arrays being combined, not the stack operation itself.",
       "governance_notes": "HSTACK replaces manual column-by-column formulas for dashboard assembly. VSTACK replaces Append Queries (PQ-0004) when the data is already in Excel and doesn't need Power Query. Use the right tool for the context.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "FRM-0017",
@@ -597,7 +722,10 @@
       "performance_notes": "Near-instant for any reasonable size. SEQUENCE(1000000, 1) generates a million-row array in milliseconds. The bottleneck is always what consumes the sequence, not the sequence itself.",
       "governance_notes": "Use SEQUENCE for all dynamic numbering. Never hardcode 1, 2, 3... in cells. SEQUENCE powers MAKEARRAY row/column headers and date-axis generation in DDL dashboards.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "PTN-0006",
@@ -611,7 +739,10 @@
       "performance_notes": "Zero computational overhead for static lists. Dynamic UNIQUE/SORT sources recalculate on every edit but are negligible at normal scale.",
       "governance_notes": "Every selector in a DDL dashboard must use data validation. Dynamic sources (UNIQUE+SORT from the fact table) are preferred over static lists. Dropdowns are the user-facing layer of ARC-0003 (Selector-Driven Reconfiguration).",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0007",
@@ -625,7 +756,10 @@
       "performance_notes": "Each conditional formatting rule recalculates on every cell change in the range. 50+ rules on large ranges measurably slow the workbook. Use sparingly and test on full datasets.",
       "governance_notes": "Conditional formatting is visual governance \u2014 it makes the data enforce its own display rules. Use for status indicators (red/yellow/green), threshold alerts, and data quality flags. Never rely on manual cell coloring.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "KEY-0004",
@@ -639,7 +773,10 @@
       "performance_notes": "Zero computational impact. This is a UI toggle. The speed gain is in exploration workflow \u2014 filtering and unfiltering without touching the mouse.",
       "governance_notes": "Use Ctrl+Shift+L for data exploration. For governed filtered views, use FILTER function (FRM-0005) instead \u2014 it produces a separate output that doesn't modify the source data's visibility.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0004",
@@ -653,7 +790,10 @@
       "performance_notes": "No computational impact. The cost is entirely in silent data loss \u2014 operations that look correct but are working on a subset of the data.",
       "governance_notes": "No blank rows or columns within any DDL data range. Period. This is the most common cause of 'my formula works but the answer is wrong' in Excel. If you need visual separation, use borders or conditional formatting \u2014 never blank rows.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0005",
@@ -667,7 +807,10 @@
       "performance_notes": "Separating data from presentation reduces recalculation scope dramatically. A 50MB monolith workbook typically becomes three 5MB files that each open and calculate faster than the original.",
       "governance_notes": "The DDL dual-workbook architecture (Registry + Tool) is this principle applied to Excelligence. STD-FACT-001 mandates separate Fact and Dash sheets. At the workbook level, the same separation applies: store, analyze, and present in different files.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 4,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ANT-0006",
@@ -681,7 +824,10 @@
       "performance_notes": "Zero computational impact. Sheet protection is a UI-layer constraint.",
       "governance_notes": "Every DDL workbook shared with external users must have sheet protection enabled with input cells explicitly unlocked. Formula cells, headers, and structural elements must remain locked. This is the preventive control for the most common spreadsheet failure mode: accidental overwrite.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 2,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
     },
     {
       "id": "ARC-0005",
@@ -695,7 +841,10 @@
       "performance_notes": "The header generation (UNIQUE+SORT) is fast. The MAKEARRAY that consumes them scales as O(rows \u00d7 cols). For large matrices (50+ \u00d7 50+), pre-aggregate in Power Query and use the matrix for display only.",
       "governance_notes": "Dynamic headers are the scaffold for every DDL matrix. The Assurance Map uses this pattern \u2014 regions as rows, periods as columns, all generated from the fact table. Never hardcode row or column headers that should come from data.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "365"
     },
     {
       "id": "PQ-0005",
@@ -709,7 +858,10 @@
       "performance_notes": "Merge performance depends on key cardinality and table size. For large tables (100K+ rows), ensure keys are indexed. Inner joins are fastest. Full outer joins are slowest. Anti-joins are useful for finding orphaned records.",
       "governance_notes": "Merge Queries replaces XLOOKUP for all multi-column enrichment scenarios. Use XLOOKUP for single-column lookups in Excel. Use Merge Queries when you need to add multiple columns from a reference table or when the data lives in Power Query already.",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+"
     },
     {
       "id": "PQ-0006",
@@ -723,7 +875,10 @@
       "performance_notes": "The combine step applies the transform function to each file sequentially. For 100+ files, optimize the transform to filter early and select only needed columns. Consider staging large folder ingestions to a database.",
       "governance_notes": "Folder-based ingestion is the PQ endgame \u2014 the fully automated data pipeline. Used in DDL auto-sweep architecture for corpus ingestion. Every file in the folder must share identical schema (enforced by PQ-0003 Column Type Enforcement and PQ-0004 Append Queries patterns).",
       "created_at": "2026-03-09 10:04:28",
-      "updated_at": "2026-03-09 10:04:28"
+      "updated_at": "2026-03-09 10:04:28",
+      "difficulty_score": 5,
+      "usage_frequency": "Situational",
+      "excel_version": "2016+"
     },
     {
       "id": "PTN-0008",
@@ -737,7 +892,10 @@
       "performance_notes": "ROW()-based keys recalculate on row insert/delete. For large stable tables, consider a hardcoded sequence column instead.",
       "governance_notes": "Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys \u2014 they couple your workbook to upstream naming conventions.",
       "created_at": "2026-03-17 00:00:00",
-      "updated_at": "2026-03-17 00:00:00"
+      "updated_at": "2026-03-17 00:00:00",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "CON-0006",
@@ -751,7 +909,10 @@
       "performance_notes": "No performance impact. README tab adds negligible file size.",
       "governance_notes": "Mandatory on all DDL workbooks per STD-EXCEL-001 Rule 0. A workbook without a README is ungoverned by definition. README must be updated on every structural change.",
       "created_at": "2026-03-17 00:00:00",
-      "updated_at": "2026-03-17 00:00:00"
+      "updated_at": "2026-03-17 00:00:00",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+"
     },
     {
       "id": "ARC-0006",
@@ -765,7 +926,10 @@
       "performance_notes": "Layer separation has no performance cost and significantly reduces recalculation chain complexity by keeping data flow unidirectional.",
       "governance_notes": "Required architecture for all DDL operational workbooks per STD-EXCEL-002 Rule 1. The OUTPUT tab must be sheet-protected with the governed exception path documented.",
       "created_at": "2026-03-17 00:00:00",
-      "updated_at": "2026-03-17 00:00:00"
+      "updated_at": "2026-03-17 00:00:00",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0009",
@@ -779,7 +943,10 @@
       "performance_notes": "Dropdown validation has no performance cost. Timestamp columns add minimal storage.",
       "governance_notes": "Every governed operational workbook in DDL uses this pattern per STD-EXCEL-002 Rule 4b. Combine with CON-0006 to document allowed status values in the README.",
       "created_at": "2026-03-17 00:00:00",
-      "updated_at": "2026-03-17 00:00:00"
+      "updated_at": "2026-03-17 00:00:00",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+"
     },
     {
       "id": "PTN-0010",
@@ -792,6 +959,179 @@
       "failure_modes": "Deleting problem rows instead of logging them \u2014 destroys the audit trail. Logging exceptions in comments \u2014 invisible to any process. Exception log growing without a resolution workflow.",
       "performance_notes": "Exception logs are typically small. If your exception log grows faster than your main table, that is a process signal, not a workbook problem.",
       "governance_notes": "Required in all DDL operational workbooks per STD-EXCEL-002 Rule 5d. Exception logs must be reviewed on a defined cadence \u2014 a log without review is just a graveyard.",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00",
+      "difficulty_score": 3,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+"
+    },
+    {
+      "id": "FRM-0018",
+      "name": "XLOOKUP with Fallback Chain",
+      "type": "FRM",
+      "tier": "Advanced",
+      "what_it_does": "Nests multiple XLOOKUP calls as the if_not_found argument of the outer XLOOKUP, creating a governed fallback hierarchy that searches successive tables before returning a default.",
+      "intent": "When a lookup must search multiple reference tables in priority order, use nested XLOOKUP fallback chains to implement a governed search hierarchy without IF/IFERROR wrapping.",
+      "example": "=XLOOKUP(A2, Primary[Key], Primary[Value],\n  XLOOKUP(A2, Secondary[Key], Secondary[Value],\n    \"Not Found\"))",
+      "failure_modes": "Deep nesting defeats readability \u2014 limit to 2 levels. Silent wrong result if table priority order is incorrect. Performance degrades with 3+ nested lookups on large tables.",
+      "performance_notes": "Each XLOOKUP evaluates only if the previous returned not_found. Two-level chain is efficient. Three or more \u2014 consider Power Query merge instead.",
+      "governance_notes": "Cap at 2 levels. Document the priority order in a README comment. If fallback logic exceeds 2 tables, the data model needs normalization, not more nesting.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2019+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "FRM-0019",
+      "name": "MAP",
+      "type": "FRM",
+      "tier": "Advanced",
+      "what_it_does": "Applies a LAMBDA function to each element of one or more arrays and returns an array of results, enabling vectorized custom operations without helper columns.",
+      "intent": "When you need to apply a custom calculation to every element in a range, use MAP with LAMBDA to produce a transformed array without helper columns or copied formulas.",
+      "example": "=MAP(Sales[Amount], LAMBDA(x, IF(x>1000, x*0.9, x)))\n// Applies a 10% discount to every value over 1000",
+      "failure_modes": "LAMBDA inside MAP cannot reference sheet cells directly \u2014 all inputs must come through the LAMBDA parameters. Arrays passed to MAP must have matching dimensions.",
+      "performance_notes": "MAP evaluates once per element. For large arrays (10K+ rows), MAP is significantly faster than equivalent helper column approaches.",
+      "governance_notes": "MAP replaces all helper column patterns in DDL workbooks. If you have a column that applies the same formula to every row, it should be MAP. Pairs with LET for named intermediate values.",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "365",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "FRM-0020",
+      "name": "REDUCE",
+      "type": "FRM",
+      "tier": "Expert",
+      "what_it_does": "Applies a LAMBDA accumulator function across an array, reducing it to a single value \u2014 the Excel equivalent of a fold/reduce operation for running totals, string concatenation, and custom aggregations.",
+      "intent": "When you need to accumulate values across an array with custom logic that SUMIFS or COUNTIFS cannot express, use REDUCE with LAMBDA to apply a governed accumulator pattern.",
+      "example": "=REDUCE(0, Values, LAMBDA(acc, x, acc + IF(x > threshold, x, 0)))\n// Running sum of values above threshold",
+      "failure_modes": "Initial accumulator type must match the output type \u2014 mixing text and numbers causes #VALUE!. Complex REDUCE logic is hard to audit; always wrap the LAMBDA in LET with named steps.",
+      "performance_notes": "REDUCE evaluates sequentially \u2014 O(n). For simple aggregations, SUMIFS is faster. Reserve REDUCE for custom logic that standard aggregations cannot express.",
+      "governance_notes": "Expert-tier function. Use only when SUMIFS, COUNTIFS, and SUMPRODUCT cannot express the required logic. Always document the accumulator pattern in a comment.",
+      "difficulty_score": 5,
+      "usage_frequency": "Situational",
+      "excel_version": "365",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PTN-0011",
+      "name": "Error Dashboard Pattern",
+      "type": "PTN",
+      "tier": "Advanced",
+      "what_it_does": "Builds a dedicated error-monitoring section in a workbook that uses COUNTIF(range, '*#*') and ISNUMBER(MATCH) to surface formula errors, missing keys, and data quality issues in one visible location.",
+      "intent": "When a governed workbook is shared with users, use the error dashboard pattern to create a visible quality control section that surfaces broken references, missing data, and formula errors before they reach output.",
+      "example": "// Count errors in fact table\n=SUMPRODUCT(ISERROR(tbl_Fact[Lookup_Result])*1)\n\n// Flag any #N/A in key column\n=COUNTIF(tbl_Fact[Category], \"#N/A\")\n\n// Traffic light: 0 errors = green CF rule",
+      "failure_modes": "Error monitoring formulas can themselves produce errors if the source range changes shape. Place monitoring on a dedicated CONTROL tab, not the dashboard.",
+      "performance_notes": "ISERROR-based monitoring recalculates on every change. Keep the monitored range bounded \u2014 don't monitor entire columns.",
+      "governance_notes": "Every DDL workbook shared externally should have at least a three-metric error section: formula error count, missing key count, and blank input count. Zero should be the target before any run.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PTN-0012",
+      "name": "Rolling Window Pattern",
+      "type": "PTN",
+      "tier": "Advanced",
+      "what_it_does": "Calculates statistics (average, sum, count) over a fixed trailing window of periods using OFFSET or INDEX-based dynamic ranges, enabling trend analysis that automatically advances as new data is added.",
+      "intent": "When you need trend statistics that automatically track the most recent N periods, use the rolling window pattern to build self-advancing aggregation ranges that require no manual range updates.",
+      "example": "// Rolling 3-month average (non-volatile \u2014 use INDEX)\n=AVERAGE(INDEX(Revenue,MATCH(MAX(Date),Date,0)-2):\n         INDEX(Revenue,MATCH(MAX(Date),Date,0)))",
+      "failure_modes": "Using OFFSET creates a volatile rolling window (recalculates on every change). INDEX-based approach is non-volatile. Window size must not exceed available data or returns #REF!.",
+      "performance_notes": "INDEX-based rolling window is non-volatile and fast. OFFSET-based is volatile \u2014 avoid in large workbooks. For 12+ rolling metrics, pre-calculate in a helper column.",
+      "governance_notes": "Document the window size as a named range (sel_Window) on the CONTROL tab. Never hardcode the window size in the formula. Pairs with STD-EXCEL-001 Rule 5 (Statistical Trend Layer).",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "CON-0007",
+      "name": "Formula Comment Convention",
+      "type": "CON",
+      "tier": "Intermediate",
+      "what_it_does": "Adds human-readable documentation to complex formulas using the N() function (which returns 0 and is ignored in calculation) or adjacent comment cells, making formula intent visible without external documentation.",
+      "intent": "When a formula encodes business logic that is not obvious from syntax alone, use the formula comment convention to embed the rule explanation directly in the formula or adjacent cell.",
+      "example": "=SUMIFS(Sales[Rev], Sales[Region], \"West\",\n  Sales[Year], 2026)\n  +N(\"West region only \u2014 excludes CA per scope declaration\")\n\n// Adjacent cell comment pattern:\nA1: [formula]  |  B1: \"// Rule: exclude refunds > $500\"",
+      "failure_modes": "N() only accepts numeric arguments \u2014 wrap text in VALUE() or use as a separate cell. Too many inline N() comments reduce formula readability rather than improving it.",
+      "performance_notes": "N() adds negligible overhead. The documentation value far exceeds the computational cost.",
+      "governance_notes": "Required for any LOGIC layer formula that encodes a non-obvious business rule. Per STD-EXCEL-002 Rule 3d: every rule-encoding formula must have a comment explaining the rule, not the syntax.",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "ARC-0007",
+      "name": "Parameter-Driven Architecture",
+      "type": "ARC",
+      "tier": "Advanced",
+      "what_it_does": "Centralizes all configurable values (thresholds, rates, date ranges, flags) in a dedicated CONTROL or CONFIG tab as named parameter cells, ensuring every formula derives its behavior from governed, auditable inputs rather than hardcoded values.",
+      "intent": "When a workbook contains values that may change between runs or by user, use parameter-driven architecture to centralize all configuration on a CONTROL tab so that no formula contains hardcoded business values.",
+      "example": "// CONTROL tab:\nsel_Threshold = 500        // Revenue threshold for flagging\nsel_Period    = \"2026-Q1\"  // Reporting period\nsel_Rate      = 0.085      // Commission rate\n\n// LOGIC tab references:\n=IF(Revenue > sel_Threshold, \"Flag\", \"OK\")\n=SUMIFS(Rev, Period, sel_Period) * sel_Rate",
+      "failure_modes": "Parameters defined as values instead of named ranges cannot be traced. Multiple parameter tabs create confusion \u2014 one CONTROL tab per workbook. Parameters without documentation are just anonymous hardcoded values in disguise.",
+      "performance_notes": "Named range lookups are instantaneous. No performance cost. The audit and maintenance value is the entire point.",
+      "governance_notes": "Required in all DDL operational workbooks per STD-EXCEL-002. Every sel_ prefixed cell must have adjacent documentation. This is the architecture that makes workbooks maintainable by anyone, not just the original builder.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PQ-0007",
+      "name": "Custom Column (M Formula)",
+      "type": "PQ",
+      "tier": "Advanced",
+      "what_it_does": "Adds calculated columns to a Power Query result using M language expressions, enabling data transformation logic that executes at the pipeline level before the data loads into Excel.",
+      "intent": "When you need to derive calculated columns from existing data during ingestion, use Power Query Custom Column to apply M-language transformations at the pipeline level rather than adding Excel formula columns post-load.",
+      "example": "// Add Column > Custom Column\n// M expression examples:\n[Amount] * [Rate]                          // Arithmetic\nif [Status] = \"Active\" then \"Y\" else \"N\"   // Conditional\nDate.Year([Date])                          // Date part extraction\nText.Upper([Name])                         // Text transformation",
+      "failure_modes": "M language is case-sensitive \u2014 Text.Upper not text.upper. Null values in referenced columns cause errors unless wrapped in try...otherwise. Custom columns dramatically slow queries if they prevent query folding.",
+      "performance_notes": "Custom columns that use only native M transformations support query folding. Avoid custom columns that reference external data or call non-foldable functions on large datasets.",
+      "governance_notes": "Custom columns belong in the LOGIC layer of the Power Query pipeline. Apply after filtering and type enforcement (PQ-0003). Document complex M expressions with // comments in the Advanced Editor.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "2016+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "ANT-0007",
+      "name": "Spaghetti References",
+      "type": "ANT",
+      "tier": "Intermediate",
+      "what_it_does": "Cross-sheet references that form tangled dependency chains \u2014 Sheet3 references Sheet1 which references Sheet5 which references Sheet3 \u2014 creating circular or near-circular reference webs that are impossible to audit.",
+      "intent": "When you find formulas referencing cells across 3 or more sheets in non-linear patterns, restructure using the layered architecture (INPUT > LOGIC > OUTPUT) to enforce unidirectional data flow.",
+      "example": "WRONG:\nSheet1!B3 = Sheet3!D7\nSheet3!D7 = Sheet5!A2 + Sheet1!B3  // circular\n\nRIGHT:\nSOURCE tab \u2192 FACT tab \u2192 DATA_TABLES tab \u2192 DASHBOARD tab\n(one direction only \u2014 no backwards references)",
+      "failure_modes": "Spaghetti references produce circular reference errors that are difficult to trace. Excel's dependency tracer (Formulas > Trace Precedents) is the diagnostic tool \u2014 use it before any refactor.",
+      "performance_notes": "Tangled cross-sheet dependencies force Excel to recalculate in multiple passes. Unidirectional architecture reduces recalculation to a single forward pass.",
+      "governance_notes": "Any cross-sheet reference that goes backwards in the layer model (DASHBOARD referencing FACT directly, OUTPUT referencing INPUT skipping LOGIC) is a spaghetti reference by definition. Trace and restructure.",
+      "difficulty_score": 3,
+      "usage_frequency": "Situational",
+      "excel_version": "2013+",
+      "created_at": "2026-03-17 00:00:00",
+      "updated_at": "2026-03-17 00:00:00"
+    },
+    {
+      "id": "PTN-0013",
+      "name": "Dependent Dropdown Pattern",
+      "type": "PTN",
+      "tier": "Advanced",
+      "what_it_does": "Creates cascading dropdown lists where the options in a second dropdown dynamically filter based on the selection in the first, using FILTER or INDIRECT to scope the secondary validation list.",
+      "intent": "When a user input requires a two-step selection where the second option depends on the first, use the dependent dropdown pattern to create governed cascading validation that prevents invalid combinations.",
+      "example": "// Category dropdown: sel_Category = \"Expenses\"\n// Sub-category dropdown sources from filtered list:\n// Name Manager: SubList = FILTER(Ref[Sub], Ref[Cat]=sel_Category)\n// Data Validation on sub-cell: List source = SubList\n\n// INDIRECT variant (simpler, less flexible):\n// Named range \"Expenses\" contains expense sub-categories\n// Validation source: =INDIRECT(sel_Category)",
+      "failure_modes": "INDIRECT approach requires named ranges matching exactly the options in the first dropdown \u2014 fragile on rename. FILTER approach requires dynamic array support (365/2019+). Both break if the first selection is cleared.",
+      "performance_notes": "FILTER-based dependent dropdowns recalculate when the source selection changes. Negligible cost at normal scale. INDIRECT is instantaneous but brittle.",
+      "governance_notes": "Use FILTER-based for all new DDL builds (365+). INDIRECT is acceptable in legacy workbooks. Document the dependency relationship in the README. Test empty-first-selection behavior before deployment.",
+      "difficulty_score": 4,
+      "usage_frequency": "Situational",
+      "excel_version": "365",
       "created_at": "2026-03-17 00:00:00",
       "updated_at": "2026-03-17 00:00:00"
     }
@@ -1446,6 +1786,136 @@
       "source": "PTN-0010",
       "target": "CON-0006",
       "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0018",
+      "target": "FRM-0001",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0018",
+      "target": "PTN-0003",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0001",
+      "target": "FRM-0018",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0019",
+      "target": "FRM-0004",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0019",
+      "target": "FRM-0002",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0004",
+      "target": "FRM-0019",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0020",
+      "target": "FRM-0004",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0020",
+      "target": "FRM-0019",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0019",
+      "target": "FRM-0020",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0011",
+      "target": "PTN-0003",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0011",
+      "target": "ARC-0006",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PTN-0012",
+      "target": "FRM-0003",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0012",
+      "target": "ARC-0007",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "CON-0007",
+      "target": "FRM-0002",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "CON-0007",
+      "target": "CON-0006",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "ARC-0007",
+      "target": "PTN-0002",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "ARC-0007",
+      "target": "ARC-0006",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "ARC-0007",
+      "target": "PTN-0009",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0002",
+      "target": "ARC-0007",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PQ-0007",
+      "target": "PQ-0003",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PQ-0007",
+      "target": "PQ-0001",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "ANT-0007",
+      "target": "ARC-0006",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "ANT-0007",
+      "target": "ARC-0004",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0013",
+      "target": "PTN-0006",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0013",
+      "target": "FRM-0005",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0006",
+      "target": "PTN-0013",
+      "type": "LEADS_TO"
     }
   ],
   "tags": [
@@ -2273,6 +2743,156 @@
       "entry_id": "PTN-0010",
       "tag_id": 24,
       "tag_name": "Workflow"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "tag_id": 25,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "tag_id": 26,
+      "tag_name": "Navigation"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "tag_id": 27,
+      "tag_name": "Auditing"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "tag_id": 28,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "tag_id": 29,
+      "tag_name": "Automation"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "tag_id": 30,
+      "tag_name": "Performance"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "tag_id": 31,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "tag_id": 32,
+      "tag_name": "Automation"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "tag_id": 33,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "tag_id": 34,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "tag_id": 35,
+      "tag_name": "Auditing"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "tag_id": 36,
+      "tag_name": "Debugging"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "tag_id": 37,
+      "tag_name": "Dashboard"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "tag_id": 38,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "tag_id": 39,
+      "tag_name": "Performance"
+    },
+    {
+      "entry_id": "CON-0007",
+      "tag_id": 40,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "CON-0007",
+      "tag_id": 41,
+      "tag_name": "Documentation"
+    },
+    {
+      "entry_id": "CON-0007",
+      "tag_id": 42,
+      "tag_name": "Auditing"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "tag_id": 43,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "tag_id": 44,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "tag_id": 45,
+      "tag_name": "Auditing"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "tag_id": 46,
+      "tag_name": "Data Modeling"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "tag_id": 47,
+      "tag_name": "Automation"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "tag_id": 48,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "tag_id": 49,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "tag_id": 50,
+      "tag_name": "Debugging"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "tag_id": 51,
+      "tag_name": "Architecture"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "tag_id": 52,
+      "tag_name": "Governance"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "tag_id": 53,
+      "tag_name": "Automation"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "tag_id": 54,
+      "tag_name": "Data Modeling"
     }
   ],
   "aliases": [
@@ -2931,6 +3551,126 @@
     {
       "entry_id": "PTN-0010",
       "alias": "exception tracking"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "alias": "xlookup chain"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "alias": "fallback lookup"
+    },
+    {
+      "entry_id": "FRM-0018",
+      "alias": "nested xlookup"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "alias": "map function"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "alias": "array transform"
+    },
+    {
+      "entry_id": "FRM-0019",
+      "alias": "vectorized lambda"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "alias": "reduce function"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "alias": "fold accumulator"
+    },
+    {
+      "entry_id": "FRM-0020",
+      "alias": "custom aggregation"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "alias": "error monitoring"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "alias": "data quality dashboard"
+    },
+    {
+      "entry_id": "PTN-0011",
+      "alias": "error summary"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "alias": "rolling average"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "alias": "trailing window"
+    },
+    {
+      "entry_id": "PTN-0012",
+      "alias": "moving average"
+    },
+    {
+      "entry_id": "CON-0007",
+      "alias": "formula comments"
+    },
+    {
+      "entry_id": "CON-0007",
+      "alias": "N function comment"
+    },
+    {
+      "entry_id": "CON-0007",
+      "alias": "inline documentation"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "alias": "config tab"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "alias": "control tab architecture"
+    },
+    {
+      "entry_id": "ARC-0007",
+      "alias": "parameter cells"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "alias": "custom column PQ"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "alias": "M formula column"
+    },
+    {
+      "entry_id": "PQ-0007",
+      "alias": "calculated column PQ"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "alias": "cross-sheet mess"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "alias": "circular references"
+    },
+    {
+      "entry_id": "ANT-0007",
+      "alias": "tangled references"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "alias": "cascading dropdowns"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "alias": "dependent validation"
+    },
+    {
+      "entry_id": "PTN-0013",
+      "alias": "linked dropdowns"
     }
   ]
 }
