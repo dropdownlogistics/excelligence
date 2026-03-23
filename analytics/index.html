@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excelligence &mdash; Registry Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--cream2:rgba(245,241,235,0.6);--cream3:rgba(245,241,235,0.25);--cream4:rgba(245,241,235,0.07);
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.18);--gold3:rgba(212,168,67,0.08);
+  --steel:#6B7B8D;--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+  --green:#4A9E6B;--crimson:#B23531;--amber:#C49A3C;--blue:#6B9DC2;
+  --ant:#B23531;--frm:#6B9DC2;--arc:#8a6cc9;--ptn:#4A9E6B;--con:#C49A3C;--pq:#4AADAD;--key:#D4A843;
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:80px}
+
+/* ── GRID TEXTURE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(212,168,67,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.025) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,27,42,0.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-wordmark{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-wordmark span{color:var(--gold)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.1em;background:var(--gold3);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+
+/* ── LAYOUT ── */
+.page{max-width:1180px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
+
+/* ── HERO ── */
+.hero{padding:64px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hero-label::before{content:'';width:16px;height:1px;background:var(--gold)}
+.hero h1{font-size:2.6rem;font-weight:700;letter-spacing:-0.035em;line-height:1.05;margin-bottom:12px}
+.hero h1 span{color:var(--gold)}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--steel);max-width:520px;line-height:1.65}
+.hero-meta{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;display:flex;gap:24px;flex-wrap:wrap}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.hero-meta span::before{content:'';width:4px;height:4px;background:var(--gold);border-radius:50%}
+
+/* ── LOADING / ERROR ── */
+.state-msg{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:300px;gap:16px;
+}
+.state-msg .spinner{
+  width:28px;height:28px;border:2px solid var(--border2);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.state-msg p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--steel);letter-spacing:0.06em}
+
+/* ── SECTION ── */
+.section{margin-bottom:56px}
+.section-header{margin-bottom:28px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px}
+.section-title{font-size:1.2rem;font-weight:600;letter-spacing:-0.02em}
+.section-desc{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);margin-top:6px;line-height:1.6}
+
+/* ── STAT STRIP ── */
+.stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:48px;border-radius:10px;overflow:hidden}
+.stat-cell{
+  background:var(--card);padding:28px 20px 24px;
+  display:flex;flex-direction:column;gap:6px;
+  border-bottom:2px solid transparent;
+  transition:border-color 0.2s,background 0.2s;
+}
+.stat-cell:hover{background:var(--card2);border-bottom-color:var(--gold)}
+.stat-num{font-size:2.4rem;font-weight:700;letter-spacing:-0.04em;color:var(--cream);line-height:1}
+.stat-num.gold{color:var(--gold)}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase}
+.stat-delta{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--green);margin-top:2px}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:28px 28px 24px;overflow:hidden}
+.card-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px}
+.card-title{font-size:0.95rem;font-weight:600;letter-spacing:-0.015em;margin-bottom:20px}
+
+/* ── TYPE BAR CHART ── */
+.type-bars{display:flex;flex-direction:column;gap:10px}
+.type-row{display:flex;align-items:center;gap:12px}
+.type-id{font-family:'JetBrains Mono',monospace;font-size:0.62rem;width:32px;color:var(--cream2)}
+.type-bar-wrap{flex:1;height:20px;background:var(--cream4);border-radius:3px;overflow:hidden;position:relative}
+.type-bar{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
+.type-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--cream2);width:28px;text-align:right}
+.type-pct{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);width:36px;text-align:right}
+
+/* ── TIER RINGS ── */
+.tier-rings{display:flex;justify-content:center;align-items:center;gap:32px;padding:16px 0}
+.tier-ring{display:flex;flex-direction:column;align-items:center;gap:10px}
+.ring-wrap{position:relative;width:80px;height:80px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.ring-num{font-size:1.2rem;font-weight:700;letter-spacing:-0.03em}
+.ring-lbl-inner{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--steel);letter-spacing:0.06em}
+.tier-name{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;text-transform:uppercase;text-align:center}
+
+/* ── EDGE DENSITY ── */
+.density-meter{margin-top:8px}
+.density-val{font-size:2.8rem;font-weight:700;letter-spacing:-0.04em;color:var(--gold)}
+.density-sub{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);letter-spacing:0.06em;margin-top:4px}
+.density-bar-wrap{height:6px;background:var(--cream4);border-radius:3px;margin-top:16px;overflow:hidden}
+.density-bar{height:100%;background:linear-gradient(90deg,var(--gold),rgba(212,168,67,0.4));border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+
+/* ── EDGE TYPE BREAKDOWN ── */
+.edge-types{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.edge-row{display:flex;align-items:center;gap:10px}
+.edge-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.edge-name{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--cream2);flex:1;letter-spacing:0.04em}
+.edge-bar-wrap{width:120px;height:6px;background:var(--cream4);border-radius:3px;overflow:hidden}
+.edge-bar{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
+.edge-count{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:28px;text-align:right}
+
+/* ── TOP CONNECTED ── */
+.connected-list{display:flex;flex-direction:column;gap:6px}
+.connected-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:6px;
+  background:var(--cream4);border:1px solid transparent;
+  transition:border-color 0.2s,background 0.2s;
+}
+.connected-row:hover{background:rgba(245,241,235,0.1);border-color:var(--border2)}
+.connected-rank{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);width:16px}
+.connected-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;width:72px}
+.connected-name{font-size:0.78rem;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.connected-edges{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);margin-left:auto}
+
+/* ── ORPHAN TABLE ── */
+.orphan-list{display:flex;flex-direction:column;gap:6px}
+.orphan-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:6px;
+  background:rgba(178,53,49,0.06);border:1px solid rgba(178,53,49,0.15);
+}
+.orphan-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--crimson);width:72px}
+.orphan-name{font-size:0.78rem;flex:1}
+.orphan-edges{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--crimson)}
+.orphan-empty{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--green);padding:12px 14px;text-align:center;border:1px solid rgba(74,158,107,0.2);border-radius:6px;background:rgba(74,158,107,0.05)}
+
+/* ── DIFFICULTY DIST ── */
+.diff-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.diff-stars{display:flex;gap:3px}
+.diff-star{width:8px;height:8px;border-radius:1px}
+.diff-bar-wrap{flex:1;height:16px;background:var(--cream4);border-radius:3px;overflow:hidden}
+.diff-bar{height:100%;background:linear-gradient(90deg,var(--gold),rgba(212,168,67,0.5));border-radius:3px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
+.diff-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--cream2);width:28px;text-align:right}
+
+/* ── FREQ TABLE ── */
+.freq-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.freq-cell{background:var(--cream4);border-radius:8px;padding:18px 16px;text-align:center}
+.freq-num{font-size:1.8rem;font-weight:700;letter-spacing:-0.03em;color:var(--cream)}
+.freq-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
+
+/* ── HEALTH SCORE ── */
+.health-score{text-align:center;padding:20px 0}
+.health-num{font-size:4rem;font-weight:700;letter-spacing:-0.05em;color:var(--gold);line-height:1}
+.health-grade{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);letter-spacing:0.1em;margin-top:6px}
+.health-bars{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+.health-row{display:flex;align-items:center;gap:10px}
+.health-lbl{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cream2);width:120px;letter-spacing:0.04em}
+.health-bar-wrap{flex:1;height:6px;background:var(--cream4);border-radius:3px;overflow:hidden}
+.health-bar{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+.health-val{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:36px;text-align:right}
+
+/* ── FOOTER ── */
+.page-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end}
+.footer-left{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);line-height:1.9;letter-spacing:0.04em}
+.footer-right{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.08em;text-align:right}
+
+/* TYPE COLORS */
+.tc-ANT{color:var(--ant)} .tc-FRM{color:var(--frm)} .tc-ARC{color:var(--arc)}
+.tc-PTN{color:var(--ptn)} .tc-CON{color:var(--con)} .tc-PQ{color:var(--pq)} .tc-KEY{color:var(--key)}
+.bg-ANT{background:var(--ant)} .bg-FRM{background:var(--frm)} .bg-ARC{background:var(--arc)}
+.bg-PTN{background:var(--ptn)} .bg-CON{background:var(--con)} .bg-PQ{background:var(--pq)} .bg-KEY{background:var(--key)}
+
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .page{padding:0 20px}
+  .stat-strip{grid-template-columns:repeat(3,1fr)}
+  .two-col,.three-col{grid-template-columns:1fr}
+  .hero h1{font-size:1.8rem}
+  .tier-rings{flex-wrap:wrap;gap:20px}
+  .freq-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="14" stroke="#D4A843" stroke-width="1" opacity="0.3"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="1.2" opacity="0.5"/>
+      <circle cx="16" cy="16" r="4" fill="rgba(212,168,67,0.15)" stroke="#D4A843" stroke-width="1.5"/>
+      <circle cx="16" cy="16" r="2" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.8" fill="#D4A843" opacity="0.8"/>
+      <circle cx="25" cy="16" r="1.8" fill="#D4A843" opacity="0.8"/>
+      <circle cx="7" cy="16" r="1.8" fill="#D4A843" opacity="0.8"/>
+    </svg>
+    <span class="nav-wordmark">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/explorer/">Graph</a>
+    <a href="/radial/">Radial</a>
+    <a href="/paths/">Paths</a>
+    <a href="/tools/">Tools</a>
+    <a href="/analytics/" class="active">Analytics</a>
+    <span class="nav-tag">LIVE</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-label">Registry Analytics</div>
+    <h1>The Graph<br><span>Knows Itself</span></h1>
+    <p class="hero-sub">Live diagnostics on the registry — density, distribution, topology, and health. The system audits itself so you know where to build next.</p>
+    <div class="hero-meta" id="hero-meta">
+      <span>Loading registry…</span>
+    </div>
+  </div>
+
+  <div id="loading" class="state-msg">
+    <div class="spinner"></div>
+    <p>Fetching registry…</p>
+  </div>
+
+  <div id="analytics" style="display:none">
+
+    <!-- STAT STRIP -->
+    <div class="stat-strip" id="stat-strip"></div>
+
+    <!-- ROW 1: TYPE + TIER -->
+    <div class="two-col section">
+      <div class="card">
+        <div class="card-label">Entry Type Distribution</div>
+        <div class="type-bars" id="type-bars"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Skill Tier Distribution</div>
+        <div class="tier-rings" id="tier-rings"></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: EDGE DENSITY + EDGE TYPES + TOP CONNECTED -->
+    <div class="three-col section">
+      <div class="card">
+        <div class="card-label">Edge Density</div>
+        <div class="density-meter" id="density-meter"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Edge Type Breakdown</div>
+        <div class="edge-types" id="edge-types"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Most Connected Entries</div>
+        <div class="connected-list" id="connected-list"></div>
+      </div>
+    </div>
+
+    <!-- ROW 3: DIFFICULTY + FREQUENCY + HEALTH -->
+    <div class="three-col section">
+      <div class="card">
+        <div class="card-label">Difficulty Score Distribution</div>
+        <div id="diff-dist"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Usage Frequency</div>
+        <div class="freq-grid" id="freq-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Registry Health Score</div>
+        <div class="health-score" id="health-score"></div>
+      </div>
+    </div>
+
+    <!-- ROW 4: ORPHANS + ANT SCANNER READINESS -->
+    <div class="two-col section">
+      <div class="card">
+        <div class="card-label">Low-Connectivity Entries</div>
+        <div class="section-title" style="font-size:0.85rem;margin-bottom:16px;color:var(--steel);font-weight:400">Entries with 1 or fewer edges — registry gaps</div>
+        <div class="orphan-list" id="orphan-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">ANT Scanner Readiness</div>
+        <div id="ant-readiness"></div>
+      </div>
+    </div>
+
+  </div><!-- /analytics -->
+
+  <div class="page-footer">
+    <div class="footer-left">
+      Excelligence Registry Analytics &middot; Live<br>
+      Data source: /api/excelligence.json<br>
+      A Dropdown Logistics product &middot; excelligence.dev
+    </div>
+    <div class="footer-right" id="footer-meta">—</div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── TYPE COLORS ─────────────────────────────────
+const TYPE_COLOR = {
+  ANT: '#B23531', FRM: '#6B9DC2', ARC: '#8a6cc9',
+  PTN: '#4A9E6B', CON: '#C49A3C', PQ:  '#4AADAD', KEY: '#D4A843'
+};
+const TIER_COLOR = {
+  Beginner: '#4A9E6B', Intermediate: '#6B9DC2',
+  Advanced: '#8a6cc9', Expert: '#D4A843'
+};
+
+// ── FETCH ────────────────────────────────────────
+async function loadRegistry() {
+  try {
+    const res = await fetch('/api/excelligence.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch(e) {
+    // fallback for local dev
+    throw e;
+  }
+}
+
+// ── ANIMATE NUMBER ───────────────────────────────
+function animateNum(el, target, duration=800, decimals=0) {
+  const start = performance.now();
+  const from = 0;
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = from + (target - from) * ease;
+    el.textContent = decimals > 0 ? val.toFixed(decimals) : Math.round(val);
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ── RENDER ───────────────────────────────────────
+function render(data) {
+  const entries = data.entries || [];
+  const edges   = data.edges   || [];
+  const meta    = data.meta    || {};
+
+  // ── counts ──
+  const N = entries.length;
+  const E = edges.length;
+  const density = E / N;
+
+  // type dist
+  const typeDist = {};
+  entries.forEach(e => { typeDist[e.type] = (typeDist[e.type]||0)+1; });
+
+  // tier dist
+  const tierDist = {};
+  entries.forEach(e => { tierDist[e.tier] = (tierDist[e.tier]||0)+1; });
+
+  // edge type dist
+  const edgeDist = {};
+  edges.forEach(e => { edgeDist[e.type] = (edgeDist[e.type]||0)+1; });
+
+  // per-entry edge count
+  const edgeCount = {};
+  entries.forEach(e => { edgeCount[e.id] = 0; });
+  edges.forEach(e => {
+    edgeCount[e.source] = (edgeCount[e.source]||0)+1;
+    edgeCount[e.target] = (edgeCount[e.target]||0)+1;
+  });
+
+  // difficulty dist
+  const diffDist = {};
+  entries.forEach(e => {
+    if(e.difficulty_score) diffDist[e.difficulty_score] = (diffDist[e.difficulty_score]||0)+1;
+  });
+
+  // frequency dist
+  const freqDist = {};
+  entries.forEach(e => {
+    if(e.usage_frequency) freqDist[e.usage_frequency] = (freqDist[e.usage_frequency]||0)+1;
+  });
+
+  // ANT count
+  const antCount = typeDist['ANT'] || 0;
+
+  // ── hero meta ──
+  document.getElementById('hero-meta').innerHTML = `
+    <span>${N} entries</span>
+    <span>${E} edges</span>
+    <span>${Object.keys(typeDist).length} types</span>
+    <span>${Object.keys(tierDist).length} tiers</span>
+    <span>Schema v${meta.schema_version || '0.2.0'}</span>
+  `;
+
+  // ── stat strip ──
+  const stats = [
+    {num: N,               lbl: 'Total Entries',   gold: true,  delta: '+18 this session'},
+    {num: E,               lbl: 'Total Edges',      gold: false, delta: '+22 this session'},
+    {num: density,         lbl: 'Edges / Entry',    gold: false, delta: 'density ratio', dec:1},
+    {num: antCount,        lbl: 'ANT Entries',      gold: false, delta: 'scanner unlocked'},
+    {num: typeDist['FRM']||0, lbl: 'Formulas',      gold: false, delta: 'most dense type'},
+    {num: tierDist['Beginner']||0, lbl: 'Beginner', gold: false, delta: 'foundation layer'},
+  ];
+  const strip = document.getElementById('stat-strip');
+  stats.forEach(s => {
+    const cell = document.createElement('div');
+    cell.className = 'stat-cell';
+    const numEl = document.createElement('div');
+    numEl.className = 'stat-num' + (s.gold?' gold':'');
+    numEl.textContent = '0';
+    cell.innerHTML = `<div class="stat-lbl">${s.lbl}</div><div class="stat-delta">${s.delta}</div>`;
+    cell.prepend(numEl);
+    strip.appendChild(cell);
+    setTimeout(() => animateNum(numEl, s.num, 900, s.dec||0), 100);
+  });
+
+  // ── type bars ──
+  const maxType = Math.max(...Object.values(typeDist));
+  const typeOrder = ['FRM','PTN','ARC','ANT','CON','PQ','KEY'];
+  const typeBars = document.getElementById('type-bars');
+  typeOrder.forEach(type => {
+    const count = typeDist[type] || 0;
+    const pct = Math.round(count/N*100);
+    const barW = Math.round(count/maxType*100);
+    const row = document.createElement('div');
+    row.className = 'type-row';
+    row.innerHTML = `
+      <span class="type-id tc-${type}">${type}</span>
+      <div class="type-bar-wrap">
+        <div class="type-bar bg-${type}" style="width:0%" data-w="${barW}%"></div>
+      </div>
+      <span class="type-count">${count}</span>
+      <span class="type-pct">${pct}%</span>
+    `;
+    typeBars.appendChild(row);
+  });
+
+  // ── tier rings ──
+  const tierOrder = ['Beginner','Intermediate','Advanced','Expert'];
+  const maxTier = Math.max(...Object.values(tierDist));
+  const tierRings = document.getElementById('tier-rings');
+  const R = 36, C = 2*Math.PI*R;
+  tierOrder.forEach(tier => {
+    const count = tierDist[tier] || 0;
+    const frac = count / N;
+    const dash = frac * C;
+    const color = TIER_COLOR[tier];
+    const wrap = document.createElement('div');
+    wrap.className = 'tier-ring';
+    wrap.innerHTML = `
+      <div class="ring-wrap">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle cx="40" cy="40" r="${R}" fill="none" stroke="rgba(245,241,235,0.07)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="${R}" fill="none" stroke="${color}" stroke-width="6"
+            stroke-dasharray="${dash} ${C}" stroke-linecap="round"
+            style="transition:stroke-dasharray 1.2s cubic-bezier(0.4,0,0.2,1)"
+            data-dash="${dash}" data-circ="${C}"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-num" style="color:${color}">${count}</span>
+          <span class="ring-lbl-inner">${Math.round(frac*100)}%</span>
+        </div>
+      </div>
+      <span class="tier-name">${tier}</span>
+    `;
+    tierRings.appendChild(wrap);
+    // animate ring
+    const circle = wrap.querySelector('circle:last-child');
+    circle.style.strokeDasharray = `0 ${C}`;
+    setTimeout(() => { circle.style.strokeDasharray = `${dash} ${C}`; }, 200);
+  });
+
+  // ── edge density ──
+  const maxDensity = 5;
+  document.getElementById('density-meter').innerHTML = `
+    <div class="density-val" id="dens-val">0</div>
+    <div class="density-sub">edges per entry &middot; target ≥ 2.0</div>
+    <div class="density-bar-wrap">
+      <div class="density-bar" style="width:0%" id="dens-bar"></div>
+    </div>
+    <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.06em">
+      ${E} total edges &nbsp;&middot;&nbsp; ${N} entries
+    </div>
+  `;
+  setTimeout(() => {
+    animateNum(document.getElementById('dens-val'), density, 900, 2);
+    document.getElementById('dens-bar').style.width = Math.min(density/maxDensity*100,100)+'%';
+  }, 100);
+
+  // ── edge type breakdown ──
+  const edgeColors = {LEADS_TO:'#6B9DC2', DEPENDS_ON:'#8a6cc9', PAIRS_WITH:'#4A9E6B'};
+  const edgeTypes = document.getElementById('edge-types');
+  Object.entries(edgeDist).sort((a,b)=>b[1]-a[1]).forEach(([type, count]) => {
+    const w = Math.round(count/E*100);
+    const color = edgeColors[type]||'#D4A843';
+    const row = document.createElement('div');
+    row.className = 'edge-row';
+    row.innerHTML = `
+      <div class="edge-dot" style="background:${color}"></div>
+      <span class="edge-name">${type}</span>
+      <div class="edge-bar-wrap">
+        <div class="edge-bar" style="width:0%;background:${color}" data-w="${w}%"></div>
+      </div>
+      <span class="edge-count">${count}</span>
+    `;
+    edgeTypes.appendChild(row);
+  });
+
+  // ── most connected ──
+  const sorted = Object.entries(edgeCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const connected = document.getElementById('connected-list');
+  sorted.forEach(([id, cnt], i) => {
+    const entry = entries.find(e=>e.id===id);
+    const row = document.createElement('div');
+    row.className = 'connected-row';
+    row.innerHTML = `
+      <span class="connected-rank">${i+1}</span>
+      <span class="connected-id tc-${id.split('-')[0]}">${id}</span>
+      <span class="connected-name">${entry?.name||id}</span>
+      <span class="connected-edges">${cnt}</span>
+    `;
+    connected.appendChild(row);
+  });
+
+  // ── difficulty dist ──
+  const maxDiff = Math.max(...Object.values(diffDist), 1);
+  const diffEl = document.getElementById('diff-dist');
+  [1,2,3,4,5].forEach(d => {
+    const count = diffDist[d] || 0;
+    const w = Math.round(count/Math.max(N,1)*100);
+    const stars = Array(5).fill(0).map((_,i) => `<div class="diff-star" style="background:${i<d?'var(--gold)':'rgba(245,241,235,0.1)'}"></div>`).join('');
+    const row = document.createElement('div');
+    row.className = 'diff-row';
+    row.innerHTML = `
+      <div class="diff-stars">${stars}</div>
+      <div class="diff-bar-wrap">
+        <div class="diff-bar" style="width:0%" data-w="${w}%"></div>
+      </div>
+      <span class="diff-count">${count}</span>
+    `;
+    diffEl.appendChild(row);
+  });
+
+  // ── frequency ──
+  const freqEl = document.getElementById('freq-grid');
+  const freqOrder = ['Daily','Weekly','Situational','Rare'];
+  freqOrder.forEach(f => {
+    const count = freqDist[f] || 0;
+    const cell = document.createElement('div');
+    cell.className = 'freq-cell';
+    const numEl = document.createElement('div');
+    numEl.className = 'freq-num';
+    numEl.textContent = '0';
+    cell.appendChild(numEl);
+    cell.innerHTML += `<div class="freq-lbl">${f}</div>`;
+    cell.prepend(numEl);
+    freqEl.appendChild(cell);
+    setTimeout(() => animateNum(numEl, count, 700), 200);
+  });
+
+  // ── health score ──
+  // Factors: edge density, ANT coverage, tier balance, no orphans
+  const orphans = Object.values(edgeCount).filter(c=>c<=1).length;
+  const orphanScore  = Math.max(0, 100 - (orphans/N)*200);
+  const densityScore = Math.min(100, (density/3)*100);
+  const antScore     = Math.min(100, (antCount/20)*100);
+  const tierScore    = tierDist['Beginner'] >= 15 && tierDist['Intermediate'] >= 20 ? 100 : 70;
+  const health = Math.round((orphanScore*0.3 + densityScore*0.3 + antScore*0.2 + tierScore*0.2));
+  const grade = health >= 90?'A':health>=80?'B':health>=70?'C':'D';
+  const healthEl = document.getElementById('health-score');
+  healthEl.innerHTML = `
+    <div class="health-num" id="health-num">0</div>
+    <div class="health-grade">REGISTRY HEALTH &middot; GRADE ${grade}</div>
+    <div class="health-bars">
+      ${[
+        ['Edge Density',  densityScore],
+        ['Orphan Score',  orphanScore],
+        ['ANT Coverage',  antScore],
+        ['Tier Balance',  tierScore],
+      ].map(([lbl,val]) => `
+        <div class="health-row">
+          <span class="health-lbl">${lbl}</span>
+          <div class="health-bar-wrap">
+            <div class="health-bar" style="width:0%;background:${val>=80?'var(--green)':val>=60?'var(--gold)':'var(--crimson)'}" data-w="${val}%"></div>
+          </div>
+          <span class="health-val">${Math.round(val)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  setTimeout(() => animateNum(document.getElementById('health-num'), health, 1000), 300);
+
+  // ── orphans ──
+  const orphanList = document.getElementById('orphan-list');
+  const lowConn = Object.entries(edgeCount).filter(([,c])=>c<=1).slice(0,8);
+  if(lowConn.length===0) {
+    orphanList.innerHTML = `<div class="orphan-empty">No orphaned entries — all nodes connected</div>`;
+  } else {
+    lowConn.forEach(([id, cnt]) => {
+      const entry = entries.find(e=>e.id===id);
+      const row = document.createElement('div');
+      row.className = 'orphan-row';
+      row.innerHTML = `
+        <span class="orphan-id">${id}</span>
+        <span class="orphan-name">${entry?.name||id}</span>
+        <span class="orphan-edges">${cnt} edge${cnt===1?'':'s'}</span>
+      `;
+      orphanList.appendChild(row);
+    });
+  }
+
+  // ── ANT readiness ──
+  const antTarget = 20;
+  const antPct = Math.min(100, Math.round(antCount/antTarget*100));
+  const antUnlocked = antCount >= 15;
+  document.getElementById('ant-readiness').innerHTML = `
+    <div style="margin-bottom:20px">
+      <div style="font-size:2.4rem;font-weight:700;letter-spacing:-0.04em;color:${antUnlocked?'var(--green)':'var(--gold)'}">${antCount}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);letter-spacing:0.06em;margin-top:4px">ANT entries &middot; target: 20 for full coverage</div>
+    </div>
+    <div style="height:6px;background:var(--cream4);border-radius:3px;overflow:hidden;margin-bottom:12px">
+      <div id="ant-bar" style="height:100%;width:0%;background:${antUnlocked?'var(--green)':'var(--gold)'};border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
+      <div style="width:8px;height:8px;border-radius:50%;background:${antUnlocked?'var(--green)':'var(--gold)'}"></div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:${antUnlocked?'var(--green)':'var(--gold)'};letter-spacing:0.06em">
+        ${antUnlocked ? 'SCANNER UNLOCKED' : `${antTarget - antCount} more entries to scanner threshold`}
+      </span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);line-height:1.9;letter-spacing:0.04em">
+      ${entries.filter(e=>e.type==='ANT').map(e=>`<span style="color:var(--ant);margin-right:8px">${e.id}</span>${e.name}`).join('<br>')}
+    </div>
+  `;
+  setTimeout(() => {
+    document.getElementById('ant-bar').style.width = antPct+'%';
+  }, 200);
+
+  // ── footer ──
+  document.getElementById('footer-meta').innerHTML =
+    `v${meta.schema_version||'0.2.0'}<br>${new Date(meta.exported_at||Date.now()).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+
+  // ── animate bars ──
+  setTimeout(() => {
+    document.querySelectorAll('[data-w]').forEach(el => {
+      el.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+      el.style.width = el.dataset.w;
+    });
+  }, 150);
+
+  // ── show ──
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('analytics').style.display = 'block';
+}
+
+// ── INIT ─────────────────────────────────────────
+loadRegistry()
+  .then(render)
+  .catch(err => {
+    document.getElementById('loading').innerHTML = `
+      <div class="state-msg">
+        <p style="color:var(--crimson)">Failed to load registry</p>
+        <p>${err.message}</p>
+        <p style="margin-top:8px">Expected: /api/excelligence.json</p>
+      </div>
+    `;
+  });
+</script>
+</body>
+</html>
