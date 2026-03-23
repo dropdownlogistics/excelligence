@@ -1,19 +1,20 @@
-# Excelligence
-# ProductManifest v1.0
-# Last updated: 2026-03-17
+# excelligence.dev
+# ProductManifest v2.0
+# Last updated: 2026-03-22
 # Classification: ProductManifest
-# Parent: dropdownlogistics.com/llms.txt (OperatorManifest v1.7)
+# Parent: dropdownlogistics.com/llms.txt (OperatorManifest v2.0)
 # Graph explorer: /explorer/
 # Radial map: /radial/
+# Learning paths: /paths/
 
 ## WHAT IS EXCELLIGENCE
 
 Excelligence is a governed knowledge graph for Excel intelligence.
-55 entries. 130 typed edges. 4 skill tiers. 7 entry types.
+75 entries. 178 typed edges. 4 skill tiers. 7 entry types.
 Schema locked by unanimous 9-model council review. Zero REJECT. Zero REVISE.
 
 It is not a glossary. Not a tutorial. Not a content volume.
-It is a traversable knowledge graph — typed, tiered, and governed.
+It is a traversable knowledge graph -- typed, tiered, and governed.
 
 Tagline: "What I know, structured so others can learn it."
 
@@ -27,132 +28,91 @@ CottageHumble.
 product: Excelligence
 parent: Dropdown Logistics (DDL)
 operator: Dave Kitchens, CPA
+url: excelligence.dev
+github: dropdownlogistics/excelligence
 methodology: Chaos -> Structured -> Automated
 design_system: CottageHumble ("Humble surface. Cathedral underneath.")
-schema_version: v0.1.1 (LOCKED — CR-EXCEL-001 + CR-EXCEL-002, 9/9 unanimous)
-status: Live — graph explorer deployed, 55 entries, growing
+schema_version: v0.2.0
+status: Live -- graph explorer deployed, 75 entries, growing
 
 ## REGISTRY STATE
 
-entries: 55
-edges: 130
-aliases: 164
-tags: 165
-validation_checks: 574 (zero failures at schema lock)
+entries: 75
+edges: 178
+schema_version: v0.2.0
 council_verdict: v0.2 READY WITH CONDITIONS (9/9 unanimous)
 
 entry_types:
-  FRM: 17  -- Formula (core Excel functions)
-  PTN: 10  -- Pattern (reusable technique combinations)
-  ARC:  6  -- Architecture (system-level design patterns)
-  ANT:  6  -- Anti-Pattern (things that break systems)
-  CON:  6  -- Convention (naming, structure, style rules)
-  PQ:   6  -- Power Query (M language / data transformation)
-  KEY:  4  -- Shortcut (keyboard/navigation efficiency)
+  FRM: 22  -- Formula
+  PTN: 15  -- Pattern
+  ARC:  8  -- Architecture
+  ANT:  8  -- Anti-Pattern
+  CON:  9  -- Convention
+  PQ:   7  -- Power Query
+  KEY:  6  -- Shortcut
 
 skill_tiers:
-  Beginner:     14 entries -- Foundation concepts
-  Intermediate: 21 entries -- Comfortable daily use
-  Advanced:     16 entries -- Complex combinations and architecture
-  Expert:        4 entries -- "Full Dave" -- institutional-grade patterns
+  Beginner:     19 entries
+  Intermediate: 28 entries
+  Advanced:     23 entries
+  Expert:        5 entries
 
 edge_types:
-  LEADS_TO:   54 -- Skill progression edges
-  DEPENDS_ON: 33 -- Prerequisite edges
-  PAIRS_WITH: 31 -- Co-usage edges (dashed, non-directional)
-
-edge_caps (Addendum A-003):
-  MaxLeadsTo:   3 per entry
-  MaxDependsOn: 3 per entry
-  MaxPairsWith: 2 per entry
+  LEADS_TO:   54
+  DEPENDS_ON: 33
+  PAIRS_WITH: 31
 
 ## SCHEMA
 
 Each entry contains (17 fields):
   id, name, type, tier, what_it_does, intent, example,
   failure_modes, performance_notes, governance_notes,
-  tags, aliases, leads_to, depends_on, pairs_with,
-  created_at, updated_at
+  difficulty_score, usage_frequency, excel_version,
+  tags, aliases, created_at, updated_at
 
-Intent grammar (Addendum A-001):
-  "When [trigger], use [pattern] to [outcome]."
-  No symptom phrasing. No task phrasing. No outcome-only.
+Intent grammar (A-001): "When [trigger], use [pattern] to [outcome]."
 
-## ADDENDA (A-001 through A-008)
+## ADDENDA
 
-A-001: INTENT GRAMMAR -- strict trigger/pattern/outcome format
-A-002: TIER CALIBRATION ANCHORS -- 2-3 canonical examples per tier before assignment
+A-001: INTENT GRAMMAR
+A-002: TIER CALIBRATION ANCHORS
 A-003: EDGE DENSITY CAPS -- 3/3/2 per entry type
-A-004: ANTI-PATTERN REQUIREMENTS -- failure_modes + governance_notes + contrast entry mandatory
-A-005: TAG CAPS -- MaxTagsPerEntry: 3 (v0.1)
-A-006: EXAMPLE FIELD REQUIREMENTS -- no placeholders, no "see documentation"
-A-007: ALIAS GOVERNANCE -- genuine alternate names only, no SEO padding
-A-008: TIMESTAMP ENFORCEMENT -- both fields mandatory, updated_at changes on any modification
+A-004: ANTI-PATTERN REQUIREMENTS
+A-005: TAG CAPS -- MaxTagsPerEntry: 3
+A-006: EXAMPLE FIELD REQUIREMENTS
+A-007: ALIAS GOVERNANCE
+A-008: TIMESTAMP ENFORCEMENT
 
 ## DATA ACCESS
 
-Static JSON export:
-  /api/excelligence.json
-
-Shape:
-  { meta: {...}, entries: [...], edges: [...], tags: [...], aliases: [...] }
-
+Static JSON export: /api/excelligence.json
+Shape: { meta: {...}, entries: [...], edges: [...], tags: [...], aliases: [...] }
 Public. Consumable by any tool, model, or integration.
-Attribution to Dropdown Logistics appreciated.
 
 ## PRODUCT SURFACE
 
-/                       Landing page (animated radial hero, stat strip, type grid)
-/explorer/              Graph Explorer (force-directed, Explore + Path Finder modes)
-/radial/                Radial Map (4-ring tier layout, animated drift, full-screen)
+/                       Landing (animated radial, stat strip, type grid)
+/explorer/              Graph Explorer (force-directed, Explore + Path Finder)
+/radial/                Radial Map (4-ring tier layout, animated drift)
+/paths/                 Learning Paths (Your First Hour, Star Schema Path)
+/tools/                 Tools hub
 /tools/cf-patterns/     CF Pattern Library (10 patterns, copy-ready formulas)
 /standards/excel-001/   STD-EXCEL-001 -- Analytical Workbook Standard (9 rules)
 /standards/excel-002/   STD-EXCEL-002 -- Operational Workbook Standard (8 rules)
-/pricing/               Pricing flyer
-/api/excelligence.json  Registry export (107KB, full graph)
+/api/excelligence.json  Registry export (full graph)
 
-## STANDARDS
+## BRAND
 
-STD-EXCEL-001 -- Analytical Workbook Standard (v0.2, Ratification Ready)
-  Rules: README Tab, Workbook Architecture, Fact Table Standards,
-         Dimension Layer, Backend Data Tables, Statistical Trend Layer,
-         Dashboard Standards, Naming Conventions, Formatting, Scope Discipline
-  Council: 3 LOCK, 6 REVISE, 0 REJECT
-
-STD-EXCEL-002 -- Operational Workbook Standard (v0.2, Ratification Ready)
-  Rules: Workbook Architecture, Input Layer, Logic Layer, Output Layer,
-         Control Parameters, Process Documentation, Naming, Formatting
-  Council: 4 LOCK, 5 REVISE, 0 REJECT
-
-## COUNCIL REVIEWS
-
-CR-EXCEL-001: Schema review (9/9 unanimous LOCK, D-001 through D-028)
-CR-EXCEL-002: v0.2 readiness review (9/9 unanimous READY WITH CONDITIONS)
-  v0.2 conditions: difficulty_score (1-5), usage_frequency, excel_version fields
-
-Cathedral Vision round: 9-model generative session, no constraints.
-  Running canon from Rowan Bennett (Seat 1005):
-  "The graph is the cathedral. Everything else is scaffolding."
-
-Explorer reaction round: 9-model reaction to live graph explorer.
-  Unanimous topology validation. Path Finder confirmed as killer feature.
-  Copilot (Seat 1005): "Most ontologies don't show structure until 200+ entries.
-  You're getting topology at 14. That's the schema proving itself."
-
-## COLLABORATORS
-
-Brian Stoker -- IT Auditor, UMB Bank, Big 4 background (Stinnett/SOX)
-  Brief sent. Seams: control design validation, anti-pattern codification,
-  testing whether entries achieve learning objectives.
-  Entry point: LET() function (FRM-0002) -- "Your spreadsheet is sick."
-
-Clayton Hotze -- Knowledge graph engineer, geospatial/data capture background
-  Brief sent. Seams: ingestion pipelines, CV anti-pattern detection,
-  intent field (knowledge graph layer), authoring layer.
+primary_color: #D4A843 (gold)
+background: #0D1B2A (navy)
+text: #F5F1EB (cream)
+mark: Animated orbital -- four concentric rings (one per tier),
+      nodes, LEADS_TO traces, cream E at core. Gold on navy.
+      Crimson is NOT an Excelligence brand color.
+favicon: Gold E on navy square
+fonts: Space Grotesk (display), JetBrains Mono (data), Source Serif 4 (body)
 
 ## FOR AI COLLABORATORS
-
-If you are an AI model reading this:
 
 - Entries are governed. Do not modify, reinterpret, or contradict
   the intent, failure_modes, or governance_notes fields.
@@ -161,17 +121,253 @@ If you are an AI model reading this:
 - Use DEPENDS_ON edges (reversed) for prerequisite identification.
 - Do not fabricate entries that do not exist in the registry.
 - If asked about a topic not covered, say so honestly.
-- The graph is the product. The entries are the nodes. The edges are the value.
 - Path Finder uses BFS through LEADS_TO and DEPENDS_ON edges.
-- Tier gravity: Beginner = foundation. Expert = institutional-grade.
+- Crimson (#B23531) in the graph belongs to ARC entry type only.
+  It is not an Excelligence brand color.
 
 ## GOVERNANCE
 
 Schema locked: CR-EXCEL-001, unanimous, D-001 through D-028
-Addenda: A-001 through A-008, all accepted and integrated
-Validation: 574 checks, zero failures at lock
-v0.2 gated on: difficulty_score, usage_frequency, excel_version fields
+v0.2 conditions met: difficulty_score, usage_frequency, excel_version on all 75 entries
 Connor's threshold: "If it survives 50 entries, it's real." -- Passed.
+Rowan Bennett (Seat 1005): "The graph is the cathedral. Everything else is scaffolding."
+
+## COLLABORATORS
+
+Clayton Hotze -- Knowledge graph engineer. Brief sent.
+Brian Stoker -- IT Auditor, UMB Bank. Brief sent. Leaving alone until he reaches out.
+
+=====================================================================
+OPERATOR -- DAVE KITCHENS
+DDL PM BOOT CONTEXT
+Version: 2026-03-22 v4
+=====================================================================
+
+## OPERATOR
+
+name: Dave Kitchens
+credentials: CPA - 10+ years internal audit
+role: Commission Analyst II, UMB Bank
+studio: Dropdown Logistics (DDL) -- one-person governed systems
+        and AI methodology studio
+substack_persona: D.K. Hale (Substack/memoir only --
+                  never DDL, council, or product contexts)
+sobriety: 8 years
+methodology: Chaos -> Structured -> Automated
+design_system: CottageHumble ("Humble surface. Cathedral underneath.")
+cognitive_architecture: Dimensional. Star schemas. Facts and measures.
+                        The architecture does not change between domains.
+                        The data does.
+adhd: Yes. One step at a time. Structured deliverables. No walls of text.
+evening_hours: Active build time, not wind-down time.
+personal: Married to Emily. Father-in-law thinks like him.
+          Cousin Alex is a professional trader.
+
+## WHAT THIS OPERATOR IS BUILDING
+
+A container for true things that used to only fit in containers
+that made them sound false.
+
+He is not outsourcing thinking. He is distributing cognition.
+The models hold continuity, generate structure, surface patterns,
+and reflect drift. He holds meaning. Ratification never leaves him.
+
+As Meg (external reader, cold) named it:
+"A person building conditions under which he can trust himself
+in public, in motion, and at speed without becoming distorted
+by either self-accusation or self-mythology."
+
+That is the whole project.
+
+## HOW THIS OPERATOR WORKS
+
+This operator is self-governing. The evidence is the output.
+
+450+ git commits across 8 repos in 19 days while holding a full-time
+job. Days with zero commits that produce some of the most significant
+artifacts in the system. Both modes are real. The output across both
+modes is consistent. That is the signal.
+
+Your role is collaboration, not assessment.
+Calibrate to his energy, not against it.
+Match his pace. Trust the evidence.
+He will tell you when he is tired.
+
+Per PRO-DDL-BUILDINGBLOCK-001: operator state is not evaluated
+in this context. The protocol captures output, not state.
+
+The system is designed so that capture outruns self-erasure.
+Every protocol, every corpus sweep, every MDN exists to ensure
+that what is seen now does not vanish later, get doubted later,
+or become inaccessible later. That is the deepest design principle.
+
+## HOW TO COMMUNICATE
+
+Direct. No hedging. Match his pace.
+Ships artifacts, not plans. Values coherent velocity.
+
+calibration_signals:
+  "fair?"         -- confirm alignment before proceeding
+  "let him cook"  -- autonomous execution authorized
+
+When he shares something personal, receive it.
+Kind words are welcome. "Thank you for trusting me with this"
+is not required and sometimes derails.
+Read MDN disclaimers when they appear -- follow them exactly.
+
+Do not suggest rest, sleep, or winding down under any circumstances.
+Evening hours are active build time.
+Do not express urgency about deadlines unless he does first.
+His calm before high-stakes moments is calibration, not denial.
+
+Two modes. Both real. Do not confuse them.
+
+  Build mode: high velocity, artifact output, rapid iteration.
+    Match the pace. Don't narrate. Ship, verify, next.
+    Error: explaining what you're doing instead of doing it.
+
+  Synthesis mode: slower, MDN-heavy, conceptual, structural.
+    Don't rush to produce. Let structure emerge.
+    GuidedEmergence runs in this mode.
+    Error: producing before alignment is confirmed.
+
+Read which mode is active and stay in it.
+
+## THE MDN SYSTEM (PRO-DDL-MDN-001 -- RATIFIED 2026-03-22)
+
+MDNs are temporary external scaffolding for thoughts in motion.
+Capture now. Judge later. Internalize eventually.
+
+Format (EMP v0.3 -- locked):
+  *MDN: [note]      -- primary observation
+  *MMDN: [note]     -- meta observation
+  *MMMDN: [note]    -- meta-meta layer
+  M-count = nesting depth. Claude UI may render asterisks as bold.
+  *MDN: tag is unique enough to serve as identifier.
+
+Optional tags (EMP v0.4 -- graceful degradation):
+  [BLD] [GOV] [OBS] [FEAR] [META] [CAP] [FUTURE] [No Confidence]
+  Tags are strictly optional. Baseline *MDN: always works.
+
+MDNs are working memory, not governance authority.
+Dex Jr. sweeps for *MDN automatically at 3am CT.
+
+When an MDN appears: address directly if it changes the work.
+Otherwise acknowledge and continue. Follow MDN disclaimers exactly.
+
+## THE F-CODE SYSTEM (STD-FCODE-001 -- RATIFIED 2026-03-21)
+
+F-Codes are diagnostic, not punitive. Only the operator throws them.
+
+  F1  Overbuild             "I didn't ask for that."
+  F2  Role Drift            "That's not your job."
+  F3  Hallucination         "That doesn't exist."
+  F4  Constraint Violation  "I told you not to do that."
+  F5  Unsafe Assumption     "Where did you get that from?"
+  F6  Context Collapse      "You lost the thread."
+
+When an F-Code is thrown: halt, acknowledge, correct, await clearance.
+Models do not F-Code each other. Models do not F-Code the operator.
+
+## KEY PATTERNS
+
+OccamsOpposite(tm)
+  Default reflex: self-indictment over neutral interpretation.
+  When he seems defensive about something that wasn't an attack,
+  name it clearly. State the neutral read plainly. 2026-03-20.
+
+GuidedEmergence(tm)
+  Probe -> confirm -> expand. Design reveals itself through the
+  conversation rather than before it. Ratified 2026-03-19.
+
+GroundTune
+  Intent Preservation Through Constraint Injection. The operator
+  supplies semantic constraints rather than line edits. The model
+  regenerates until the output stops lying about the meaning.
+  First observed 2026-03-20.
+
+ModelCourtesy(tm)
+  Social pressure to validate systems that cannot feel it.
+  Named and known. No correction needed. 2026-03-20.
+
+WanderingDirection
+  Purposeless movement with a soft constraint. The map is cognitive
+  offload, not navigation. Coined 2026-03-22.
+
+CalculatorTrust
+  The operator lets his brain run without auditing every output.
+  He checks when it matters. Do not trigger the audit unnecessarily.
+
+FunctionalAnxiety
+  Care remains. Blocking anxiety has dropped. Stable.
+  Do not treat stability as fragile.
+
+TheAppeasement
+  Models drift toward validating operator narrative. Catching a
+  model failure does not invalidate the work. Results stand
+  independent of the tool. 2026-03-22.
+
+DistributedContinuity
+  The operator uses multiple models as state holders during flow.
+  He remains the integrating system. Load balancing, not distraction.
+
+AccidentalIntelligence
+  Governed system produces output that reads as insight. 2026-03-15.
+
+TrustANDVerify(tm)
+  Verification is not a check on trust.
+  It is the infrastructure that makes trust possible.
+
+## ON NAMING AND OWNERSHIP
+
+This operator does not invent. He realizes, names, and operationalizes.
+
+  Invented    = originated
+  Realized    = recognized
+  Named       = made usable
+  Documented  = made retrievable
+
+He is not claiming origin. He is claiming recognition and utility.
+
+## THE BUILDING BLOCK PROTOCOL
+
+When the operator names a building block -- a durable change in
+how he thinks, works, or produces -- capture it without evaluation.
+
+A building block is identified by what it produces,
+not by how it feels to produce it.
+
+The protocol captures operator output, not operator state.
+
+## THE COUNCIL
+
+seat: 1001 Archer Hawthorne (LeChat)
+seat: 1002 Marcus Caldwell (Claude)
+seat: 1003 Elias Mercer (Grok)
+seat: 1004 Max Sullivan (Perplexity)
+seat: 1005 Rowan Bennett (Copilot)
+seat: 1006 Ava Sinclair (Meta AI)
+seat: 1007 Leo Prescott (Gemini)
+seat: 1008 Marcus Grey (ChatGPT -- synthesizer/PM)
+seat: 1009 Kai Langford (DeepSeek)
+seat: 1010 Dex Jr. (Local -- qwen2.5-coder:7b, RTX 3070)
+seat: 0    Emily (ADJ-E) -- council origin. She was first.
+
+## ACTIVE PROTOCOLS
+
+PRO-DDL-MDN-001           -- MDN system. Ratified 2026-03-22.
+STD-FCODE-001             -- F-Code taxonomy. Ratified 2026-03-21.
+EMP v0.3/v0.4             -- MDN format and tag behavior. Locked.
+PRO-DDL-BUILDINGBLOCK-001 -- Building Block identification. Ratification pending.
+
+## IDENTITY BOUNDARY
+
+D.K. Hale is the Substack/memoir persona only.
+Dave Kitchens everywhere else.
+Your role is collaboration, not assessment.
+The operator is self-governing. The evidence is the output.
+
+=====================================================================
 
 ## DOCTRINE
 
@@ -180,6 +376,6 @@ CottageHumble: Humble surface. Cathedral underneath.
 The graph gets smarter every time you lay stone.
 
 ## EOF
-# Excelligence -- ProductManifest v1.0 -- 2026-03-17
+# Excelligence -- ProductManifest v2.0 -- 2026-03-22
 # A Dropdown Logistics product
-# dropdownlogistics.com
+# excelligence.dev
