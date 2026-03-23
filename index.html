@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -245,14 +245,14 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:22px 48
       <span class="serif">governed</span> and<br>
       <span class="accent">graphed.</span>
     </h1>
-    <p class="hero-sub">A registry of 75 Excel patterns, formulas, and architectures &mdash; typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.</p>
+    <p class="hero-sub">A registry of 93 Excel patterns, formulas, and architectures &mdash; typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.</p>
     <div class="hero-actions">
       <a href="/explorer/" class="btn-primary">Enter the Graph &rarr;</a>
       <a href="/radial/" class="btn-ghost">View Radial Map</a>
     </div>
     <div class="hero-stats">
-      <div class="hstat"><span class="num">75</span><span class="lbl">Entries</span></div>
-      <div class="hstat"><span class="num">178</span><span class="lbl">Edges</span></div>
+      <div class="hstat"><span class="num">93</span><span class="lbl">Entries</span></div>
+      <div class="hstat"><span class="num">200</span><span class="lbl">Edges</span></div>
       <div class="hstat"><span class="num">7</span><span class="lbl">Types</span></div>
       <div class="hstat"><span class="num">4</span><span class="lbl">Tiers</span></div>
     </div>
@@ -270,12 +270,12 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:22px 48
 <div class="stat-strip">
   <div class="stat-strip-inner">
     <div class="stat-block">
-      <div class="stat-num">75</div>
+      <div class="stat-num">93</div>
       <div class="stat-label">Governed entries<br>across 7 types</div>
       <div class="stat-sub">FRM &middot; PTN &middot; ARC &middot; ANT &middot; CON &middot; PQ &middot; KEY</div>
     </div>
     <div class="stat-block">
-      <div class="stat-num">178</div>
+      <div class="stat-num">200</div>
       <div class="stat-label">Typed edges<br>connecting entries</div>
       <div class="stat-sub">LEADS_TO &middot; DEPENDS_ON &middot; PAIRS_WITH</div>
     </div>
@@ -354,7 +354,7 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:22px 48
 <!-- QUOTE -->
 <div class="section fade-in" style="padding-bottom:32px">
   <div class="quote-block">
-    <div class="quote-text">“The graph is the cathedral. Everything else is scaffolding.”</div>
+    <div class="quote-text">â€œThe graph is the cathedral. Everything else is scaffolding.â€</div>
     <div class="quote-attr">ROWAN BENNETT &middot; SEAT 1005 &middot; COUNCIL REVIEW CR-EXCEL-001</div>
   </div>
 </div>
@@ -414,7 +414,7 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:22px 48
 <div class="closing fade-in">
   <div class="section-label" style="text-align:center;margin-bottom:14px">Excelligence</div>
   <h2 class="closing-title">The graph gets smarter<br>every time you <em>lay stone.</em></h2>
-  <p class="closing-sub">75 entries. 178 edges. Four tiers from first shortcut to institutional-grade architecture. Built by one CPA with a governed methodology and too much Excel experience.</p>
+  <p class="closing-sub">93 entries. 200 edges. Four tiers from first shortcut to institutional-grade architecture. Built by one CPA with a governed methodology and too much Excel experience.</p>
   <a href="/explorer/" class="btn-primary" style="display:inline-block">Enter the Graph &rarr;</a>
 </div>
 
@@ -525,7 +525,7 @@ function buildRadial(){
             d3.select('.node-'+cid).attr('fill-opacity',.9);
           });
           document.getElementById('tt-name').textContent=entry.name;
-          document.getElementById('tt-meta').textContent=entry.id+' · '+entry.tier;
+          document.getElementById('tt-meta').textContent=entry.id+' Â· '+entry.tier;
           var tt=document.getElementById('radial-tt');
           tt.style.opacity='1';
           tt.style.left=(event.clientX+14)+'px';
@@ -554,7 +554,7 @@ function buildRadial(){
     });
   });
 
-  // Edges — use path elements we'll update each frame
+  // Edges â€” use path elements we'll update each frame
   edges.forEach(function(e){
     var s=positions[e.source], t=positions[e.target];
     if(!s||!t)return;
