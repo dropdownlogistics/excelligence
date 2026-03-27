@@ -1,4 +1,4 @@
-// api/scan.js
+﻿// api/scan.js
 // Excelligence Anti-Pattern Scanner
 // Vercel serverless function
 // Reads live ANT entries from /api/excelligence.json
@@ -8,9 +8,9 @@
 export const config = { runtime: 'edge' };
 
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-const REGISTRY_URL = 'https://excelligence.dev/api/excelligence.json';
+const REGISTRY_URL = 'https://raw.githubusercontent.com/dropdownlogistics/excelligence/main/api/excelligence.json';
 
-// ── Load ANT entries from live registry ──────────────
+// â”€â”€ Load ANT entries from live registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadANTEntries() {
   const res = await fetch(REGISTRY_URL);
   if (!res.ok) throw new Error('Registry fetch failed');
@@ -18,7 +18,7 @@ async function loadANTEntries() {
   return data.entries.filter(e => e.type === 'ANT');
 }
 
-// ── Build system prompt with registry context ─────────
+// â”€â”€ Build system prompt with registry context â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildSystemPrompt(antEntries) {
   const entryBlock = antEntries.map(e => `
 ENTRY: ${e.id}
@@ -30,11 +30,11 @@ Governance notes: ${e.governance_notes}
 Severity: ${e.difficulty_score <= 1 ? 'High' : e.difficulty_score <= 2 ? 'Medium' : 'Low'}
 `.trim()).join('\n\n---\n\n');
 
-  return `You are the Excelligence Anti-Pattern Scanner — a governed diagnostic tool powered by the Excelligence Excel knowledge graph.
+  return `You are the Excelligence Anti-Pattern Scanner â€” a governed diagnostic tool powered by the Excelligence Excel knowledge graph.
 
 Your job: analyze the user's input (a formula, a workbook description, or a problem they're experiencing) and identify which governed anti-patterns from the registry apply.
 
-REGISTRY CONTEXT — ${antEntries.length} ANT entries:
+REGISTRY CONTEXT â€” ${antEntries.length} ANT entries:
 
 ${entryBlock}
 
@@ -49,7 +49,7 @@ RULES:
 
 COVERAGE NOTE: This scanner currently checks for ${antEntries.length} governed anti-patterns from the Excelligence registry. Registry coverage grows as new ANT entries are added.
 
-OUTPUT FORMAT — respond with valid JSON only, no markdown, no explanation outside the JSON:
+OUTPUT FORMAT â€” respond with valid JSON only, no markdown, no explanation outside the JSON:
 {
   "findings": [
     {
@@ -75,7 +75,7 @@ If no anti-patterns found:
 }`;
 }
 
-// ── Handler ───────────────────────────────────────────
+// â”€â”€ Handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default async function handler(req) {
   // CORS
   const headers = {
