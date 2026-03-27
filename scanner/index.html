@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excelligence &mdash; Anti-Pattern Scanner</title>
+<meta name="description" content="Paste a formula or describe your workbook. Get a governed diagnosis against the Excelligence registry.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.12);--gold3:rgba(212,168,67,0.06);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.12);--crimson3:rgba(178,53,49,0.06);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.12);
+  --amber:#C49A3C;--blue:#6B9DC2;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+  --sev-high:#B23531;--sev-med:#C49A3C;--sev-low:#6B7B8D;
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:80px}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.02) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,27,42,0.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--cream)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--gold);letter-spacing:0.1em;background:var(--gold3);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+
+/* PAGE */
+.page{max-width:860px;margin:0 auto;padding:64px 40px 0;position:relative;z-index:1}
+
+/* HERO */
+.hero{margin-bottom:48px;padding-bottom:40px;border-bottom:1px solid var(--border)}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hero-label::before{content:'';width:16px;height:1px;background:var(--gold)}
+.hero h1{font-size:2.2rem;font-weight:700;letter-spacing:-0.035em;line-height:1.05;margin-bottom:12px}
+.hero h1 span{color:var(--crimson)}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--steel);line-height:1.65;max-width:560px;margin-bottom:20px}
+.coverage-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  color:var(--steel);letter-spacing:0.06em;
+  background:var(--card);border:1px solid var(--border);
+  padding:6px 12px;border-radius:4px;
+}
+.coverage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* INPUT SECTION */
+.input-section{margin-bottom:32px}
+.input-label{
+  font-family:'JetBrains Mono',monospace;font-size:0.62rem;
+  color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;
+}
+.input-label span{color:var(--steel);font-size:0.58rem}
+.input-wrap{position:relative}
+textarea{
+  width:100%;min-height:160px;
+  background:var(--card);border:1px solid var(--border2);border-radius:8px;
+  color:var(--cream);font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+  line-height:1.6;padding:20px;resize:vertical;
+  transition:border-color 0.2s;outline:none;
+}
+textarea:focus{border-color:rgba(212,168,67,0.4)}
+textarea::placeholder{color:var(--steel);opacity:0.6}
+.char-count{
+  position:absolute;bottom:12px;right:16px;
+  font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+  color:var(--steel);letter-spacing:0.04em;
+  transition:color 0.2s;
+}
+.char-count.warn{color:var(--amber)}
+.char-count.limit{color:var(--crimson)}
+
+/* EXAMPLES */
+.examples{margin-bottom:24px}
+.examples-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px}
+.example-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{
+  font-family:'JetBrains Mono',monospace;font-size:0.62rem;
+  color:var(--steel);background:var(--card);
+  border:1px solid var(--border);border-radius:4px;
+  padding:5px 10px;cursor:pointer;
+  transition:color 0.2s,border-color 0.2s;
+  white-space:nowrap;
+}
+.pill:hover{color:var(--gold);border-color:rgba(212,168,67,0.3)}
+
+/* SCAN BUTTON */
+.scan-btn{
+  width:100%;padding:14px 24px;
+  background:var(--crimson);color:var(--cream);
+  border:none;border-radius:6px;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;
+  letter-spacing:-0.01em;
+  transition:background 0.2s,transform 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.scan-btn:hover:not(:disabled){background:#9a2b28;transform:translateY(-1px)}
+.scan-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.scan-btn .btn-spinner{
+  width:16px;height:16px;border:2px solid rgba(245,241,235,0.3);
+  border-top-color:var(--cream);border-radius:50%;
+  animation:spin 0.7s linear infinite;display:none;
+}
+.scan-btn.loading .btn-spinner{display:block}
+.scan-btn.loading .btn-text{opacity:0.7}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULTS */
+.results{margin-top:40px}
+.results-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.results-title{font-size:1rem;font-weight:600;letter-spacing:-0.015em}
+.results-meta{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em}
+
+/* SUMMARY CARD */
+.summary-card{
+  padding:20px 24px;border-radius:8px;margin-bottom:24px;
+  border:1px solid;
+}
+.summary-card.findings{background:var(--crimson2);border-color:rgba(178,53,49,0.2)}
+.summary-card.clean{background:var(--green2);border-color:rgba(74,158,107,0.2)}
+.summary-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.summary-card.findings .summary-label{color:var(--crimson)}
+.summary-card.clean .summary-label{color:var(--green)}
+.summary-text{font-family:'Source Serif 4',serif;font-size:0.92rem;line-height:1.55;color:var(--cream)}
+
+/* FINDING CARD */
+.finding{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:24px;margin-bottom:12px;
+  border-left:3px solid transparent;
+  transition:border-color 0.2s;
+}
+.finding:hover{border-color:var(--border2)}
+.finding.sev-high{border-left-color:var(--sev-high)}
+.finding.sev-medium{border-left-color:var(--sev-med)}
+.finding.sev-low{border-left-color:var(--sev-low)}
+.finding-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.finding-id{
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  color:var(--crimson);letter-spacing:0.06em;flex-shrink:0;
+  background:var(--crimson2);border:1px solid rgba(178,53,49,0.2);
+  padding:3px 8px;border-radius:3px;
+}
+.finding-name{font-size:0.95rem;font-weight:600;letter-spacing:-0.01em;flex:1}
+.sev-badge{
+  font-family:'JetBrains Mono',monospace;font-size:0.55rem;
+  letter-spacing:0.1em;padding:3px 8px;border-radius:3px;flex-shrink:0;
+}
+.sev-High{background:rgba(178,53,49,0.15);color:var(--sev-high);border:1px solid rgba(178,53,49,0.2)}
+.sev-Medium{background:rgba(196,154,60,0.15);color:var(--sev-med);border:1px solid rgba(196,154,60,0.2)}
+.sev-Low{background:rgba(107,123,141,0.15);color:var(--sev-low);border:1px solid rgba(107,123,141,0.2)}
+
+.finding-body{display:flex;flex-direction:column;gap:10px}
+.finding-row{display:flex;gap:12px}
+.finding-row-label{
+  font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+  color:var(--steel);letter-spacing:0.08em;text-transform:uppercase;
+  width:120px;flex-shrink:0;padding-top:2px;
+}
+.finding-row-text{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.85);line-height:1.55;flex:1}
+.finding-link{
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  color:var(--gold);text-decoration:none;letter-spacing:0.06em;
+  display:inline-flex;align-items:center;gap:4px;margin-top:4px;
+  transition:opacity 0.2s;
+}
+.finding-link:hover{opacity:0.7}
+
+/* COVERAGE FOOTER */
+.coverage-footer{
+  margin-top:32px;padding:16px 20px;
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cov-left{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;line-height:1.8}
+.cov-bar-wrap{width:120px;height:4px;background:rgba(245,241,235,0.07);border-radius:2px;margin-top:6px}
+.cov-bar{height:100%;background:var(--gold);border-radius:2px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
+.cov-right{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);letter-spacing:0.06em;text-align:right}
+
+/* ERROR */
+.error-card{
+  background:rgba(178,53,49,0.08);border:1px solid rgba(178,53,49,0.2);
+  border-radius:8px;padding:20px 24px;margin-top:24px;
+}
+.error-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.error-text{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.55}
+
+/* EMPTY STATE */
+.empty{display:none}
+.results.has-results .empty{display:none}
+
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page{padding:40px 20px 0}
+  .hero h1{font-size:1.6rem}
+  .example-pills{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/explorer/">Graph</a>
+    <a href="/radial/">Radial</a>
+    <a href="/paths/">Paths</a>
+    <a href="/tools/">Tools</a>
+    <a href="/analytics/">Analytics</a>
+    <a href="/scanner/" class="active">Scanner</a>
+    <span class="nav-tag">BETA</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-label">Anti-Pattern Scanner</div>
+    <h1>Paste a formula.<br>Get a <span>governed</span> diagnosis.</h1>
+    <p class="hero-sub">Describe your workbook problem or paste a formula. The scanner checks it against the Excelligence registry and returns findings — each one cited to a governed entry with a rationale and alternative.</p>
+    <div class="coverage-badge">
+      <div class="coverage-dot"></div>
+      <span id="coverage-text">Loading registry&hellip;</span>
+    </div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-label">
+      Your Formula or Workbook Description
+      <span>Plain English or raw formula — both work</span>
+    </div>
+    <div class="input-wrap">
+      <textarea
+        id="scanner-input"
+        placeholder="Examples:&#10;=IF(AND(VLOOKUP(A2,B:F,3,0)>500,C2=&quot;Active&quot;),IF(D2&lt;&gt;&quot;Excluded&quot;,&quot;Eligible&quot;,&quot;No&quot;),&quot;No&quot;)&#10;&#10;My workbook has 12 monthly tabs with the same columns. I manually hide rows to filter data and use cell colors to mark which rows need review."
+        maxlength="3000"
+        rows="7"
+      ></textarea>
+      <div class="char-count" id="char-count">0 / 3000</div>
+    </div>
+  </div>
+
+  <div class="examples">
+    <div class="examples-label">Try an example</div>
+    <div class="example-pills">
+      <div class="pill" data-example="=IFERROR(VLOOKUP(A2,B:F,4,0),&quot;&quot;)">Blanket IFERROR</div>
+      <div class="pill" data-example="I use merged cells for my headers and hide rows to filter data instead of using AutoFilter.">Merged cells + hidden rows</div>
+      <div class="pill" data-example="=IF(A2=1,&quot;Low&quot;,IF(A2=2,&quot;Medium&quot;,IF(A2=3,&quot;High&quot;,IF(A2=4,&quot;Critical&quot;,&quot;Unknown&quot;))))">Nested IFs</div>
+      <div class="pill" data-example="My commission rate of 0.035 is hardcoded in 47 different cells across 6 sheets.">Hardcoded values</div>
+      <div class="pill" data-example="I color rows red, yellow, or green to show status. There's no status column — just the colors.">Color as data</div>
+    </div>
+  </div>
+
+  <button class="scan-btn" id="scan-btn" disabled>
+    <div class="btn-spinner"></div>
+    <span class="btn-text">Scan Against Registry</span>
+  </button>
+
+  <div class="results" id="results"></div>
+
+</div><!-- /page -->
+
+<script>
+const input = document.getElementById('scanner-input');
+const charCount = document.getElementById('char-count');
+const scanBtn = document.getElementById('scan-btn');
+const results = document.getElementById('results');
+const coverageText = document.getElementById('coverage-text');
+
+// ── Load coverage count ─────────────────────────
+fetch('/api/excelligence.json')
+  .then(r => r.json())
+  .then(data => {
+    const antCount = data.entries.filter(e => e.type === 'ANT').length;
+    coverageText.textContent = `Checking against ${antCount} governed anti-patterns · Registry v0.2`;
+  })
+  .catch(() => {
+    coverageText.textContent = 'Registry connected · Anti-Pattern Scanner';
+  });
+
+// ── Char counter ────────────────────────────────
+input.addEventListener('input', () => {
+  const len = input.value.length;
+  charCount.textContent = `${len} / 3000`;
+  charCount.className = 'char-count' + (len > 2500 ? ' warn' : '') + (len >= 3000 ? ' limit' : '');
+  scanBtn.disabled = len < 10;
+});
+
+// ── Example pills ───────────────────────────────
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    input.value = pill.dataset.example;
+    input.dispatchEvent(new Event('input'));
+    input.focus();
+  });
+});
+
+// ── Severity color ──────────────────────────────
+function sevClass(sev) {
+  if (!sev) return '';
+  const s = sev.toLowerCase();
+  if (s === 'high') return 'sev-high';
+  if (s === 'medium') return 'sev-med';
+  return 'sev-low';
+}
+
+// ── Render results ──────────────────────────────
+function renderResults(data) {
+  results.innerHTML = '';
+
+  if (data.error) {
+    results.innerHTML = `
+      <div class="error-card">
+        <div class="error-label">Scanner Error</div>
+        <div class="error-text">${data.error}</div>
+      </div>`;
+    return;
+  }
+
+  const findingCount = (data.findings || []).length;
+  const isClean = data.clean || findingCount === 0;
+  const coverage = data.coverage || 0;
+
+  // Header
+  results.innerHTML = `
+    <div class="results-header">
+      <div class="results-title">${isClean ? 'No Anti-Patterns Detected' : `${findingCount} Anti-Pattern${findingCount !== 1 ? 's' : ''} Found`}</div>
+      <div class="results-meta">Coverage: ${coverage} ANT entries checked</div>
+    </div>
+  `;
+
+  // Summary
+  if (data.summary) {
+    const summaryCard = document.createElement('div');
+    summaryCard.className = `summary-card ${isClean ? 'clean' : 'findings'}`;
+    summaryCard.innerHTML = `
+      <div class="summary-label">${isClean ? 'Diagnosis' : 'Summary'}</div>
+      <div class="summary-text">${data.summary}</div>
+    `;
+    results.appendChild(summaryCard);
+  }
+
+  // Findings
+  if (!isClean && data.findings) {
+    data.findings.forEach(f => {
+      const card = document.createElement('div');
+      card.className = `finding sev-${f.severity}`;
+      card.innerHTML = `
+        <div class="finding-header">
+          <div class="finding-id">${f.id}</div>
+          <div class="finding-name">${f.name}</div>
+          <div class="sev-badge sev-${f.severity}">${f.severity}</div>
+        </div>
+        <div class="finding-body">
+          <div class="finding-row">
+            <div class="finding-row-label">Finding</div>
+            <div class="finding-row-text">${f.finding}</div>
+          </div>
+          <div class="finding-row">
+            <div class="finding-row-label">Alternative</div>
+            <div class="finding-row-text">${f.governed_alternative}</div>
+          </div>
+          ${f.governance_note ? `
+          <div class="finding-row">
+            <div class="finding-row-label">Governance</div>
+            <div class="finding-row-text">${f.governance_note}</div>
+          </div>` : ''}
+          <div class="finding-row">
+            <div class="finding-row-label">Registry</div>
+            <div class="finding-row-text">
+              <a class="finding-link" href="/explorer/#${f.id}" target="_blank">
+                View ${f.id} in graph &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+      results.appendChild(card);
+    });
+  }
+
+  // Coverage footer
+  const totalEntries = 93;
+  const covPct = Math.round(coverage / totalEntries * 100);
+  const footer = document.createElement('div');
+  footer.className = 'coverage-footer';
+  footer.innerHTML = `
+    <div class="cov-left">
+      Scanner Coverage
+      <div class="cov-bar-wrap">
+        <div class="cov-bar" style="width:0%" id="cov-bar"></div>
+      </div>
+    </div>
+    <div class="cov-right">${coverage} / ${totalEntries} entries<br>ANT layer only</div>
+  `;
+  results.appendChild(footer);
+  setTimeout(() => {
+    const bar = document.getElementById('cov-bar');
+    if (bar) bar.style.width = covPct + '%';
+  }, 100);
+}
+
+// ── Scan ────────────────────────────────────────
+scanBtn.addEventListener('click', async () => {
+  const text = input.value.trim();
+  if (!text || text.length < 10) return;
+
+  scanBtn.classList.add('loading');
+  scanBtn.disabled = true;
+  results.innerHTML = '';
+
+  try {
+    const res = await fetch('/api/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: text })
+    });
+
+    const data = await res.json();
+    renderResults(data);
+
+  } catch (err) {
+    results.innerHTML = `
+      <div class="error-card">
+        <div class="error-label">Connection Error</div>
+        <div class="error-text">Could not reach the scanner. Check your connection and try again.</div>
+      </div>`;
+  } finally {
+    scanBtn.classList.remove('loading');
+    scanBtn.disabled = false;
+  }
+});
+
+// ── Enter to scan (Ctrl+Enter) ──────────────────
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    scanBtn.click();
+  }
+});
+</script>
+</body>
+</html>
