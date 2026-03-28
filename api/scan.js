@@ -8,7 +8,7 @@
 export const config = { runtime: 'edge' };
 
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-const REGISTRY_URL = 'https://raw.githubusercontent.com/dropdownlogistics/excelligence/main/api/excelligence.json';
+const REGISTRY_URL = 'https://raw.githubusercontent.com/dropdownlogistics/excelligence/main/excelligence.json';
 
 // â”€â”€ Load ANT entries from live registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadANTEntries() {
