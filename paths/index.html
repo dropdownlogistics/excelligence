@@ -96,18 +96,21 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
 .footer-right{display:flex;gap:18px}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
 .nav-link-small{font-family:"JetBrains Mono",monospace;font-size:0.62rem;color:var(--steel);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;margin-right:16px;}
 .nav-link-small:hover{color:var(--cream)}
-</style>
+.nav-links{display:flex;gap:24px;align-items:center}.nav-links a{font-family:"JetBrains Mono",monospace;font-size:0.62rem;color:rgba(245,241,235,0.5);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s}.nav-links a:hover,.nav-links a.active{color:#F5F1EB}.nav-tag{font-family:"JetBrains Mono",monospace;font-size:0.56rem;color:#D4A843;letter-spacing:0.1em;background:rgba(212,168,67,0.07);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}</style>
 </head>
 <body>
 
 <nav>
   <a href="/" class="nav-logo">Excel<span>ligence</span></a>
-  <div class="nav-sep"></div>
-  <div class="nav-crumb">
-    <a href="/">Home</a><span style="opacity:.4">â€º</span>
-    <span style="color:var(--cream)">Learning Paths</span>
+  <div class="nav-links">
+    <a href="/explorer/">Graph</a>
+    <a href="/radial/">Radial</a>
+    <a href="/paths/" class="active">Paths</a>
+    <a href="/tools/">Tools</a>
+    <a href="/analytics/">Analytics</a>
+    <a href="/scanner/">Scanner</a>
+    <span class="nav-tag">LIVE</span>
   </div>
-  <div class="nav-right"><a href="/scanner/" class="nav-link-small">Scanner</a><a href="/explorer/" class="nav-cta">Enter the Graph &rarr;</a></div>
 </nav>
 
 <div class="hero">
@@ -520,4 +523,5 @@ document.querySelectorAll('.step-card').forEach(function(card, i){
 </script>
 </body>
 </html>
+
 
