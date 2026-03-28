@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -119,7 +119,7 @@ body{background:var(--navy);color:var(--cream);font-family:"Space Grotesk",sans-
 .zoom-btn{width:30px;height:30px;background:var(--card2);border:1px solid var(--border2);border-radius:5px;color:var(--cream);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .zoom-btn:hover{background:rgba(255,255,255,0.08)}
 #clear-path-btn{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--dim);font-family:"Space Grotesk",sans-serif;font-size:12px;padding:5px 10px;cursor:pointer;width:100%;margin-top:6px}
-</style>
+@media(max-width:768px){body{height:auto;min-height:100vh;overflow-y:auto}#main{flex-direction:column;height:auto}#graph-container{flex:none;height:320px;width:100%!important;min-width:0}#graph-canvas{width:100%!important;height:320px!important}#panel{width:100%!important;border-left:none;border-top:1px solid rgba(245,241,235,0.07);height:auto;min-height:400px}}</style>
 </head>
 <body>
 <div id="topbar">
@@ -394,10 +394,23 @@ function findPath(){
 }
 function zoomIn(){svg.transition().call(zoomBehavior.scaleBy,1.3);}
 function zoomOut(){svg.transition().call(zoomBehavior.scaleBy,0.77);}
-function zoomReset(){svg.transition().call(zoomBehavior.transform,d3.zoomIdentity);}
+function zoomReset(){var s=window.innerWidth<768?0.7:1;svg.transition().call(zoomBehavior.transform,d3.zoomIdentity.scale(s));}
 window.addEventListener("resize",function(){var c=document.getElementById("graph-container"),W=c.clientWidth,H=c.clientHeight;svg.attr("width",W).attr("height",H);if(simulation)simulation.force("center",d3.forceCenter(W/2,H/2)).alpha(0.3).restart();});
 document.getElementById("graph-canvas").addEventListener("click",function(e){if(e.target.id==="graph-canvas"||e.target.tagName==="svg"){if(mode==="explore")clearSelection();}});
-document.addEventListener("DOMContentLoaded",function(){initGraph();});
+document.addEventListener("DOMContentLoaded",function(){initGraph();setTimeout(function(){if(window.innerWidth<768){var c=document.getElementById("graph-container");svg.attr("width",c.clientWidth).attr("height",c.clientHeight);svg.call(zoomBehavior.transform,d3.zoomIdentity.translate(c.clientWidth/2,c.clientHeight/2).scale(0.7));}},800);});
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
