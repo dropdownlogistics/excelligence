@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -18,14 +18,14 @@
 html{scroll-behavior:smooth}
 body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:80px}
 
-/* ── GRID TEXTURE ── */
+/* â”€â”€ GRID TEXTURE â”€â”€ */
 body::before{
   content:'';position:fixed;inset:0;
   background-image:linear-gradient(rgba(212,168,67,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.025) 1px,transparent 1px);
   background-size:48px 48px;pointer-events:none;z-index:0;
 }
 
-/* ── NAV ── */
+/* â”€â”€ NAV â”€â”€ */
 nav{
   position:sticky;top:0;z-index:100;
   background:rgba(13,27,42,0.92);backdrop-filter:blur(12px);
@@ -41,10 +41,10 @@ nav{
 .nav-links a:hover,.nav-links a.active{color:var(--gold)}
 .nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.1em;background:var(--gold3);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
 
-/* ── LAYOUT ── */
+/* â”€â”€ LAYOUT â”€â”€ */
 .page{max-width:1180px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
 
-/* ── HERO ── */
+/* â”€â”€ HERO â”€â”€ */
 .hero{padding:64px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px}
 .hero-label{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .hero-label::before{content:'';width:16px;height:1px;background:var(--gold)}
@@ -55,7 +55,7 @@ nav{
 .hero-meta span{display:flex;align-items:center;gap:6px}
 .hero-meta span::before{content:'';width:4px;height:4px;background:var(--gold);border-radius:50%}
 
-/* ── LOADING / ERROR ── */
+/* â”€â”€ LOADING / ERROR â”€â”€ */
 .state-msg{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:300px;gap:16px;
@@ -68,14 +68,14 @@ nav{
 @keyframes spin{to{transform:rotate(360deg)}}
 .state-msg p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--steel);letter-spacing:0.06em}
 
-/* ── SECTION ── */
+/* â”€â”€ SECTION â”€â”€ */
 .section{margin-bottom:56px}
 .section-header{margin-bottom:28px}
 .section-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px}
 .section-title{font-size:1.2rem;font-weight:600;letter-spacing:-0.02em}
 .section-desc{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);margin-top:6px;line-height:1.6}
 
-/* ── STAT STRIP ── */
+/* â”€â”€ STAT STRIP â”€â”€ */
 .stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:48px;border-radius:10px;overflow:hidden}
 .stat-cell{
   background:var(--card);padding:28px 20px 24px;
@@ -89,16 +89,16 @@ nav{
 .stat-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase}
 .stat-delta{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--green);margin-top:2px}
 
-/* ── TWO COL ── */
+/* â”€â”€ TWO COL â”€â”€ */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-/* ── CARD ── */
+/* â”€â”€ CARD â”€â”€ */
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:28px 28px 24px;overflow:hidden}
 .card-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px}
 .card-title{font-size:0.95rem;font-weight:600;letter-spacing:-0.015em;margin-bottom:20px}
 
-/* ── TYPE BAR CHART ── */
+/* â”€â”€ TYPE BAR CHART â”€â”€ */
 .type-bars{display:flex;flex-direction:column;gap:10px}
 .type-row{display:flex;align-items:center;gap:12px}
 .type-id{font-family:'JetBrains Mono',monospace;font-size:0.62rem;width:32px;color:var(--cream2)}
@@ -107,7 +107,7 @@ nav{
 .type-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--cream2);width:28px;text-align:right}
 .type-pct{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);width:36px;text-align:right}
 
-/* ── TIER RINGS ── */
+/* â”€â”€ TIER RINGS â”€â”€ */
 .tier-rings{display:flex;justify-content:center;align-items:center;gap:32px;padding:16px 0}
 .tier-ring{display:flex;flex-direction:column;align-items:center;gap:10px}
 .ring-wrap{position:relative;width:80px;height:80px}
@@ -117,14 +117,14 @@ nav{
 .ring-lbl-inner{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--steel);letter-spacing:0.06em}
 .tier-name{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;text-transform:uppercase;text-align:center}
 
-/* ── EDGE DENSITY ── */
+/* â”€â”€ EDGE DENSITY â”€â”€ */
 .density-meter{margin-top:8px}
 .density-val{font-size:2.8rem;font-weight:700;letter-spacing:-0.04em;color:var(--gold)}
 .density-sub{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);letter-spacing:0.06em;margin-top:4px}
 .density-bar-wrap{height:6px;background:var(--cream4);border-radius:3px;margin-top:16px;overflow:hidden}
 .density-bar{height:100%;background:linear-gradient(90deg,var(--gold),rgba(212,168,67,0.4));border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
 
-/* ── EDGE TYPE BREAKDOWN ── */
+/* â”€â”€ EDGE TYPE BREAKDOWN â”€â”€ */
 .edge-types{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .edge-row{display:flex;align-items:center;gap:10px}
 .edge-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -133,7 +133,7 @@ nav{
 .edge-bar{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
 .edge-count{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:28px;text-align:right}
 
-/* ── TOP CONNECTED ── */
+/* â”€â”€ TOP CONNECTED â”€â”€ */
 .connected-list{display:flex;flex-direction:column;gap:6px}
 .connected-row{
   display:flex;align-items:center;gap:12px;
@@ -147,7 +147,7 @@ nav{
 .connected-name{font-size:0.78rem;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .connected-edges{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);margin-left:auto}
 
-/* ── ORPHAN TABLE ── */
+/* â”€â”€ ORPHAN TABLE â”€â”€ */
 .orphan-list{display:flex;flex-direction:column;gap:6px}
 .orphan-row{
   display:flex;align-items:center;gap:12px;
@@ -159,7 +159,7 @@ nav{
 .orphan-edges{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--crimson)}
 .orphan-empty{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--green);padding:12px 14px;text-align:center;border:1px solid rgba(74,158,107,0.2);border-radius:6px;background:rgba(74,158,107,0.05)}
 
-/* ── DIFFICULTY DIST ── */
+/* â”€â”€ DIFFICULTY DIST â”€â”€ */
 .diff-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .diff-stars{display:flex;gap:3px}
 .diff-star{width:8px;height:8px;border-radius:1px}
@@ -167,13 +167,13 @@ nav{
 .diff-bar{height:100%;background:linear-gradient(90deg,var(--gold),rgba(212,168,67,0.5));border-radius:3px;transition:width 1s cubic-bezier(0.4,0,0.2,1)}
 .diff-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--cream2);width:28px;text-align:right}
 
-/* ── FREQ TABLE ── */
+/* â”€â”€ FREQ TABLE â”€â”€ */
 .freq-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .freq-cell{background:var(--cream4);border-radius:8px;padding:18px 16px;text-align:center}
 .freq-num{font-size:1.8rem;font-weight:700;letter-spacing:-0.03em;color:var(--cream)}
 .freq-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
 
-/* ── HEALTH SCORE ── */
+/* â”€â”€ HEALTH SCORE â”€â”€ */
 .health-score{text-align:center;padding:20px 0}
 .health-num{font-size:4rem;font-weight:700;letter-spacing:-0.05em;color:var(--gold);line-height:1}
 .health-grade{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);letter-spacing:0.1em;margin-top:6px}
@@ -184,7 +184,7 @@ nav{
 .health-bar{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
 .health-val{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:36px;text-align:right}
 
-/* ── FOOTER ── */
+/* â”€â”€ FOOTER â”€â”€ */
 .page-footer{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end}
 .footer-left{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);line-height:1.9;letter-spacing:0.04em}
 .footer-right{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.08em;text-align:right}
@@ -236,15 +236,15 @@ nav{
   <div class="hero">
     <div class="hero-label">Registry Analytics</div>
     <h1>The Graph<br><span>Knows Itself</span></h1>
-    <p class="hero-sub">Live diagnostics on the registry — density, distribution, topology, and health. The system audits itself so you know where to build next.</p>
+    <p class="hero-sub">Live diagnostics on the registry â€” density, distribution, topology, and health. The system audits itself so you know where to build next.</p>
     <div class="hero-meta" id="hero-meta">
-      <span>Loading registry…</span>
+      <span>Loading registryâ€¦</span>
     </div>
   </div>
 
   <div id="loading" class="state-msg">
     <div class="spinner"></div>
-    <p>Fetching registry…</p>
+    <p>Fetching registryâ€¦</p>
   </div>
 
   <div id="analytics" style="display:none">
@@ -300,7 +300,7 @@ nav{
     <div class="two-col section">
       <div class="card">
         <div class="card-label">Low-Connectivity Entries</div>
-        <div class="section-title" style="font-size:0.85rem;margin-bottom:16px;color:var(--steel);font-weight:400">Entries with 1 or fewer edges — registry gaps</div>
+        <div class="section-title" style="font-size:0.85rem;margin-bottom:16px;color:var(--steel);font-weight:400">Entries with 1 or fewer edges â€” registry gaps</div>
         <div class="orphan-list" id="orphan-list"></div>
       </div>
       <div class="card">
@@ -314,16 +314,16 @@ nav{
   <div class="page-footer">
     <div class="footer-left">
       Excelligence Registry Analytics &middot; Live<br>
-      Data source: /api/excelligence.json<br>
+      Data source: /excelligence.json<br>
       A Dropdown Logistics product &middot; excelligence.dev
     </div>
-    <div class="footer-right" id="footer-meta">—</div>
+    <div class="footer-right" id="footer-meta">â€”</div>
   </div>
 
 </div><!-- /page -->
 
 <script>
-// ── TYPE COLORS ─────────────────────────────────
+// â”€â”€ TYPE COLORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const TYPE_COLOR = {
   ANT: '#B23531', FRM: '#6B9DC2', ARC: '#8a6cc9',
   PTN: '#4A9E6B', CON: '#C49A3C', PQ:  '#4AADAD', KEY: '#D4A843'
@@ -333,10 +333,10 @@ const TIER_COLOR = {
   Advanced: '#8a6cc9', Expert: '#D4A843'
 };
 
-// ── FETCH ────────────────────────────────────────
+// â”€â”€ FETCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadRegistry() {
   try {
-    const res = await fetch('/api/excelligence.json');
+    const res = await fetch('/excelligence.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch(e) {
@@ -345,7 +345,7 @@ async function loadRegistry() {
   }
 }
 
-// ── ANIMATE NUMBER ───────────────────────────────
+// â”€â”€ ANIMATE NUMBER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function animateNum(el, target, duration=800, decimals=0) {
   const start = performance.now();
   const from = 0;
@@ -359,13 +359,13 @@ function animateNum(el, target, duration=800, decimals=0) {
   requestAnimationFrame(tick);
 }
 
-// ── RENDER ───────────────────────────────────────
+// â”€â”€ RENDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function render(data) {
   const entries = data.entries || [];
   const edges   = data.edges   || [];
   const meta    = data.meta    || {};
 
-  // ── counts ──
+  // â”€â”€ counts â”€â”€
   const N = entries.length;
   const E = edges.length;
   const density = E / N;
@@ -405,7 +405,7 @@ function render(data) {
   // ANT count
   const antCount = typeDist['ANT'] || 0;
 
-  // ── hero meta ──
+  // â”€â”€ hero meta â”€â”€
   document.getElementById('hero-meta').innerHTML = `
     <span>${N} entries</span>
     <span>${E} edges</span>
@@ -414,7 +414,7 @@ function render(data) {
     <span>Schema v${meta.schema_version || '0.2.0'}</span>
   `;
 
-  // ── stat strip ──
+  // â”€â”€ stat strip â”€â”€
   const stats = [
     {num: N,               lbl: 'Total Entries',   gold: true,  delta: '+18 this session'},
     {num: E,               lbl: 'Total Edges',      gold: false, delta: '+22 this session'},
@@ -436,7 +436,7 @@ function render(data) {
     setTimeout(() => animateNum(numEl, s.num, 900, s.dec||0), 100);
   });
 
-  // ── type bars ──
+  // â”€â”€ type bars â”€â”€
   const maxType = Math.max(...Object.values(typeDist));
   const typeOrder = ['FRM','PTN','ARC','ANT','CON','PQ','KEY'];
   const typeBars = document.getElementById('type-bars');
@@ -457,7 +457,7 @@ function render(data) {
     typeBars.appendChild(row);
   });
 
-  // ── tier rings ──
+  // â”€â”€ tier rings â”€â”€
   const tierOrder = ['Beginner','Intermediate','Advanced','Expert'];
   const maxTier = Math.max(...Object.values(tierDist));
   const tierRings = document.getElementById('tier-rings');
@@ -492,11 +492,11 @@ function render(data) {
     setTimeout(() => { circle.style.strokeDasharray = `${dash} ${C}`; }, 200);
   });
 
-  // ── edge density ──
+  // â”€â”€ edge density â”€â”€
   const maxDensity = 5;
   document.getElementById('density-meter').innerHTML = `
     <div class="density-val" id="dens-val">0</div>
-    <div class="density-sub">edges per entry &middot; target ≥ 2.0</div>
+    <div class="density-sub">edges per entry &middot; target â‰¥ 2.0</div>
     <div class="density-bar-wrap">
       <div class="density-bar" style="width:0%" id="dens-bar"></div>
     </div>
@@ -509,7 +509,7 @@ function render(data) {
     document.getElementById('dens-bar').style.width = Math.min(density/maxDensity*100,100)+'%';
   }, 100);
 
-  // ── edge type breakdown ──
+  // â”€â”€ edge type breakdown â”€â”€
   const edgeColors = {LEADS_TO:'#6B9DC2', DEPENDS_ON:'#8a6cc9', PAIRS_WITH:'#4A9E6B'};
   const edgeTypes = document.getElementById('edge-types');
   Object.entries(edgeDist).sort((a,b)=>b[1]-a[1]).forEach(([type, count]) => {
@@ -528,7 +528,7 @@ function render(data) {
     edgeTypes.appendChild(row);
   });
 
-  // ── most connected ──
+  // â”€â”€ most connected â”€â”€
   const sorted = Object.entries(edgeCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
   const connected = document.getElementById('connected-list');
   sorted.forEach(([id, cnt], i) => {
@@ -544,7 +544,7 @@ function render(data) {
     connected.appendChild(row);
   });
 
-  // ── difficulty dist ──
+  // â”€â”€ difficulty dist â”€â”€
   const maxDiff = Math.max(...Object.values(diffDist), 1);
   const diffEl = document.getElementById('diff-dist');
   [1,2,3,4,5].forEach(d => {
@@ -563,7 +563,7 @@ function render(data) {
     diffEl.appendChild(row);
   });
 
-  // ── frequency ──
+  // â”€â”€ frequency â”€â”€
   const freqEl = document.getElementById('freq-grid');
   const freqOrder = ['Daily','Weekly','Situational','Rare'];
   freqOrder.forEach(f => {
@@ -580,7 +580,7 @@ function render(data) {
     setTimeout(() => animateNum(numEl, count, 700), 200);
   });
 
-  // ── health score ──
+  // â”€â”€ health score â”€â”€
   // Factors: edge density, ANT coverage, tier balance, no orphans
   const orphans = Object.values(edgeCount).filter(c=>c<=1).length;
   const orphanScore  = Math.max(0, 100 - (orphans/N)*200);
@@ -612,11 +612,11 @@ function render(data) {
   `;
   setTimeout(() => animateNum(document.getElementById('health-num'), health, 1000), 300);
 
-  // ── orphans ──
+  // â”€â”€ orphans â”€â”€
   const orphanList = document.getElementById('orphan-list');
   const lowConn = Object.entries(edgeCount).filter(([,c])=>c<=1).slice(0,8);
   if(lowConn.length===0) {
-    orphanList.innerHTML = `<div class="orphan-empty">No orphaned entries — all nodes connected</div>`;
+    orphanList.innerHTML = `<div class="orphan-empty">No orphaned entries â€” all nodes connected</div>`;
   } else {
     lowConn.forEach(([id, cnt]) => {
       const entry = entries.find(e=>e.id===id);
@@ -631,7 +631,7 @@ function render(data) {
     });
   }
 
-  // ── ANT readiness ──
+  // â”€â”€ ANT readiness â”€â”€
   const antTarget = 20;
   const antPct = Math.min(100, Math.round(antCount/antTarget*100));
   const antUnlocked = antCount >= 15;
@@ -657,11 +657,11 @@ function render(data) {
     document.getElementById('ant-bar').style.width = antPct+'%';
   }, 200);
 
-  // ── footer ──
+  // â”€â”€ footer â”€â”€
   document.getElementById('footer-meta').innerHTML =
     `v${meta.schema_version||'0.2.0'}<br>${new Date(meta.exported_at||Date.now()).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
 
-  // ── animate bars ──
+  // â”€â”€ animate bars â”€â”€
   setTimeout(() => {
     document.querySelectorAll('[data-w]').forEach(el => {
       el.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
@@ -669,12 +669,12 @@ function render(data) {
     });
   }, 150);
 
-  // ── show ──
+  // â”€â”€ show â”€â”€
   document.getElementById('loading').style.display = 'none';
   document.getElementById('analytics').style.display = 'block';
 }
 
-// ── INIT ─────────────────────────────────────────
+// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 loadRegistry()
   .then(render)
   .catch(err => {
@@ -682,7 +682,7 @@ loadRegistry()
       <div class="state-msg">
         <p style="color:var(--crimson)">Failed to load registry</p>
         <p>${err.message}</p>
-        <p style="margin-top:8px">Expected: /api/excelligence.json</p>
+        <p style="margin-top:8px">Expected: /excelligence.json</p>
       </div>
     `;
   });

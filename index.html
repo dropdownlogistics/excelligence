@@ -657,7 +657,7 @@ function buildTicker(entries){
 }
 
 // â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-fetch('/api/excelligence.json')
+fetch('/excelligence.json')
   .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
   .then(data=>{
     const entries=data.entries||[];
