@@ -1,26 +1,26 @@
 {
   "meta": {
     "schema_version": "0.2.0",
-    "entry_count": 93,
-    "edge_count": 200,
-    "alias_count": 56,
-    "tag_count": 54,
+    "entry_count": 105,
+    "edge_count": 228,
+    "alias_count": 94,
+    "tag_count": 93,
     "type_distribution": {
-      "FRM": 26,
-      "ARC": 10,
+      "FRM": 30,
+      "ARC": 11,
       "ANT": 16,
-      "PTN": 16,
-      "KEY": 7,
-      "CON": 10,
-      "PQ": 8
+      "PTN": 19,
+      "KEY": 8,
+      "CON": 11,
+      "PQ": 10
     },
     "tier_distribution": {
-      "Intermediate": 35,
-      "Advanced": 24,
-      "Expert": 5,
-      "Beginner": 29
+      "Intermediate": 40,
+      "Advanced": 29,
+      "Expert": 6,
+      "Beginner": 30
     },
-    "exported_at": "2026-03-23T03:04:05.491182",
+    "exported_at": "2026-03-27T19:56:32.361753",
     "source": "Excelligence_Registry_v020_merged.json",
     "product": "Excelligence · Dropdown Logistics",
     "v2_fields": [
@@ -1792,6 +1792,335 @@
       ],
       "created_at": "2026-03-23 00:00:00",
       "updated_at": "2026-03-23 00:00:00"
+    },
+    {
+      "id": "FRM-0027",
+      "name": "GROUPBY",
+      "type": "FRM",
+      "tier": "Advanced",
+      "what_it_does": "Aggregates a dataset by grouping rows on one or more columns and applying a function (SUM, AVERAGE, COUNT, etc.) to return a dynamic summary table without a PivotTable.",
+      "intent": "When you need a dynamic summary table that groups data by one or more dimensions and updates automatically, use GROUPBY to replace static PivotTables in formula-driven architectures.",
+      "example": "=GROUPBY(Sales[Region], Sales[Amount], SUM)\nReturns a two-column spill: Region | Total Amount\nUpdates automatically when source data changes.\n\n=GROUPBY(Sales[Region], Sales[Amount], SUM, , , 1)\nSorted descending by total amount.",
+      "failure_modes": "Available in Excel 365 only — not in Excel 2021 or earlier; requires a flat table structure as input, not a PivotTable; empty rows in source cause grouping errors; result cannot be directly referenced by cell address — must use spill range operator (#).",
+      "performance_notes": "GROUPBY is calculated engine-side and is significantly faster than equivalent SUMIFS arrays on large datasets. More efficient than a PivotTable for formula-driven dashboards because it recalculates in dependency order without requiring manual refresh.",
+      "governance_notes": "GROUPBY is the governed replacement for PivotTable-based summaries in formula-driven workbooks. Use GROUPBY when the summary must update automatically within a formula chain. Use PivotTables when the user needs interactive slicing. Never combine GROUPBY output with raw SUMIFS on the same dataset — one source of truth per summary.",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 365 only",
+      "tags": [
+        "dynamic-array",
+        "aggregation",
+        "365"
+      ],
+      "aliases": [
+        "GROUPBY function",
+        "group-by",
+        "dynamic-grouping"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "FRM-0028",
+      "name": "PIVOTBY",
+      "type": "FRM",
+      "tier": "Advanced",
+      "what_it_does": "Creates a pivot-style cross-tabulation with row and column grouping in a single dynamic array formula, producing a two-dimensional summary table that updates automatically.",
+      "intent": "When you need a cross-tabulated summary (rows AND columns both grouped) that updates automatically without a PivotTable, use PIVOTBY as the formula-native pivot engine.",
+      "example": "=PIVOTBY(Sales[Region], Sales[Quarter], Sales[Amount], SUM)\nReturns a grid: Regions as rows, Quarters as columns, SUM of Amount at each intersection.\nUpdates when source data changes — no Refresh needed.",
+      "failure_modes": "Excel 365 only — not available in earlier versions; both row and column fields must be single columns; result spills into a variable range — ensure sufficient blank space below and to the right; cannot be nested inside most other functions.",
+      "performance_notes": "PIVOTBY is the most efficient way to produce a cross-tabulation in a formula chain. Significantly faster than equivalent SUMIFS matrix arrays. Comparable to PivotTable performance on datasets under 500K rows.",
+      "governance_notes": "PIVOTBY is the governed alternative to manually built SUMIFS cross-tabulation matrices. Any workbook using a grid of SUMIFS formulas to produce a cross-tab should be migrated to PIVOTBY. Pairs with GROUPBY — use GROUPBY for one-dimensional summaries, PIVOTBY for two-dimensional. Both require Excel 365.",
+      "difficulty_score": 4,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 365 only",
+      "tags": [
+        "dynamic-array",
+        "cross-tabulation",
+        "365"
+      ],
+      "aliases": [
+        "PIVOTBY function",
+        "pivot-by",
+        "formula-pivot"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "FRM-0029",
+      "name": "MAKEARRAY",
+      "type": "FRM",
+      "tier": "Expert",
+      "what_it_does": "Builds a two-dimensional array of specified dimensions by applying a LAMBDA function to each row and column index, enabling custom matrix construction without helper columns or VBA.",
+      "intent": "When you need to generate a custom two-dimensional array where each cell's value depends on its row and column position, use MAKEARRAY with a LAMBDA to define the per-cell calculation.",
+      "example": "-- Multiplication table\n=MAKEARRAY(10, 10, LAMBDA(r, c, r*c))\nGenerates a 10x10 multiplication table dynamically.\n\n-- Conditional count matrix (from the Assurance Map)\n=MAKEARRAY(\n  ROWS(rowsDim), COLUMNS(qtrs),\n  LAMBDA(r, c, COUNTIFS(dimKey, INDEX(rowsDim,r), QuarterTag, INDEX(qtrs,c)))\n)",
+      "failure_modes": "Excel 365 only; LAMBDA inside MAKEARRAY cannot reference cells directly — must use INDEX to extract values from arrays; result spills into a variable range — no other content can occupy that area; nesting additional LAMBDAs inside the MAKEARRAY LAMBDA increases complexity rapidly.",
+      "performance_notes": "MAKEARRAY is evaluated as a single array operation — more efficient than equivalent nested BYROW/BYCOL combinations for fixed-dimension outputs. On large dimensions (100x100+) recalculation can be slow — consider Power Query for static large matrices.",
+      "governance_notes": "MAKEARRAY is an Expert-tier function reserved for cases where no simpler pattern produces the required two-dimensional output. Before using MAKEARRAY, confirm that GROUPBY, PIVOTBY, or a PivotTable cannot solve the problem. Every MAKEARRAY formula must be documented with a comment or README entry explaining the row/column semantics. See ANT-0014 (Over-Nesting) for the risk of nesting MAKEARRAY inside other complex functions.",
+      "difficulty_score": 5,
+      "usage_frequency": "Situational",
+      "excel_version": "Excel 365 only",
+      "tags": [
+        "dynamic-array",
+        "lambda",
+        "matrix",
+        "365"
+      ],
+      "aliases": [
+        "MAKEARRAY function",
+        "make-array",
+        "custom-array"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "FRM-0030",
+      "name": "EDATE",
+      "type": "FRM",
+      "tier": "Intermediate",
+      "what_it_does": "Returns the date that is a specified number of months before or after a given start date, enabling dynamic date range construction without hardcoded month offsets.",
+      "intent": "When you need to calculate a date a fixed number of months from a reference date — for rolling windows, maturity dates, or period end calculations — use EDATE to keep the calculation dynamic and version-independent.",
+      "example": "-- 3 months after contract start\n=EDATE(A2, 3)\n\n-- Last day of current month\n=EDATE(DATE(YEAR(TODAY()), MONTH(TODAY())+1, 1), 0)-1\n\n-- Rolling 12-month window start\n=EDATE(TODAY(), -12)\nReturns the date exactly 12 months ago — updates daily.",
+      "failure_modes": "Result is a serial number — must be formatted as a date; adding months to January 31 returns the last day of February (not March 3); does not account for business days — use WORKDAY for business-day offsets.",
+      "performance_notes": "EDATE is a non-volatile date function. Faster than equivalent DATE(YEAR, MONTH+n, DAY) constructions and handles month-end edge cases correctly where manual month arithmetic fails.",
+      "governance_notes": "EDATE is the governed alternative to manual month arithmetic (=DATE(YEAR(A2), MONTH(A2)+3, DAY(A2))). Manual month arithmetic fails silently on month-end dates (Jan 31 + 3 months = Apr 31, which Excel resolves as May 1 incorrectly). Any rolling date window in a DDL workbook must use EDATE or EOMONTH, never manual arithmetic.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 2007+",
+      "tags": [
+        "date-function",
+        "rolling-window",
+        "dynamic-date"
+      ],
+      "aliases": [
+        "EDATE function",
+        "end-date",
+        "month-offset"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "PQ-0009",
+      "name": "Parameter Table",
+      "type": "PQ",
+      "tier": "Intermediate",
+      "what_it_does": "Stores query variables (file paths, filter criteria, date ranges, thresholds) in a dedicated Excel table that Power Query reads before loading, making queries reusable and configurable without editing M code.",
+      "intent": "When a Power Query needs to be reconfigured for different runs (different dates, different folders, different filter values), store the variables in a Parameter Table so the query reads its own settings from a governed source.",
+      "example": "PARAMETER TABLE (on Config tab):\nParameterName  | Value\nFilePath       | C:\\Data\\Sales\\2026\\\nStartDate      | 2026-01-01\nMinAmount      | 500\n\nIN POWER QUERY (M code):\nlet\n  Params = Excel.CurrentWorkbook(){[Name=\"tbl_Parameters\"]}[Content],\n  FilePath = Params{[ParameterName=\"FilePath\"]}[Value],\n  Source = Folder.Files(FilePath)\nin Source",
+      "failure_modes": "Parameter Table must be a named Excel Table (Ctrl+T) for reliable M code reference; parameter names must match exactly including case; if the table is on a different sheet than expected, the query may not find it; date values must be stored as text in ISO format to prevent serial number conversion.",
+      "performance_notes": "Parameter Table adds one table read at query load time — negligible overhead. Significantly reduces maintenance time compared to editing M code directly for each run.",
+      "governance_notes": "Any Power Query that runs against variable inputs (dates, paths, thresholds) must use a Parameter Table. Hard-coded values inside M code are the PQ equivalent of ANT-0003 (Hardcoded Values) — they make the query brittle and non-reusable. The Parameter Table must live on the Config tab alongside the Driver Table Architecture (ARC-0010).",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 2016+ (Power Query built-in)",
+      "tags": [
+        "power-query",
+        "configuration",
+        "reusable"
+      ],
+      "aliases": [
+        "PQ parameter table",
+        "query parameters",
+        "M code parameters"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "PQ-0010",
+      "name": "Append vs Merge",
+      "type": "PQ",
+      "tier": "Intermediate",
+      "what_it_does": "Defines the structural difference between Append (stacking tables vertically — union) and Merge (joining tables horizontally — join), which are the two foundational data combination operations in Power Query.",
+      "intent": "When combining data from multiple sources in Power Query, use Append to stack rows from tables with the same structure, and Merge to join tables on a shared key column — never confuse the two.",
+      "example": "APPEND (vertical stack — same columns):\nJanuary sales + February sales + March sales\n→ One table with all rows, same columns\nUse: Transform > Append Queries\n\nMERGE (horizontal join — shared key):\nSales table [OrderID] joined to Products table [OrderID]\n→ One table with columns from both, matched on OrderID\nUse: Transform > Merge Queries\nJoin types: Left Outer, Inner, Full Outer, Left Anti, Right Anti",
+      "failure_modes": "Appending tables with different column names produces null values in mismatched columns; merging on a non-unique key produces a cartesian product (row explosion); Left Anti join is the governed pattern for finding orphan records — not a filter applied after a full join.",
+      "performance_notes": "Append is a lightweight union operation. Merge performance depends on join type and table size — Inner joins are fastest, Full Outer joins are most expensive. On large tables, filter before merging to reduce join cost.",
+      "governance_notes": "Every PQ data combination must explicitly declare whether it is an Append or a Merge and which join type applies. Undocumented merges are a governance finding — the join type determines which rows survive and must be intentional. Left Anti join is the governed pattern for exception reporting (records in A not in B).",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 2016+ (Power Query built-in)",
+      "tags": [
+        "power-query",
+        "data-combination",
+        "join"
+      ],
+      "aliases": [
+        "append queries",
+        "merge queries",
+        "PQ join",
+        "union vs join"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "PTN-0017",
+      "name": "Rolling Window Pattern",
+      "type": "PTN",
+      "tier": "Advanced",
+      "what_it_does": "Constructs a dynamic date range that always covers a fixed trailing period (12 months, 13 weeks, 90 days) anchored to today, using EDATE and SEQUENCE to drive formulas, charts, and summaries without manual date updates.",
+      "intent": "When a dashboard or summary must always show the trailing N periods without manual date entry, use the Rolling Window Pattern to anchor all period references to TODAY() through EDATE and SEQUENCE.",
+      "example": "-- Rolling 12-month header row\n=EDATE(EOMONTH(TODAY(),0), -SEQUENCE(1,12,11,0))\nGenerates 12 month-end dates ending this month, left to right.\n\n-- Rolling 12-month SUMIFS\n=SUMIFS(Sales[Amount], Sales[MonthEnd], \">=\"&EDATE(TODAY(),-12), Sales[MonthEnd], \"<=\"&TODAY())\n\n-- Rolling window driven by a single Config cell\nConfig!B2 = 12 (months to show)\n=EDATE(TODAY(), -Config!B2) -- window start, updates daily",
+      "failure_modes": "Rolling windows anchored to TODAY() recalculate on every workbook open — use a Config cell to freeze the anchor date for point-in-time reporting; EDATE on the last day of a month can produce unexpected results at month-end; rolling windows that cross fiscal year boundaries require additional logic for fiscal calendar alignment.",
+      "performance_notes": "TODAY() is volatile — it triggers recalculation on every workbook open. Anchor rolling windows to a Config cell date for workbooks where recalculation overhead is a concern.",
+      "governance_notes": "Any dashboard showing trailing periods must use the Rolling Window Pattern. Hardcoded date ranges in formulas or charts are a governance finding — they require manual updates and produce stale data silently. The Config cell anchor is mandatory for any workbook used for point-in-time reporting.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 2013+ (EDATE, SEQUENCE requires 365/2019)",
+      "tags": [
+        "date-pattern",
+        "rolling-window",
+        "dashboard"
+      ],
+      "aliases": [
+        "trailing period",
+        "rolling 12 months",
+        "dynamic date range"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "PTN-0018",
+      "name": "Control Panel Pattern",
+      "type": "PTN",
+      "tier": "Intermediate",
+      "what_it_does": "Consolidates all global workbook assumptions, toggles, thresholds, and user-selectable variables into a single labeled input grid on a dedicated tab, so every downstream formula reads from one governed source.",
+      "intent": "When a workbook has multiple user-configurable inputs that drive calculations across multiple tabs, build a Control Panel tab so all inputs are visible, labeled, and validated in one place.",
+      "example": "CONTROL PANEL TAB (Config):\n+-------------------+--------+------------------+\n| Parameter         | Value  | Notes            |\n+-------------------+--------+------------------+\n| Report_Date       | 3/31/26| Override TODAY() |\n| Tax_Rate          | 8.75%  | State + Local    |\n| Tier1_Threshold   | 500    | Commission floor |\n| LOD_Filter        | All    | All / L1 / L2    |\n| Show_Inactive     | FALSE  | Toggle           |\n+-------------------+--------+------------------+\n\nFormulas reference: =Config[Value] via XLOOKUP or named ranges.",
+      "failure_modes": "Control Panel must be protected with only the Value column unlocked; parameter names must be stable — renaming breaks downstream formulas; dropdown validation on toggle cells prevents invalid entries; undocumented parameters accumulate over time — every row needs a Notes column entry.",
+      "performance_notes": "Zero computational overhead. The Control Panel is a lookup source, not a calculation engine. XLOOKUP against a 20-row parameter table is negligible.",
+      "governance_notes": "Every DDL workbook with more than 3 user-configurable inputs must have a Control Panel tab. Inputs scattered across formula cells are a governance finding. The Control Panel is the human-facing layer of the Driver Table Architecture (ARC-0010) — same principle, different audience. Users interact with the Control Panel; formulas interact with the Driver Table.",
+      "difficulty_score": 2,
+      "usage_frequency": "Daily",
+      "excel_version": "All versions",
+      "tags": [
+        "architecture",
+        "configuration",
+        "user-input"
+      ],
+      "aliases": [
+        "parameter block",
+        "assumptions tab",
+        "config tab",
+        "control panel"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "PTN-0019",
+      "name": "Dynamic Spill Template",
+      "type": "PTN",
+      "tier": "Advanced",
+      "what_it_does": "Designs a workbook layout where all formula outputs use dynamic arrays that spill automatically, eliminating manual range adjustments when source data grows or shrinks.",
+      "intent": "When building a formula-driven output that must adapt to variable data lengths, design the layout around spill ranges so that adding rows to the source table automatically extends all downstream outputs without formula edits.",
+      "example": "LAYOUT DESIGN:\n- Source: tbl_Sales (Excel Table — auto-expands)\n- Unique regions: =SORT(UNIQUE(tbl_Sales[Region]))  -- spills down\n- Summary: =GROUPBY(tbl_Sales[Region], tbl_Sales[Amount], SUM)  -- spills down\n- Header: =TRANSPOSE(SORT(UNIQUE(tbl_Sales[Quarter])))  -- spills right\n\nKEY RULE: Leave blank columns/rows adjacent to every spill range.\nNever place content in a cell that a spill range might expand into.",
+      "failure_modes": "#SPILL! error when another value blocks the spill range; spill ranges cannot overlap — plan layout to give each formula room to expand to its maximum likely size; spill ranges referenced by other formulas must use the # operator (e.g., A1#) not a fixed range.",
+      "performance_notes": "Dynamic spill layouts recalculate as a single array operation per formula — more efficient than equivalent dragged-down formula ranges. Source table growth triggers incremental recalculation only on affected ranges.",
+      "governance_notes": "Any workbook built for recurring use with variable data volumes must use the Dynamic Spill Template pattern. Fixed ranges that require manual extension when data grows are a governance finding. Every spill range must have documented maximum expected dimensions in the README so future maintainers can plan the layout.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 365 / 2021+",
+      "tags": [
+        "dynamic-array",
+        "layout",
+        "spill",
+        "365"
+      ],
+      "aliases": [
+        "spill layout",
+        "dynamic array template",
+        "auto-expanding formulas"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "KEY-0008",
+      "name": "Ctrl+[ — Trace Precedents Jump",
+      "type": "KEY",
+      "tier": "Intermediate",
+      "what_it_does": "Jumps the active cell selection directly to the precedent cells referenced in the current formula, bypassing manual scrolling and tab switching when auditing formula chains.",
+      "intent": "When auditing a formula and needing to inspect the source cells it references, use Ctrl+[ to jump directly to those cells rather than manually reading the formula and navigating.",
+      "example": "1. Select a cell containing =XLOOKUP(A2, Config[Param], Config[Value])\n2. Press Ctrl+[ \n3. Excel jumps to A2 (first precedent)\n4. Press Ctrl+[ again to trace further back\n5. Press Ctrl+] to jump to dependents (cells that USE the current cell)\n\nFor cross-sheet precedents:\n1. Ctrl+[ jumps to the source sheet automatically\n2. Ctrl+G (Go To) > Last to return to starting point",
+      "failure_modes": "Ctrl+[ only jumps to the first precedent — use Ctrl+Shift+{ to select ALL precedents at once; does not work on array formula results in older versions; cross-workbook precedents require the source workbook to be open.",
+      "performance_notes": "Keyboard shortcut — zero computational overhead. Significantly faster than reading formula text and manually navigating to source cells.",
+      "governance_notes": "Ctrl+[ and Ctrl+] (trace precedents / dependents) are the primary keyboard tools for workbook auditing. Any auditor reviewing a DDL workbook should be comfortable with both shortcuts. Pairs with Ctrl+Shift+{ (select all precedents) for full dependency mapping.",
+      "difficulty_score": 2,
+      "usage_frequency": "Weekly",
+      "excel_version": "All versions",
+      "tags": [
+        "keyboard-shortcut",
+        "auditing",
+        "navigation"
+      ],
+      "aliases": [
+        "trace precedents",
+        "Ctrl+[",
+        "jump to precedent"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "CON-0011",
+      "name": "One Version of the Truth",
+      "type": "CON",
+      "tier": "Beginner",
+      "what_it_does": "Establishes the governance rule that any global variable — a rate, a threshold, a target date, a category list — must exist in exactly one cell across the entire workbook, with all other references pointing to that single source.",
+      "intent": "When a value is used in multiple places across a workbook, define it once in a named cell or Control Panel row and reference that location everywhere, so changing the value requires editing exactly one cell.",
+      "example": "WRONG: Tax rate of 8.75% hardcoded in cells D4, G12, K8, and the dashboard formula.\nChanging the rate requires finding and updating 4 places. One will be missed.\n\nRIGHT:\nConfig tab, row 3: Tax_Rate | 8.75% | State + Local combined\nNamed range: Tax_Rate = Config!$B$3\nAll formulas: =Revenue * Tax_Rate\nChanging the rate: edit Config!B3 once. Done.",
+      "failure_modes": "Named ranges can break if the referenced cell is deleted or moved — use structured table references instead of absolute cell addresses where possible; the 'one cell' rule applies to the definition, not to calculated derivations (e.g., monthly rate = annual rate / 12 is a derivation, not a violation).",
+      "performance_notes": "Zero computational overhead. Named range lookups are resolved at parse time, not calculation time.",
+      "governance_notes": "One Version of the Truth is the most fundamental governance convention in workbook design. Any value that appears in more than one hardcoded location is a governance finding. This convention is the human-readable complement to the Driver Table Architecture (ARC-0010) — the Driver Table stores business rules, One Version of the Truth stores the values those rules use.",
+      "difficulty_score": 1,
+      "usage_frequency": "Daily",
+      "excel_version": "All versions",
+      "tags": [
+        "convention",
+        "single-source",
+        "governance"
+      ],
+      "aliases": [
+        "single source of truth",
+        "one source of truth",
+        "SVOT"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
+    },
+    {
+      "id": "ARC-0011",
+      "name": "Dashboard Slicer Architecture",
+      "type": "ARC",
+      "tier": "Advanced",
+      "what_it_does": "Connects multiple PivotTables and PivotCharts to a unified set of Slicers so a single user selection filters all connected objects simultaneously, creating an interactive dashboard without VBA.",
+      "intent": "When building a multi-visual dashboard where all charts and tables must respond to the same filter selections, use connected Slicers to drive all PivotTables from a single interaction point.",
+      "example": "SETUP:\n1. Create all PivotTables from the same source table\n2. Insert Slicer on one PivotTable (PivotTable Tools > Insert Slicer)\n3. Right-click Slicer > Report Connections\n4. Check all PivotTables the Slicer should control\n5. Repeat for each filter dimension (Region, Quarter, Product)\n\nRESULT: Clicking 'Q1' in the Quarter Slicer filters all charts and\ntables simultaneously — no VBA, no helper columns, no formulas.",
+      "failure_modes": "All connected PivotTables must share the same data source — Slicers cannot connect PivotTables from different sources; Slicer formatting must be applied individually or via Slicer Style; Timeline Slicers require a date field formatted as a date (not text); Slicers do not work with non-PivotTable ranges.",
+      "performance_notes": "Slicer selection triggers a full PivotTable refresh on all connected objects simultaneously. On large source datasets (500K+ rows), Slicer response time degrades — consider Power Pivot Data Model for large-scale Slicer architectures.",
+      "governance_notes": "Any executive dashboard with more than one PivotChart must use Slicer Architecture for filter consistency. Dashboards where each chart is filtered independently are a UX and governance failure — users cannot trust that all visuals reflect the same selection. All Slicers must be labeled, positioned in a dedicated filter zone, and documented in the README.",
+      "difficulty_score": 3,
+      "usage_frequency": "Weekly",
+      "excel_version": "Excel 2010+",
+      "tags": [
+        "dashboard",
+        "pivot-table",
+        "slicers",
+        "interactive"
+      ],
+      "aliases": [
+        "slicer dashboard",
+        "connected slicers",
+        "report connections"
+      ],
+      "created_at": "2026-03-27 00:00:00",
+      "updated_at": "2026-03-27 00:00:00"
     }
   ],
   "edges": [
@@ -2794,6 +3123,146 @@
       "source": "KEY-0007",
       "target": "FRM-0024",
       "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0027",
+      "target": "FRM-0028",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0027",
+      "target": "PTN-0019",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0027",
+      "target": "ANT-0015",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0028",
+      "target": "ARC-0011",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0028",
+      "target": "PTN-0019",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0029",
+      "target": "FRM-0023",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "FRM-0029",
+      "target": "ANT-0014",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "FRM-0030",
+      "target": "PTN-0017",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "FRM-0030",
+      "target": "ANT-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PQ-0009",
+      "target": "ARC-0010",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PQ-0009",
+      "target": "ANT-0003",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PQ-0010",
+      "target": "PQ-0008",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PQ-0010",
+      "target": "ARC-0009",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0017",
+      "target": "FRM-0030",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0017",
+      "target": "CON-0011",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PTN-0018",
+      "target": "ARC-0010",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "PTN-0018",
+      "target": "CON-0011",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0018",
+      "target": "ANT-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "PTN-0019",
+      "target": "FRM-0027",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0019",
+      "target": "FRM-0028",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "PTN-0019",
+      "target": "FRM-0026",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "KEY-0008",
+      "target": "FRM-0025",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "KEY-0008",
+      "target": "ARC-0009",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "CON-0011",
+      "target": "ARC-0010",
+      "type": "DEPENDS_ON"
+    },
+    {
+      "source": "CON-0011",
+      "target": "ANT-0003",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "CON-0011",
+      "target": "PTN-0018",
+      "type": "LEADS_TO"
+    },
+    {
+      "source": "ARC-0011",
+      "target": "FRM-0028",
+      "type": "PAIRS_WITH"
+    },
+    {
+      "source": "ARC-0011",
+      "target": "ARC-0009",
+      "type": "DEPENDS_ON"
     }
   ],
   "tags": [
