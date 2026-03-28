@@ -1,13 +1,5 @@
 ﻿{
-  "functions": {
-    "api/scan.js": {
-      "runtime": "edge"
-    }
-  },
-  "routes": [
-    {
-      "src": "/api/excelligence.json",
-      "dest": "/api/excelligence.json"
-    }
+  "rewrites": [
+    { "source": "/api/scan", "destination": "/api/scan.js" }
   ]
 }
