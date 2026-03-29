@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn &mdash; Excelligence</title>
+<meta name="description" content="Formula decompositions. Step by step, line by line, with the why attached to each piece. Most Excel references tell you what a function does. This shows you how it thinks.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--cream)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:72px 40px 0}
+
+/* HERO */
+.hero{margin-bottom:64px;animation:fadeUp 0.5s ease both}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:20px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.035em;
+  line-height:1.05;margin-bottom:14px}
+.hero h1 em{font-family:'Source Serif 4',serif;font-style:italic;color:rgba(245,241,235,0.6);font-weight:400}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:1rem;color:var(--steel);
+  line-height:1.7;max-width:580px;margin-bottom:24px}
+.hero-sub strong{color:var(--cream)}
+
+/* HOW IT WORKS */
+.how-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:64px;
+  animation:fadeUp 0.5s ease 0.1s both}
+.how-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;
+  border-top:2px solid}
+.how-card:nth-child(1){border-top-color:var(--gold)}
+.how-card:nth-child(2){border-top-color:var(--blue)}
+.how-card:nth-child(3){border-top-color:var(--green)}
+.how-num{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;margin-bottom:8px}
+.how-title{font-size:0.88rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
+.how-body{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);line-height:1.55}
+
+/* SECTION HEADER */
+.section-head{margin-bottom:24px;animation:fadeUp 0.5s ease 0.15s both}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.section-eyebrow::before{content:'';width:14px;height:1px;background:var(--gold)}
+.section-title{font-size:1.3rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:4px}
+.section-sub{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel)}
+
+/* ENTRY CARDS */
+.entries-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:64px;
+  animation:fadeUp 0.5s ease 0.2s both}
+.entry-card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:24px;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.15s;
+  position:relative;overflow:hidden}
+.entry-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.entry-card.frm::before{background:var(--blue)}
+.entry-card.ant::before{background:var(--crimson)}
+.entry-card.ptn::before{background:var(--green)}
+.entry-card.arc::before{background:var(--amber)}
+.entry-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.entry-card.stub{opacity:0.5;pointer-events:none;cursor:default}
+.entry-card.stub:hover{transform:none}
+
+.card-type{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;
+  text-transform:uppercase;margin-bottom:6px}
+.entry-card.frm .card-type{color:var(--blue)}
+.entry-card.ant .card-type{color:var(--crimson)}
+.entry-card.ptn .card-type{color:var(--green)}
+.entry-card.arc .card-type{color:var(--amber)}
+.card-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);margin-bottom:8px}
+.card-name{font-size:1.1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.card-desc{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);
+  line-height:1.55;margin-bottom:14px}
+.card-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card-pill{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.06em;
+  padding:2px 8px;border-radius:3px;border:1px solid;color:var(--steel);
+  background:rgba(107,123,141,0.08);border-color:rgba(107,123,141,0.2)}
+.card-status{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;
+  margin-left:auto;display:flex;align-items:center;gap:5px}
+.status-live{color:var(--green)}
+.status-soon{color:var(--steel)}
+.status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s ease-in-out infinite}
+
+/* REQUEST SECTION */
+.request-section{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:32px;margin-bottom:48px;animation:fadeUp 0.5s ease 0.25s both}
+.req-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.req-title{font-size:1.1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.req-body{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);
+  line-height:1.65;margin-bottom:20px;max-width:540px}
+.req-ideas{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.req-idea{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  background:var(--card2);border:1px solid var(--border);padding:5px 10px;border-radius:4px;
+  cursor:pointer;transition:color 0.2s,border-color 0.2s}
+.req-idea:hover{color:var(--gold);border-color:rgba(212,168,67,0.3)}
+.req-note{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);font-style:italic}
+
+/* HAMBURGER */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border2);z-index:150;
+  padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;
+  border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover,.nav-drawer a.active-drawer{color:var(--cream)}
+.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;
+  background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);
+  padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none!important}
+  .nav-hamburger{display:flex!important}
+  .page{padding:48px 20px 0}
+  .how-strip{grid-template-columns:1fr}
+  .entries-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/explorer/">Graph</a>
+    <a href="/radial/">Radial</a>
+    <a href="/paths/">Paths</a>
+    <a href="/tools/">Tools</a>
+    <a href="/analytics/">Analytics</a>
+    <a href="/scanner/">Scanner</a>
+    <a href="/gridtactics/">GridTactics</a>
+    <a href="/learn/" class="active">Learn</a>
+    <span class="nav-tag">BETA</span>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/explorer/">Graph</a>
+  <a href="/radial/">Radial</a>
+  <a href="/paths/">Paths</a>
+  <a href="/tools/">Tools</a>
+  <a href="/analytics/">Analytics</a>
+  <a href="/scanner/">Scanner</a>
+  <a href="/gridtactics/">GridTactics</a>
+  <a href="/learn/" class="active-drawer">Learn</a>
+  <span class="drawer-tag">BETA</span>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Excelligence &middot; Learn</div>
+    <h1>Formula decompositions.<br><em>Line by line. With the why.</em></h1>
+    <p class="hero-sub">Most Excel references tell you <strong>what</strong> a function does. This shows you <strong>how it thinks</strong> &mdash; each piece named, each step explained, each decision justified. Built from the governed registry.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-strip">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-title">Pick a formula</div>
+      <div class="how-body">Choose from the decomposition library below. Each entry has a full step-by-step breakdown, not just a definition.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-title">Read the steps</div>
+      <div class="how-body">Each line of the formula is explained in plain English. What it does, what it holds, why it&rsquo;s there, and what breaks without it.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-title">See it in the graph</div>
+      <div class="how-body">Every entry connects back to the Excelligence knowledge graph. See how it relates to patterns, anti-patterns, and architecture entries.</div>
+    </div>
+  </div>
+
+  <!-- AVAILABLE -->
+  <div class="section-head">
+    <div class="section-eyebrow">Decompositions</div>
+    <h2 class="section-title">Available Now</h2>
+    <p class="section-sub">Hand-crafted step-by-step explanations. More added based on requests.</p>
+  </div>
+
+  <div class="entries-grid">
+
+    <!-- LET — LIVE -->
+    <a href="/learn/let/" class="entry-card frm">
+      <div class="card-type">FRM &middot; Formula</div>
+      <div class="card-id">FRM-0023</div>
+      <div class="card-name">LET</div>
+      <div class="card-desc">Names intermediate results inside a formula. The function that makes complex formulas readable, debuggable, and governed.</div>
+      <div class="card-meta">
+        <span class="card-pill">Intermediate</span>
+        <span class="card-pill">Daily use</span>
+        <span class="card-pill">365 / 2021+</span>
+        <span class="card-status status-live"><span class="status-dot"></span>Live</span>
+      </div>
+    </a>
+
+    <!-- XLOOKUP — COMING SOON -->
+    <div class="entry-card frm stub">
+      <div class="card-type">FRM &middot; Formula</div>
+      <div class="card-id">FRM-0004</div>
+      <div class="card-name">XLOOKUP</div>
+      <div class="card-desc">The governed replacement for VLOOKUP. Returns values from a range based on a match, with built-in error handling and flexible match modes.</div>
+      <div class="card-meta">
+        <span class="card-pill">Intermediate</span>
+        <span class="card-pill">Daily use</span>
+        <span class="card-status status-soon"><span class="status-dot"></span>Coming soon</span>
+      </div>
+    </div>
+
+    <!-- SUMIFS — COMING SOON -->
+    <div class="entry-card frm stub">
+      <div class="card-type">FRM &middot; Formula</div>
+      <div class="card-id">FRM-0006</div>
+      <div class="card-name">SUMIFS</div>
+      <div class="card-desc">Multi-condition aggregation. The governed alternative to nested IFs for conditional summation. The most common formula in production workbooks.</div>
+      <div class="card-meta">
+        <span class="card-pill">Beginner</span>
+        <span class="card-pill">Daily use</span>
+        <span class="card-status status-soon"><span class="status-dot"></span>Coming soon</span>
+      </div>
+    </div>
+
+    <!-- LAMBDA — COMING SOON -->
+    <div class="entry-card frm stub">
+      <div class="card-type">FRM &middot; Formula</div>
+      <div class="card-id">FRM-0024</div>
+      <div class="card-name">LAMBDA</div>
+      <div class="card-desc">Defines reusable custom functions inside Excel without VBA. The function that turns Excel into a real programming environment.</div>
+      <div class="card-meta">
+        <span class="card-pill">Advanced</span>
+        <span class="card-pill">Expert tier</span>
+        <span class="card-status status-soon"><span class="status-dot"></span>Coming soon</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REQUEST -->
+  <div class="request-section">
+    <div class="req-eyebrow">Request a Decomposition</div>
+    <h3 class="req-title">What formula do you want explained?</h3>
+    <p class="req-body">The decomposition library grows based on what people actually find confusing. If there&rsquo;s a formula you use but don&rsquo;t fully understand, or one you avoid because it feels opaque &mdash; that&rsquo;s the one we should build next.</p>
+    <div class="req-ideas">
+      <span class="req-idea" onclick="suggest(this)">MAKEARRAY</span>
+      <span class="req-idea" onclick="suggest(this)">INDEX / MATCH</span>
+      <span class="req-idea" onclick="suggest(this)">LAMBDA</span>
+      <span class="req-idea" onclick="suggest(this)">GROUPBY</span>
+      <span class="req-idea" onclick="suggest(this)">PIVOTBY</span>
+      <span class="req-idea" onclick="suggest(this)">LET + LAMBDA combo</span>
+      <span class="req-idea" onclick="suggest(this)">FILTER + SORT + UNIQUE</span>
+    </div>
+    <p class="req-note">Suggestions go to the build queue. High-demand entries get built first.</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// Hamburger
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var drw=document.getElementById('nav-drawer');
+  if(!btn||!drw)return;
+  btn.addEventListener('click',function(e){e.stopPropagation();btn.classList.toggle('open');drw.classList.toggle('open');});
+  document.addEventListener('click',function(e){if(!drw.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove('open');drw.classList.remove('open');}});
+})();
+
+// Suggestion pills
+function suggest(el) {
+  var orig = el.textContent;
+  el.textContent = '&#10003; Noted';
+  el.style.color = 'var(--green)';
+  el.style.borderColor = 'rgba(74,158,107,0.4)';
+  setTimeout(function(){ el.innerHTML = orig; el.style.color=''; el.style.borderColor=''; }, 1800);
+}
+</script>
+
+</body>
+</html>

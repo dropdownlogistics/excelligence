@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LET — Excelligence Registry</title>
+<meta name="description" content="LET assigns names to intermediate calculation results within a single formula, eliminating repeated sub-expressions and making complex formulas debuggable.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+.nav-back{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.06em;display:flex;align-items:center;gap:6px;transition:color 0.2s}
+.nav-back:hover{color:var(--cream)}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+/* ENTRY HEADER */
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
+  animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--gold)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;
+  line-height:1;margin-bottom:10px}
+.entry-name span{color:var(--gold)}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);
+  line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-type{color:var(--blue);border-color:rgba(107,157,194,0.3);background:rgba(107,157,194,0.08)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-freq{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.pill-ver{color:var(--steel);border-color:rgba(107,123,141,0.3);background:rgba(107,123,141,0.08)}
+.pill-diff{color:var(--crimson);border-color:rgba(178,53,49,0.3);background:rgba(178,53,49,0.08)}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:36px;
+  animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* TAB PANELS */
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+/* SECTIONS */
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);
+  line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+/* GOV BOX */
+.gov-box{border-left:3px solid var(--crimson);background:rgba(178,53,49,0.06);
+  padding:14px 18px;border-radius:0 4px 4px 0;margin:4px 0}
+.gov-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.78);line-height:1.7}
+
+/* CODE BLOCK */
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  padding:18px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--green);
+  line-height:1.7;white-space:pre}
+.code-comment{color:var(--steel)}
+.code-name{color:var(--gold)}
+.code-val{color:var(--blue)}
+.code-fn{color:var(--crimson)}
+
+/* DECOMPOSITION VIEW */
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+
+.decomp-step{border-bottom:1px solid var(--border);padding:0}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;
+  border-radius:3px;flex-shrink:0}
+.badge-name{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.badge-calc{color:var(--blue);background:rgba(107,157,194,0.1);border:1px solid rgba(107,157,194,0.2)}
+.badge-output{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);
+  line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;
+  padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);
+  display:inline-block;margin-bottom:8px}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.04em;font-style:italic}
+
+/* FULL FORMULA -->
+.full-formula{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:18px 20px;margin:12px 0}
+.formula-line{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.9;white-space:pre}
+
+/* CONNECTIONS */
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;
+  text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.leads{color:var(--green)}
+.conn-type.depends{color:var(--crimson)}
+.conn-type.pairs{color:var(--amber)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+/* TAGS */
+.tags-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  background:var(--card);border:1px solid var(--border);padding:4px 10px;border-radius:3px}
+
+/* REQUEST CTA */
+.request-box{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.request-text{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.6}
+.request-text strong{color:var(--cream);font-family:'Space Grotesk',sans-serif}
+.btn-ghost{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  border:1px solid rgba(212,168,67,0.3);background:transparent;padding:8px 16px;border-radius:4px;
+  cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:background 0.2s;text-decoration:none;white-space:nowrap}
+.btn-ghost:hover{background:var(--gold2)}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .page{padding:40px 20px 0}
+  .request-box{flex-direction:column;align-items:flex-start}
+  .tabs{overflow-x:auto}
+  .tab{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/explorer/#FRM-0023" class="nav-link">View in Graph</a>
+    <a href="/explorer/" class="nav-link">Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ENTRY HEADER -->
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Excelligence Registry &middot; Formula</div>
+    <div class="entry-id">FRM-0023</div>
+    <h1 class="entry-name"><span>LET</span> Function</h1>
+    <p class="entry-what">Assigns names to intermediate calculation results within a single formula, eliminating repeated sub-expressions, improving readability, and making complex formulas debuggable without helper columns.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-type">FRM &mdash; Formula</span>
+      <span class="meta-pill pill-tier">Intermediate</span>
+      <span class="meta-pill pill-diff">Difficulty 3/5</span>
+      <span class="meta-pill pill-freq">Daily use</span>
+      <span class="meta-pill pill-ver">Excel 365 / 2021+</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('explained')">Explained</button>
+    <button class="tab" onclick="switchTab('entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab('examples')">Examples</button>
+    <button class="tab" onclick="switchTab('connections')">Connections</button>
+  </div>
+
+  <!-- TAB: EXPLAINED (decomposition view) -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Idea</div>
+      <p class="section-body">LET lets you name things inside a formula. Instead of writing the same calculation three times, you write it once, give it a name, and use the name everywhere. Think of it like creating a variable &mdash; the same concept you see in every programming language, now inside Excel.</p>
+    </div>
+
+    <!-- DECOMPOSITION -->
+    <div class="section">
+      <div class="section-label">Formula Walkthrough &mdash; Step by Step</div>
+      <p class="section-body" style="margin-bottom:16px">Here&rsquo;s a real formula. Click each step to understand what it does and why it&rsquo;s there.</p>
+
+      <!-- Full formula display -->
+      <div class="full-formula">
+        <div class="formula-line"><span style="color:var(--crimson)">= LET(</span></div>
+        <div class="formula-line">    <span class="code-name">raw</span>,        <span class="code-val">XLOOKUP(A2, tbl[ID], tbl[Amount], 0)</span>,</div>
+        <div class="formula-line">    <span class="code-name">adjusted</span>,   <span class="code-val">raw * 1.1</span>,</div>
+        <div class="formula-line">    <span class="code-name">threshold</span>,  <span class="code-val">1000</span>,</div>
+        <div class="formula-line">    <span class="code-fn">IF</span>(<span class="code-name">adjusted</span> &gt; <span class="code-name">threshold</span>, <span class="code-name">adjusted</span>, 0)</div>
+        <div class="formula-line"><span style="color:var(--crimson)">)</span></div>
+      </div>
+    </div>
+
+    <div class="decomp-wrap">
+      <div class="decomp-header">
+        <div class="decomp-title">Each Line Explained</div>
+        <div class="decomp-desc">Click any step to expand</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">01</div>
+          <div class="step-formula"><span class="code-name">raw</span>, &nbsp;<span class="code-val">XLOOKUP(A2, tbl[ID], tbl[Amount], 0)</span>,</div>
+          <span class="step-badge badge-name">Name a value</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This line does two things: it runs an XLOOKUP to find the amount for the ID in cell A2, and it names the result <strong style="color:var(--gold)">raw</strong>. From this point on, anywhere you write <code style="font-family:JetBrains Mono,monospace;color:var(--gold);font-size:0.85em">raw</code> inside the formula, Excel substitutes the XLOOKUP result &mdash; without running the lookup again.</p>
+          <div class="step-value">raw = 847.27 &nbsp;(example)</div>
+          <div class="step-why">Without LET: you&rsquo;d write XLOOKUP(A2,tbl[ID],tbl[Amount],0) every time you need this value &mdash; once in the multiply, once in the IF check, once in the output. Three lookups. Three places to break.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">02</div>
+          <div class="step-formula"><span class="code-name">adjusted</span>, &nbsp;<span class="code-val">raw * 1.1</span>,</div>
+          <span class="step-badge badge-calc">Calculation</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This line takes the value we named <strong style="color:var(--gold)">raw</strong> and multiplies it by 1.1 (a 10% markup). The result is named <strong style="color:var(--gold)">adjusted</strong>. Notice we&rsquo;re building on top of a previous step &mdash; LET variables can reference earlier LET variables.</p>
+          <div class="step-value">adjusted = 931.99 &nbsp;(raw &times; 1.1)</div>
+          <div class="step-why">This is where LET starts to feel like code. You&rsquo;re building a calculation chain where each step has a name and a clear purpose. Anyone reading this formula can follow the logic without reverse-engineering it.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">03</div>
+          <div class="step-formula"><span class="code-name">threshold</span>, &nbsp;<span class="code-val">1000</span>,</div>
+          <span class="step-badge badge-name">Name a value</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This names the number 1000 as <strong style="color:var(--gold)">threshold</strong>. A hardcoded number in a formula is almost always a governance problem &mdash; where did 1000 come from? Naming it makes the intent clear: this is the threshold we&rsquo;re testing against. If the threshold changes, you update it in one place.</p>
+          <div class="step-value">threshold = 1000</div>
+          <div class="step-why">Governance note: ideally threshold would reference a Config cell, not be hardcoded at all. But naming it is already a significant improvement over writing 1000 directly in the IF condition.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">04</div>
+          <div class="step-formula"><span class="code-fn">IF</span>(<span class="code-name">adjusted</span> &gt; <span class="code-name">threshold</span>, <span class="code-name">adjusted</span>, 0)</div>
+          <span class="step-badge badge-output">Final output</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">The last line of LET is always the output &mdash; what the formula actually returns. Here we&rsquo;re asking: is <strong style="color:var(--gold)">adjusted</strong> greater than <strong style="color:var(--gold)">threshold</strong>? If yes, return <strong style="color:var(--gold)">adjusted</strong>. If no, return 0. Every named variable from above is available here.</p>
+          <div class="step-value">Result: 0 &nbsp;(931.99 is not &gt; 1000)</div>
+          <div class="step-why">The last expression in LET has no name and no comma after it. That&rsquo;s how Excel knows it&rsquo;s the output. If you forget the comma rule, you&rsquo;ll get a formula error &mdash; that&rsquo;s the most common LET mistake.</div>
+        </div>
+      </div>
+
+    </div><!-- /decomp-wrap -->
+
+    <!-- BEFORE / AFTER COMPARE -->
+    <div class="section">
+      <div class="section-label">Without LET vs With LET</div>
+      <p class="section-body" style="margin-bottom:12px">The same logic &mdash; one formula is defensible, one is not.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2717; Without LET</div>
+          <div class="code-block" style="border-color:rgba(178,53,49,0.2)">
+            <pre style="color:rgba(245,241,235,0.5)">=IF(
+  XLOOKUP(A2,T[ID],T[Amt],0)*1.1
+    >1000,
+  XLOOKUP(A2,T[ID],T[Amt],0)*1.1,
+  0
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">XLOOKUP runs twice. The multiply by 1.1 appears twice. One edit requires two fixes. One typo produces a silent wrong answer.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2713; With LET</div>
+          <div class="code-block" style="border-color:rgba(74,158,107,0.2)">
+            <pre>=LET(
+  <span class="code-name">raw</span>,       XLOOKUP(...),
+  <span class="code-name">adjusted</span>,  raw*1.1,
+  IF(<span class="code-name">adjusted</span>>1000,
+     <span class="code-name">adjusted</span>, 0)
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">XLOOKUP runs once. The multiply is named. The logic reads like a sentence. One edit, one place.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHEN TO USE -->
+    <div class="section">
+      <div class="section-label">When to Use LET</div>
+      <div class="gov-box">
+        <p>LET is the preferred pattern for any formula longer than 80 characters. Named variables must describe what they represent, not how they are calculated &mdash; <strong>adjusted_revenue</strong> not <strong>B2_times_1point1</strong>.</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- TAB: REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When a formula evaluates the same sub-expression more than once or contains logic that cannot be understood in a single read, use LET to name each component so the formula reads like documented code.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">LET requires Excel 365 or Excel 2021 &mdash; not available in Excel 2019 or earlier. Variable names cannot conflict with cell addresses or Excel function names. The last expression in LET must not have a trailing comma &mdash; this is the most common syntax error.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">Each named variable is evaluated once regardless of how many times it appears in the body, making LET faster than repeated sub-expressions on large ranges.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="gov-box">
+        <p>LET is the preferred pattern for any formula longer than 80 characters. Named variables must describe what they represent, not how they are calculated &mdash; <strong>adjusted_revenue</strong> not <strong>B2_times_1point1</strong>.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tags</div>
+      <div class="tags-wrap">
+        <span class="tag">formula-readability</span>
+        <span class="tag">dynamic-array</span>
+        <span class="tag">365</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Aliases</div>
+      <p class="section-body">LET function &middot; named-variables-in-formula &middot; formula-decomposition</p>
+    </div>
+
+  </div><!-- /tab-entry -->
+
+  <!-- TAB: EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Basic Variable Naming</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Name a single intermediate value</span>
+=LET(
+  <span class="code-name">rate</span>, 0.085,
+  <span class="code-name">base</span>, B2,
+  <span class="code-name">base</span> * <span class="code-name">rate</span>
+)
+
+<span class="code-comment">-- Result: B2 multiplied by 8.5%
+-- 'rate' is defined once, used once
+-- but now the formula reads: base times rate</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; Chained Variables</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Each step builds on the previous</span>
+=LET(
+  <span class="code-name">region</span>,    "North",
+  <span class="code-name">total</span>,     SUMIFS(D:D, A:A, <span class="code-name">region</span>),
+  <span class="code-name">target</span>,    Config!Target_North,
+  <span class="code-name">variance</span>,  <span class="code-name">total</span> - <span class="code-name">target</span>,
+  IF(<span class="code-name">variance</span> >= 0, "On track", "Behind")
+)
+
+<span class="code-comment">-- 'region' feeds into 'total'
+-- 'total' and 'target' feed into 'variance'
+-- 'variance' drives the final output</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 3 &mdash; LET Inside MAKEARRAY</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- LET as the dominant function in a LAMBDA</span>
+=MAKEARRAY(
+  ROWS(rowsDim), COLUMNS(qtrs),
+  LAMBDA(r, c,
+    LET(
+      <span class="code-name">rowLabel</span>, INDEX(rowsDim, r),
+      <span class="code-name">keyQtr</span>,   INDEX(qtrs, c),
+      COUNTIFS(dimKey, <span class="code-name">rowLabel</span>,
+               QuarterTag, <span class="code-name">keyQtr</span>)
+    )
+  )
+)
+
+<span class="code-comment">-- LET inside LAMBDA names the INDEX results
+-- so the COUNTIFS reads clearly
+-- rowLabel and keyQtr used once each,
+-- but the formula becomes self-documenting</span></pre>
+      </div>
+    </div>
+
+  </div><!-- /tab-examples -->
+
+  <!-- TAB: CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/entries/frm-0029" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0029</span>
+          <span class="conn-name">MAKEARRAY</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/entries/frm-0023" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0022</span>
+          <span class="conn-name">LAMBDA</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/entries/ant-0014" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">ANT-0014</span>
+          <span class="conn-name">Over-Nesting (what LET prevents)</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/entries/ptn-0020" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">PTN-0020</span>
+          <span class="conn-name">Governed Audit Log Pattern</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See FRM-0023 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#FRM-0023" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2);transition:opacity 0.2s" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">
+        Open FRM-0023 in Graph &rarr;
+      </a>
+    </div>
+
+  </div><!-- /tab-connections -->
+
+  <!-- REQUEST CTA -->
+  <div class="request-box">
+    <div class="request-text">
+      <strong>Want this treatment for another entry?</strong><br>
+      The decomposition view is hand-crafted for entries that benefit most from step-by-step explanation. Request an entry and we&rsquo;ll build it.
+    </div>
+    <a href="/explorer/" class="btn-ghost">Browse Registry &rarr;</a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleStep(el) {
+  el.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control Panel Pattern — Excelligence Registry</title>
+<meta name="description" content="The Control Panel Pattern consolidates all workbook assumptions into a single governed input grid. The fix for hardcoded values. The human-facing layer of governed workbook architecture.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(74,158,107,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(74,158,107,0.012) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--green)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--green);letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;line-height:1;margin-bottom:10px}
+.entry-name span{color:var(--green)}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-ptn{color:var(--green);border-color:rgba(74,158,107,0.3);background:var(--green2)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-freq{color:var(--blue);border-color:rgba(107,157,194,0.3);background:rgba(107,157,194,0.08)}
+
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:36px;animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--green);border-bottom-color:var(--green)}
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+.gov-box{border-left:3px solid var(--green);background:var(--green2);padding:14px 18px;border-radius:0 4px 4px 0;margin:12px 0}
+.gov-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.8);line-height:1.7}
+
+.warn-box{border-left:3px solid var(--crimson);background:var(--crimson2);padding:14px 18px;border-radius:0 4px 4px 0;margin:12px 0}
+.warn-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.8);line-height:1.7}
+
+/* CONTROL PANEL MOCKUP */
+.cp-mockup{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin:16px 0}
+.cp-header{background:var(--card2);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.cp-tab-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.25);padding:3px 10px;border-radius:3px;letter-spacing:0.06em}
+.cp-tab-inactive{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);padding:3px 10px;letter-spacing:0.06em}
+.cp-table{width:100%;border-collapse:collapse}
+.cp-table th{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:8px 14px;
+  border-bottom:1px solid var(--border);background:var(--card2)}
+.cp-table td{padding:9px 14px;border-bottom:1px solid rgba(245,241,235,0.04);
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;vertical-align:middle}
+.cp-table tr:last-child td{border-bottom:none}
+.cp-param{color:var(--gold)}
+.cp-value{color:var(--cream);background:rgba(245,241,235,0.04);border:1px solid var(--border);
+  padding:3px 8px;border-radius:3px}
+.cp-value.editable{border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.06)}
+.cp-notes{color:var(--steel);font-size:0.65rem}
+.cp-locked{color:var(--steel);font-size:0.6rem}
+
+/* DECOMP */
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+.decomp-step{border-bottom:1px solid var(--border)}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;border-radius:3px;flex-shrink:0}
+.badge-struct{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.badge-gov{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.badge-ref{color:var(--blue);background:rgba(107,157,194,0.1);border:1px solid rgba(107,157,194,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);display:inline-block;margin-bottom:8px}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);font-style:italic}
+
+/* CODE */
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.7;white-space:pre}
+.name{color:var(--gold)}
+.fn{color:var(--crimson)}
+.val{color:var(--blue)}
+.comment{color:var(--steel)}
+.good{color:var(--green)}
+
+/* PAIRED */
+.paired-cta{background:var(--card);border:1px solid rgba(178,53,49,0.3);border-radius:10px;padding:24px;margin:32px 0;display:flex;align-items:center;gap:20px}
+.paired-icon{width:48px;height:48px;border-radius:8px;background:var(--crimson2);border:1px solid rgba(178,53,49,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.paired-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.paired-name{font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.paired-desc{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);line-height:1.5}
+.paired-link{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--crimson);
+  text-decoration:none;border:1px solid rgba(178,53,49,0.3);padding:8px 16px;border-radius:4px;
+  background:var(--crimson2);transition:opacity 0.2s;white-space:nowrap;flex-shrink:0}
+.paired-link:hover{opacity:0.7}
+
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.depends{color:var(--crimson)}
+.conn-type.pairs{color:var(--amber)}
+.conn-type.leads{color:var(--green)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+.request-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.request-text{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.6}
+.request-text strong{color:var(--cream);font-family:'Space Grotesk',sans-serif}
+.btn-ghost{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);border:1px solid rgba(212,168,67,0.3);background:transparent;padding:8px 16px;border-radius:4px;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:background 0.2s;text-decoration:none;white-space:nowrap}
+.btn-ghost:hover{background:var(--gold2)}
+
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 20px 0}.request-box{flex-direction:column;align-items:flex-start}.tabs{overflow-x:auto}.tab{white-space:nowrap}.paired-cta{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">&#8592; Learn</a>
+    <a href="/explorer/#PTN-0018" class="nav-link">View in Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Learn &middot; Pattern &middot; Paired Entry</div>
+    <div class="entry-id">PTN-0018</div>
+    <h1 class="entry-name"><span>Control Panel</span> Pattern</h1>
+    <p class="entry-what">Consolidates all global workbook assumptions, toggles, thresholds, and user-selectable variables into a single labeled input grid on a dedicated tab — so every downstream formula reads from one governed source.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-ptn">PTN &mdash; Pattern</span>
+      <span class="meta-pill pill-tier">Intermediate</span>
+      <span class="meta-pill pill-freq">Daily use</span>
+      <span class="meta-pill pill-tier">All versions</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('explained')">Explained</button>
+    <button class="tab" onclick="switchTab('entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab('examples')">Examples</button>
+    <button class="tab" onclick="switchTab('connections')">Connections</button>
+  </div>
+
+  <!-- EXPLAINED -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Idea</div>
+      <p class="section-body">Every workbook has assumptions. Tax rates. Date ranges. Tier thresholds. Filter values. The question isn't whether those assumptions exist — it's where they live. The Control Panel Pattern answers that question: <strong>they all live on one tab, labeled, validated, and protected.</strong> Every formula in the workbook reads from that one source. Change one cell, every formula updates.</p>
+    </div>
+
+    <!-- MOCKUP -->
+    <div class="section">
+      <div class="section-label">What It Looks Like</div>
+      <p class="section-body" style="margin-bottom:12px">A Config tab. One structured table. Three columns: Parameter, Value, Notes. The Value column is the only unlocked column.</p>
+
+      <div class="cp-mockup">
+        <div class="cp-header">
+          <span class="cp-tab-label">Config</span>
+          <span class="cp-tab-inactive">Calculations</span>
+          <span class="cp-tab-inactive">Output</span>
+          <span class="cp-tab-inactive">LOG</span>
+        </div>
+        <table class="cp-table">
+          <thead>
+            <tr>
+              <th style="width:200px">Parameter</th>
+              <th style="width:140px">Value</th>
+              <th>Notes</th>
+              <th style="width:70px">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cp-param">Report_Date</td>
+              <td><span class="cp-value editable">2026-03-29</span></td>
+              <td class="cp-notes">Override for Run_Date. Never TODAY().</td>
+              <td class="cp-locked" style="color:var(--green)">&#x2713; edit</td>
+            </tr>
+            <tr>
+              <td class="cp-param">Tax_Rate</td>
+              <td><span class="cp-value editable">8.75%</span></td>
+              <td class="cp-notes">State + Local combined rate.</td>
+              <td class="cp-locked" style="color:var(--green)">&#x2713; edit</td>
+            </tr>
+            <tr>
+              <td class="cp-param">Tier1_Threshold</td>
+              <td><span class="cp-value editable">500</span></td>
+              <td class="cp-notes">Commission floor. Units sold.</td>
+              <td class="cp-locked" style="color:var(--green)">&#x2713; edit</td>
+            </tr>
+            <tr>
+              <td class="cp-param">Region_Filter</td>
+              <td><span class="cp-value editable">All</span></td>
+              <td class="cp-notes">All / North / South / East / West</td>
+              <td class="cp-locked" style="color:var(--green)">&#x2713; edit</td>
+            </tr>
+            <tr>
+              <td class="cp-param">Show_Inactive</td>
+              <td><span class="cp-value editable">FALSE</span></td>
+              <td class="cp-notes">Toggle. TRUE to include inactive records.</td>
+              <td class="cp-locked" style="color:var(--green)">&#x2713; edit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);margin-top:8px;line-height:1.55">The Value column is unlocked. Everything else is protected. Users interact with this tab. Formulas read from it. Nothing else.</p>
+    </div>
+
+    <!-- DECOMPOSITION -->
+    <div class="section">
+      <div class="section-label">How to Build It &mdash; Step by Step</div>
+
+      <div class="decomp-wrap">
+        <div class="decomp-header">
+          <div class="decomp-title">Five Steps to a Governed Config Tab</div>
+          <div class="decomp-desc">Click to expand each step</div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">01</div>
+            <div class="step-formula"><span style="color:var(--green)">Create the Config tab</span></div>
+            <span class="step-badge badge-struct">Structure</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">Add a new tab. Name it <strong style="color:var(--gold)">Config</strong>. Place it first in the tab order — before Calculations, before Output. First tab = first thing an auditor sees. That positioning is a governance signal: this workbook knows where its inputs live.</p>
+            <div class="step-value">Tab name: Config &nbsp;&#10004;</div>
+            <div class="step-why">Naming conventions matter. "Config" is unambiguous. "Assumptions" works too. "Sheet4" does not.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">02</div>
+            <div class="step-formula"><span style="color:var(--gold)">Build the three-column table</span></div>
+            <span class="step-badge badge-struct">Structure</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">Three columns: <strong style="color:var(--gold)">Parameter</strong> (what it is), <strong style="color:var(--gold)">Value</strong> (what it currently is), <strong style="color:var(--gold)">Notes</strong> (why it exists and where it's used). Format as a structured Excel Table (Ctrl+T). Name it <code style="font-family:JetBrains Mono,monospace;font-size:0.85em;color:var(--gold)">tbl_Config</code>.</p>
+            <div class="step-value">tbl_Config — three columns, structured table</div>
+            <div class="step-why">The structured table makes each row referenceable by parameter name via XLOOKUP. It also auto-expands when you add rows — no formula maintenance needed.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">03</div>
+            <div class="step-formula"><span style="color:var(--gold)">Name each Value cell</span></div>
+            <span class="step-badge badge-gov">Governance</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">Select each Value cell and give it a named range that matches the Parameter column. <strong style="color:var(--gold)">Tax_Rate</strong> in col A → select col B cell → Name Box → type <code style="font-family:JetBrains Mono,monospace;font-size:0.85em;color:var(--gold)">Tax_Rate</code> → Enter. Now any formula in the workbook can reference <code style="font-family:JetBrains Mono,monospace;font-size:0.85em;color:var(--gold)">=Revenue * Tax_Rate</code> directly.</p>
+            <div class="step-value">Named range: Tax_Rate → Config!B4</div>
+            <div class="step-why">Named ranges make formulas self-documenting. =Revenue * Tax_Rate reads like a policy. =Revenue * Config!B4 reads like archaeology.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">04</div>
+            <div class="step-formula"><span style="color:var(--blue)">Add data validation to toggle cells</span></div>
+            <span class="step-badge badge-gov">Governance</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">For dropdown parameters like Region_Filter or LOD_Filter: select the Value cell → Data → Data Validation → List → enter the valid options. For boolean toggles: List → TRUE,FALSE. This prevents invalid entries from flowing into downstream formulas silently.</p>
+            <div class="step-value">Region_Filter: dropdown → All, North, South, East, West</div>
+            <div class="step-why">Without validation, someone types "north" instead of "North" and the SUMIFS returns zero with no error. The Control Panel catches that at the source.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">05</div>
+            <div class="step-formula"><span style="color:var(--amber)">Protect the sheet, unlock only Value column</span></div>
+            <span class="step-badge badge-ref">Protection</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">Select the entire Value column → Format Cells → Protection → uncheck Locked. Then protect the sheet (Review → Protect Sheet). Now users can only edit the Value column. Parameter names can't be accidentally overwritten. Notes can't drift. The structure is enforced by Excel, not by trust.</p>
+            <div class="step-value">Value column: unlocked. Everything else: locked.</div>
+            <div class="step-why">This is the difference between a governance document and a wishful suggestion. Excel protection isn't unbreakable — but it stops accidental edits and signals that the structure matters.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HOW FORMULAS REFERENCE IT -->
+    <div class="section">
+      <div class="section-label">How Formulas Reference the Control Panel</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Option 1: Named range (cleanest)</span>
+<span class="good">=Revenue * Tax_Rate</span>
+<span class="comment">-- Tax_Rate is a named range pointing to Config!B4
+-- Formula reads like a policy document</span>
+
+<span class="comment">-- Option 2: XLOOKUP against tbl_Config</span>
+<span class="good">=Revenue * XLOOKUP("Tax_Rate",
+    tbl_Config[Parameter],
+    tbl_Config[Value])</span>
+<span class="comment">-- More explicit. Useful when named ranges aren't set up.
+-- Works well in Power Query too.</span>
+
+<span class="comment">-- Option 3: LET + Config references (best of both)</span>
+<span class="good">=LET(
+  rate,       <span class="name">Tax_Rate</span>,
+  threshold,  <span class="name">Tier1_Threshold</span>,
+  base,       Revenue,
+  IF(base > threshold, base * rate, base * 0.08)
+)</span>
+<span class="comment">-- Named ranges pulled into LET variables
+-- Formula is fully self-documenting</span></pre>
+      </div>
+    </div>
+
+    <div class="gov-box">
+      <p>Every DDL workbook with more than 3 user-configurable inputs must have a Control Panel tab. Inputs scattered across formula cells are a governance finding. The Control Panel is the human-facing layer of the workbook — users interact with it, formulas read from it, auditors trust it.</p>
+    </div>
+
+    <!-- PAIRED ENTRY -->
+    <div class="paired-cta">
+      <div class="paired-icon">&#128683;</div>
+      <div style="flex:1">
+        <div class="paired-label">Anti-Pattern &mdash; ANT-0003</div>
+        <div class="paired-name">Hardcoded Values</div>
+        <div class="paired-desc">The problem the Control Panel solves. Literal numbers buried in formulas with no name, no source, no governance. Every hardcoded value is a future audit finding.</div>
+      </div>
+      <a href="/learn/hardcoded-values/" class="paired-link">&#8592; See the Problem</a>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When a workbook has multiple user-configurable inputs that drive calculations across multiple tabs, build a Control Panel tab so all inputs are visible, labeled, and validated in one place.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">Control Panel must be protected with only the Value column unlocked. Parameter names must be stable — renaming breaks downstream formulas. Dropdown validation on toggle cells prevents invalid entries. Undocumented parameters accumulate over time — every row needs a Notes column entry.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">Zero computational overhead. The Control Panel is a lookup source, not a calculation engine. XLOOKUP against a 20-row parameter table is negligible.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="gov-box">
+        <p>Every DDL workbook with more than 3 user-configurable inputs must have a Control Panel tab. Inputs scattered across formula cells are a governance finding. The Control Panel is the human-facing layer of the Driver Table Architecture (ARC-0010) — same principle, different audience. Users interact with the Control Panel; formulas interact with the Driver Table.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Tags &amp; Aliases</div>
+      <p class="section-body">architecture &middot; configuration &middot; user-input</p>
+      <p class="section-body" style="margin-top:8px;font-style:italic;color:var(--steel)">Also known as: parameter block &middot; assumptions tab &middot; config tab</p>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Commission Model Config</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Config tab layout for a commission model</span>
++---------------------+--------+---------------------------+
+| Parameter           | Value  | Notes                     |
++---------------------+--------+---------------------------+
+| <span class="name">Run_Date</span>            | 3/31/26| Current run. Never TODAY()|
+| <span class="name">Tier1_Threshold</span>     | 500    | Units. Commission floor.  |
+| <span class="name">Tier1_Rate</span>          | 12%    | Above threshold rate.     |
+| <span class="name">Base_Rate</span>           | 8%     | Below threshold rate.     |
+| <span class="name">Include_Inactive</span>    | FALSE  | Toggle for inactive reps. |
++---------------------+--------+---------------------------+
+
+<span class="comment">-- Formula in Calculations tab:</span>
+<span class="good">=LET(
+  units, tbl_Sales[Units_Sold],
+  rate,  IF(units > <span class="name">Tier1_Threshold</span>, <span class="name">Tier1_Rate</span>, <span class="name">Base_Rate</span>),
+  units * rate
+)</span></pre>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; Dashboard with Region Toggle</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Config tab</span>
+| <span class="name">Region_Filter</span> | North | Dropdown: All/N/S/E/W |
+| <span class="name">Date_From</span>     | 1/1/26 | Start of period       |
+| <span class="name">Date_To</span>       | 3/31/26 | End of period        |
+
+<span class="comment">-- Dashboard formula reads Config:</span>
+<span class="good">=SUMIFS(
+  tbl_Sales[Revenue],
+  tbl_Sales[Region],  IF(<span class="name">Region_Filter</span>="All", tbl_Sales[Region], <span class="name">Region_Filter</span>),
+  tbl_Sales[Date],    "&gt;="&amp;<span class="name">Date_From</span>,
+  tbl_Sales[Date],    "&lt;="&amp;<span class="name">Date_To</span>
+)</span>
+<span class="comment">-- Change Region_Filter on Config → dashboard updates
+-- Change dates → dashboard updates
+-- No formula edits. Ever.</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/learn/hardcoded-values/" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">ANT-0003</span>
+          <span class="conn-name">Hardcoded Values — the problem this solves</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/learn/let/" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0023</span>
+          <span class="conn-name">LET — Config refs compose cleanly inside LET</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#ARC-0010" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">ARC-0010</span>
+          <span class="conn-name">Driver Table Architecture</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/governance/standards/std-ddl-log-001" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">STD-DDL-LOG-001</span>
+          <span class="conn-name">Black Box Standard — Run_Date lives on Config</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See PTN-0018 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#PTN-0018" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2)">
+        Open PTN-0018 in Graph &rarr;
+      </a>
+    </div>
+  </div>
+
+  <div class="request-box">
+    <div class="request-text"><strong>Next in the arc: XLOOKUP.</strong><br>Now that inputs are governed, learn the retrieval pattern that reads from them cleanly.</div>
+    <a href="/learn/" class="btn-ghost">Back to Learn &rarr;</a>
+  </div>
+
+</div>
+
+<script>
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function toggleStep(el){el.classList.toggle('open')}
+</script>
+</body>
+</html>

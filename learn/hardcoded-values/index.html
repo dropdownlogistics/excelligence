@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardcoded Values — Excelligence Registry</title>
+<meta name="description" content="Hardcoded values are the most common spreadsheet governance failure. Learn to recognize them, understand why they break, and replace them with governed alternatives.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(178,53,49,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(178,53,49,0.012) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+/* HEADER */
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--crimson)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--crimson);letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;line-height:1;margin-bottom:10px}
+.entry-name span{color:var(--crimson)}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-ant{color:var(--crimson);border-color:rgba(178,53,49,0.3);background:rgba(178,53,49,0.08)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-sev{color:#e85555;border-color:rgba(232,85,85,0.3);background:rgba(232,85,85,0.08)}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:36px;animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--crimson);border-bottom-color:var(--crimson)}
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+/* SECTIONS */
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+/* WARNING BOX */
+.warn-box{border-left:3px solid var(--crimson);background:var(--crimson2);padding:14px 18px;border-radius:0 4px 4px 0;margin:12px 0}
+.warn-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.8);line-height:1.7}
+.warn-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+
+/* FIX BOX */
+.fix-box{border-left:3px solid var(--green);background:var(--green2);padding:14px 18px;border-radius:0 4px 4px 0;margin:12px 0}
+.fix-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.8);line-height:1.7}
+.fix-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+
+/* CODE */
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.7;white-space:pre}
+.bad{color:#e85555}
+.good{color:var(--green)}
+.comment{color:var(--steel)}
+.name{color:var(--gold)}
+
+/* DECOMP STEPS */
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+.decomp-step{border-bottom:1px solid var(--border)}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;border-radius:3px;flex-shrink:0}
+.badge-bad{color:#e85555;background:rgba(232,85,85,0.1);border:1px solid rgba(232,85,85,0.2)}
+.badge-why{color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2)}
+.badge-fix{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;display:inline-block;margin-bottom:8px}
+.step-value.bad-val{color:#e85555}
+.step-value.good-val{color:var(--green)}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);font-style:italic}
+
+/* PAIRED ENTRY CTA */
+.paired-cta{background:var(--card);border:1px solid rgba(74,158,107,0.3);border-radius:10px;padding:24px;margin:32px 0;display:flex;align-items:center;gap:20px}
+.paired-icon{width:48px;height:48px;border-radius:8px;background:var(--green2);border:1px solid rgba(74,158,107,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.paired-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.paired-name{font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.paired-desc{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);line-height:1.5}
+.paired-link{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--green);
+  text-decoration:none;border:1px solid rgba(74,158,107,0.3);padding:8px 16px;border-radius:4px;
+  background:var(--green2);transition:opacity 0.2s;white-space:nowrap;flex-shrink:0}
+.paired-link:hover{opacity:0.7}
+
+/* CONNECTIONS */
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.leads{color:var(--green)}
+.conn-type.pairs{color:var(--amber)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+/* REQUEST CTA */
+.request-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.request-text{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.6}
+.request-text strong{color:var(--cream);font-family:'Space Grotesk',sans-serif}
+.btn-ghost{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);border:1px solid rgba(212,168,67,0.3);background:transparent;padding:8px 16px;border-radius:4px;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:background 0.2s;text-decoration:none;white-space:nowrap}
+.btn-ghost:hover{background:var(--gold2)}
+
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 20px 0}.request-box{flex-direction:column;align-items:flex-start}.tabs{overflow-x:auto}.tab{white-space:nowrap}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">&#8592; Learn</a>
+    <a href="/explorer/#ANT-0003" class="nav-link">View in Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Learn &middot; Anti-Pattern &middot; Paired Entry</div>
+    <div class="entry-id">ANT-0003</div>
+    <h1 class="entry-name"><span>Hardcoded</span> Values</h1>
+    <p class="entry-what">Embeds literal numbers or text directly into formulas instead of referencing named ranges or assumption cells — creating invisible dependencies that resist auditing and updating.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-ant">ANT &mdash; Anti-Pattern</span>
+      <span class="meta-pill pill-tier">Beginner</span>
+      <span class="meta-pill pill-sev">High severity</span>
+      <span class="meta-pill pill-tier">All Excel versions</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('explained')">Explained</button>
+    <button class="tab" onclick="switchTab('entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab('examples')">Examples</button>
+    <button class="tab" onclick="switchTab('connections')">Connections</button>
+  </div>
+
+  <!-- EXPLAINED -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Crime</div>
+      <p class="section-body">A hardcoded value is any literal number or text embedded directly in a formula. <strong>=B5 * 1.08</strong> — what is 1.08? A tax rate? A markup? A growth factor? Without a name, it is invisible to anyone reading the formula, including the person who wrote it six months ago.</p>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-label">Why it matters</div>
+      <p>Hardcoded values are the most frequently cited spreadsheet finding in SOX audits. Not because the math is wrong — the math is usually fine. Because the model cannot be understood, audited, or safely updated without reading every formula in every cell.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Anatomy of the Problem</div>
+      <p class="section-body" style="margin-bottom:14px">Here are three common hardcode patterns. Click each one to understand why it breaks.</p>
+
+      <div class="decomp-wrap">
+        <div class="decomp-header">
+          <div class="decomp-title">Three Failure Patterns</div>
+          <div class="decomp-desc">Click to expand</div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">01</div>
+            <div class="step-formula"><span class="bad">=B5 * 1.08</span></div>
+            <span class="step-badge badge-bad">Magic number</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">What is 1.08? Tax rate? Markup? Growth multiplier? Year-over-year factor? There is no way to know from reading the formula. The meaning lives in someone's head, not in the workbook. When that person leaves, the number becomes archaeology.</p>
+            <div class="step-value bad-val">=B5 * 1.08 &nbsp;&#x2715; meaning is invisible</div>
+            <div class="step-why">If the tax rate changes from 8% to 8.5%, you must find every formula that contains 1.08 and update it. You will miss some. The ones you miss will be wrong silently.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">02</div>
+            <div class="step-formula"><span class="bad">=IF(A2>500, "Large", "Small")</span></div>
+            <span class="step-badge badge-bad">Invisible threshold</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">What is 500? A commission threshold? A unit count? A dollar amount? The formula is technically correct but the logic is opaque. Change the threshold by business decision and you now have to hunt through every conditional formula in the workbook.</p>
+            <div class="step-value bad-val">=IF(A2>500,...) &nbsp;&#x2715; threshold is undocumented</div>
+            <div class="step-why">The number 500 probably appears in dozens of formulas. If the business changes the tier cutoff to 750, good luck finding them all. You will build a bug that auditors will find before you do.</div>
+          </div>
+        </div>
+
+        <div class="decomp-step" onclick="toggleStep(this)">
+          <div class="step-header">
+            <div class="step-num">03</div>
+            <div class="step-formula"><span class="bad">=SUMIFS(D:D, A:A, "North")</span></div>
+            <span class="step-badge badge-why">Literal text</span>
+            <span class="step-chevron">&#9660;</span>
+          </div>
+          <div class="step-body">
+            <p class="step-explains">Hardcoded text is subtler but equally dangerous. "North" is hard to find, hard to update, and breaks silently if the region naming convention changes. A user looking at the formula can't tell if "North" is a fixed filter or a variable that should change per row.</p>
+            <div class="step-value bad-val">=SUMIFS(D:D,A:A,"North") &nbsp;&#x2715; literal string, no source</div>
+            <div class="step-why">If the region renames to "North Region" in the data, this formula returns zero. No error. Just silently wrong. That is the worst kind of failure in a production workbook.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BEFORE / AFTER -->
+    <div class="section">
+      <div class="section-label">Before &amp; After</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2717; Hardcoded</div>
+          <div class="code-block" style="border-color:rgba(178,53,49,0.2)">
+            <pre class="bad">=B5 * 1.08
+
+=IF(A2 > 500,
+   "Large",
+   "Small")
+
+=SUMIFS(D:D,
+  A:A, "North")</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Three magic numbers. Three invisible assumptions. One business change breaks all three with no warning.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2713; Governed</div>
+          <div class="code-block" style="border-color:rgba(74,158,107,0.2)">
+            <pre>=B5 * <span class="name">Tax_Rate</span>
+
+=IF(A2 > <span class="name">Tier_Threshold</span>,
+   "Large",
+   "Small")
+
+=SUMIFS(D:D,
+  A:A, <span class="name">Config!Region</span>)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Named ranges and Config references. One update in one place. Every formula stays correct automatically.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIX -->
+    <div class="section">
+      <div class="section-label">The Fix</div>
+      <div class="fix-box">
+        <div class="fix-label">Governed alternative</div>
+        <p>Every literal value in a formula belongs in a named cell on a Config or Control Panel tab. Name the cell to describe what it represents. Reference the name in your formulas. When the assumption changes, update one cell. Every formula updates automatically.</p>
+      </div>
+    </div>
+
+    <!-- PAIRED CTA -->
+    <div class="paired-cta">
+      <div class="paired-icon">&#9776;</div>
+      <div style="flex:1">
+        <div class="paired-label">Governed Alternative &mdash; PTN-0018</div>
+        <div class="paired-name">Control Panel Pattern</div>
+        <div class="paired-desc">Consolidates all workbook assumptions into a single labeled input grid. Every hardcoded value has a home here. One tab governs the entire model.</div>
+      </div>
+      <a href="/learn/control-panel/" class="paired-link">See the Fix &rarr;</a>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When you find literal values embedded in formulas, use named ranges or dedicated assumption cells to make all inputs visible, auditable, and centrally updatable.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">Updating one instance misses others &mdash; the same magic number appears in 40 formulas and you change 39. Audit trail is invisible &mdash; no way to see what assumptions drive the model. Formula bar shows numbers without meaning.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">No computational difference between hardcoded values and cell references. The cost is entirely in human debugging time and audit risk.</p>
+    </div>
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="warn-box">
+        <p>Hardcoded values are banned in all DDL formulas. Every literal number in a formula is a future audit finding. This is the anti-pattern that SOX auditors find most frequently in spreadsheet-based models.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Tax Rate</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Before: magic number, no context</span>
+<span class="bad">=Revenue * 1.0875</span>
+
+<span class="comment">-- After: named range, single source of truth</span>
+<span class="good">=Revenue * Tax_Rate</span>
+<span class="comment">-- Tax_Rate is a named range pointing to Config!B4
+-- When the rate changes: update Config!B4 once
+-- Every formula using Tax_Rate updates automatically</span></pre>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; Commission Threshold</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Before: threshold buried in conditional</span>
+<span class="bad">=IF(Units_Sold > 500, Units_Sold * 0.12, Units_Sold * 0.08)</span>
+
+<span class="comment">-- After: both thresholds named and governable</span>
+<span class="good">=IF(Units_Sold > Tier1_Threshold,
+   Units_Sold * Tier1_Rate,
+   Units_Sold * Base_Rate)</span>
+<span class="comment">-- All four values live on the Control Panel tab
+-- Business changes the tier: one cell update
+-- Formula reads like a policy document</span></pre>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Example 3 &mdash; Date Logic</div>
+      <div class="code-block">
+        <pre><span class="comment">-- Before: TODAY() is volatile, hardcoded period</span>
+<span class="bad">=IF(Close_Date > TODAY()-30, "Recent", "Stale")</span>
+
+<span class="comment">-- After: governed date reference, named lookback</span>
+<span class="good">=IF(Close_Date > Report_Date - Lookback_Days,
+   "Recent", "Stale")</span>
+<span class="comment">-- Report_Date replaces TODAY() -- stable, operator-declared
+-- Lookback_Days is governable -- change once, applies everywhere
+-- See STD-DDL-LOG-001: Run_Date uses this exact pattern</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/learn/control-panel/" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">PTN-0018</span>
+          <span class="conn-name">Control Panel Pattern</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/learn/let/" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0023</span>
+          <span class="conn-name">LET Function</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#ANT-0003" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">ANT-0014</span>
+          <span class="conn-name">Over-Nesting</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See ANT-0003 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#ANT-0003" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2)" >
+        Open ANT-0003 in Graph &rarr;
+      </a>
+    </div>
+  </div>
+
+  <div class="request-box">
+    <div class="request-text"><strong>Next up: the fix.</strong><br>Every hardcoded value has a home. The Control Panel Pattern is where governed inputs live.</div>
+    <a href="/learn/control-panel/" class="btn-ghost">Control Panel &rarr;</a>
+  </div>
+
+</div>
+
+<script>
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function toggleStep(el){el.classList.toggle('open')}
+</script>
+</body>
+</html>
