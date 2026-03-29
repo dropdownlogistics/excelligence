@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -219,6 +219,19 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
   .hero h1{font-size:1.6rem}
   .example-pills{flex-direction:column}
 }
+/* HAMBURGER NAV */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,241,235,0.13);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover{color:var(--cream)}
+.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
+@media(max-width:768px){.nav-links{display:none!important}.nav-hamburger{display:flex!important}}
 </style>
 </head>
 <body>
@@ -244,14 +257,25 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
     <a href="/scanner/" class="active">Scanner</a>
     <span class="nav-tag">BETA</span>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/explorer/">Graph</a>
+  <a href="/radial/">Radial</a>
+  <a href="/paths/">Paths</a>
+  <a href="/tools/">Tools</a>
+  <a href="/analytics/">Analytics</a>
+  <a href="/scanner/">Scanner</a>
+  <a href="/gridtactics/">GridTactics</a>
+  <span class="drawer-tag">BETA</span>
+</div>
 
 <div class="page">
 
   <div class="hero">
     <div class="hero-label">Anti-Pattern Scanner</div>
     <h1>Paste a formula.<br>Get a <span>governed</span> diagnosis.</h1>
-    <p class="hero-sub">Describe your workbook problem or paste a formula. The scanner checks it against the Excelligence registry and returns findings — each one cited to a governed entry with a rationale and alternative.</p>
+    <p class="hero-sub">Describe your workbook problem or paste a formula. The scanner checks it against the Excelligence registry and returns findings â€” each one cited to a governed entry with a rationale and alternative.</p>
     <div class="coverage-badge">
       <div class="coverage-dot"></div>
 
@@ -315,7 +339,7 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
   <div class="input-section">
     <div class="input-label">
       Your Formula or Workbook Description
-      <span>Plain English or raw formula — both work</span>
+      <span>Plain English or raw formula â€” both work</span>
     </div>
     <div class="input-wrap">
       <textarea
@@ -335,7 +359,7 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
       <div class="pill" data-example="I use merged cells for my headers and hide rows to filter data instead of using AutoFilter.">Merged cells + hidden rows</div>
       <div class="pill" data-example="=IF(A2=1,&quot;Low&quot;,IF(A2=2,&quot;Medium&quot;,IF(A2=3,&quot;High&quot;,IF(A2=4,&quot;Critical&quot;,&quot;Unknown&quot;))))">Nested IFs</div>
       <div class="pill" data-example="My commission rate of 0.035 is hardcoded in 47 different cells across 6 sheets.">Hardcoded values</div>
-      <div class="pill" data-example="I color rows red, yellow, or green to show status. There's no status column — just the colors.">Color as data</div>
+      <div class="pill" data-example="I color rows red, yellow, or green to show status. There's no status column â€” just the colors.">Color as data</div>
     </div>
   </div>
 
@@ -355,18 +379,18 @@ const scanBtn = document.getElementById('scan-btn');
 const results = document.getElementById('results');
 const coverageText = document.getElementById('coverage-text');
 
-// ── Load coverage count ─────────────────────────
+// â”€â”€ Load coverage count â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 fetch('/api/excelligence.json')
   .then(r => r.json())
   .then(data => {
     const antCount = data.entries.filter(e => e.type === 'ANT').length;
-    coverageText.textContent = `Checking against ${antCount} governed anti-patterns · Registry v0.2`;
+    coverageText.textContent = `Checking against ${antCount} governed anti-patterns Â· Registry v0.2`;
   })
   .catch(() => {
-    coverageText.textContent = 'Registry connected · Anti-Pattern Scanner';
+    coverageText.textContent = 'Registry connected Â· Anti-Pattern Scanner';
   });
 
-// ── Char counter ────────────────────────────────
+// â”€â”€ Char counter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 input.addEventListener('input', () => {
   const len = input.value.length;
   charCount.textContent = `${len} / 3000`;
@@ -374,7 +398,7 @@ input.addEventListener('input', () => {
   scanBtn.disabled = len < 10;
 });
 
-// ── Example pills ───────────────────────────────
+// â”€â”€ Example pills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.querySelectorAll('.pill').forEach(pill => {
   pill.addEventListener('click', () => {
     input.value = pill.dataset.example;
@@ -383,7 +407,7 @@ document.querySelectorAll('.pill').forEach(pill => {
   });
 });
 
-// ── Severity color ──────────────────────────────
+// â”€â”€ Severity color â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sevClass(sev) {
   if (!sev) return '';
   const s = sev.toLowerCase();
@@ -392,7 +416,7 @@ function sevClass(sev) {
   return 'sev-low';
 }
 
-// ── Render results ──────────────────────────────
+// â”€â”€ Render results â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderResults(data) {
   results.innerHTML = '';
 
@@ -488,7 +512,7 @@ function renderResults(data) {
   }, 100);
 }
 
-// ── Scan ────────────────────────────────────────
+// â”€â”€ Scan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 scanBtn.addEventListener('click', async () => {
   const text = input.value.trim();
   if (!text || text.length < 10) return;
@@ -519,12 +543,22 @@ scanBtn.addEventListener('click', async () => {
   }
 });
 
-// ── Enter to scan (Ctrl+Enter) ──────────────────
+// â”€â”€ Enter to scan (Ctrl+Enter) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 input.addEventListener('keydown', e => {
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
     scanBtn.click();
   }
 });
 </script>
+<script>
+(function(){
+  var btn=document.getElementById("nav-hamburger");
+  var drw=document.getElementById("nav-drawer");
+  if(!btn||!drw)return;
+  btn.addEventListener("click",function(e){e.stopPropagation();btn.classList.toggle("open");drw.classList.toggle("open");});
+  document.addEventListener("click",function(e){if(!drw.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove("open");drw.classList.remove("open");}});
+})();
+</script>
 </body>
 </html>
+
