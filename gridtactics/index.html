@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GridTactics â€” Formula Battle Game Â· Excelligence</title>
+<link rel="icon" type="image/png" href="/og-image.png">
+<title>GridTactics — Formula Battle Game · Excelligence</title>
 <meta name="description" content="A formula battle game built on a real Excel dataset. Write formulas to capture cells. The registry is the rulebook.">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
 <style>
@@ -271,7 +272,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
     <!-- Row 2 -->
     <div class="board-row">
       <div class="board-row-head">2</div>
-      <div class="cell mine"><div class="cell-val text">North</div><div class="piece red">â™œ</div></div>
+      <div class="cell mine"><div class="cell-val text">North</div><div class="piece red">&#9820;</div></div>
       <div class="cell"><div class="cell-val text">Q1</div></div>
       <div class="cell"><div class="cell-val text">Widgets</div></div>
       <div class="cell"><div class="cell-val num">4,280</div></div>
@@ -288,7 +289,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="cell dark"><div class="cell-val num">87</div></div>
       <div class="cell dark"><div class="cell-val text">Active</div></div>
     </div>
-    <!-- Row 4 â€” TARGET -->
+    <!-- Row 4 — TARGET -->
     <div class="board-row">
       <div class="board-row-head">4</div>
       <div class="cell"><div class="cell-val text">North</div></div>
@@ -297,7 +298,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="cell target">
         <div class="target-label">target</div>
         <div class="cell-val num">6,540</div>
-        <div class="piece green">â™ž</div>
+        <div class="piece green">&#9822;</div>
       </div>
       <div class="cell"><div class="cell-val num">218</div></div>
       <div class="cell"><div class="cell-val text">Active</div></div>
@@ -309,7 +310,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="cell dark"><div class="cell-val text">Q2</div></div>
       <div class="cell dark"><div class="cell-val text">Gadgets</div></div>
       <div class="cell dark"><div class="cell-val num">3,870</div></div>
-      <div class="cell dark"><div class="cell-val num">129</div><div class="piece red">â™›</div></div>
+      <div class="cell dark"><div class="cell-val num">129</div><div class="piece red">&#9819;</div></div>
       <div class="cell dark"><div class="cell-val text">Active</div></div>
     </div>
     <!-- Row 6 -->
@@ -320,7 +321,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="cell"><div class="cell-val text">Widgets</div></div>
       <div class="cell"><div class="cell-val num">5,110</div></div>
       <div class="cell"><div class="cell-val num">170</div></div>
-      <div class="cell"><div class="cell-val text">Active</div><div class="piece green">â™Ÿ</div></div>
+      <div class="cell"><div class="cell-val text">Active</div><div class="piece green">&#9823;</div></div>
     </div>
   </div>
 </div>
@@ -382,7 +383,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 </div>
 <div class="registry-section">
   <div class="registry-card">
-    <div class="reg-icon">Î£</div>
+    <div class="reg-icon">Σ</div>
     <div>
       <div class="reg-id">FRM-0006 &middot; SUMIFS</div>
       <div class="reg-name">SUMIFS &mdash; Multi-Condition Aggregation</div>
@@ -405,37 +406,37 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 <div class="tiers-section">
   <div class="tiers-grid">
     <div class="tier-card">
-      <span class="tier-piece">â™™</span>
+      <span class="tier-piece">&#9817;</span>
       <div class="tier-name">Pawn</div>
-      <div class="tier-formula">COUNTIF Â· basic IF<br>simple arithmetic</div>
+      <div class="tier-formula">COUNTIF · basic IF<br>simple arithmetic</div>
       <div class="tier-bonus base">Base capture</div>
     </div>
     <div class="tier-card">
-      <span class="tier-piece">â™œ</span>
+      <span class="tier-piece">&#9820;</span>
       <div class="tier-name">Rook</div>
       <div class="tier-formula">SUMIFS<br>Structured references</div>
       <div class="tier-bonus mid">+50 bonus</div>
     </div>
     <div class="tier-card">
-      <span class="tier-piece">â™ž</span>
+      <span class="tier-piece">&#9822;</span>
       <div class="tier-name">Knight</div>
       <div class="tier-formula">XLOOKUP<br>INDEX / MATCH</div>
       <div class="tier-bonus mid">+75 bonus</div>
     </div>
     <div class="tier-card">
-      <span class="tier-piece">â™</span>
+      <span class="tier-piece">&#9821;</span>
       <div class="tier-name">Bishop</div>
       <div class="tier-formula">INDEX/MATCH<br>combinations</div>
       <div class="tier-bonus mid">+75 bonus</div>
     </div>
     <div class="tier-card">
-      <span class="tier-piece">â™›</span>
+      <span class="tier-piece">&#9819;</span>
       <div class="tier-name">Queen</div>
-      <div class="tier-formula">LET Â· LAMBDA<br>MAKEARRAY</div>
+      <div class="tier-formula">LET · LAMBDA<br>MAKEARRAY</div>
       <div class="tier-bonus high">+100 bonus</div>
     </div>
     <div class="tier-card">
-      <span class="tier-piece">â™š</span>
+      <span class="tier-piece">&#9818;</span>
       <div class="tier-name">King</div>
       <div class="tier-formula">Named ranges<br>Control Panel patterns</div>
       <div class="tier-bonus expert">+100 bonus</div>
@@ -458,4 +459,3 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 
 </body>
 </html>
-
