@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Excelligence &mdash; Excel Knowledge, Governed and Graphed</title>
-<meta name="description" content="A registry of Excel patterns, formulas, and architectures — typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.">
-<meta property="og:title" content="Excelligence — Excel Knowledge, Governed and Graphed">
-<meta property="og:description" content="A registry of Excel patterns, formulas, and architectures — typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.">
+<meta name="description" content="A registry of Excel patterns, formulas, and architectures â€” typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.">
+<meta property="og:title" content="Excelligence â€” Excel Knowledge, Governed and Graphed">
+<meta property="og:description" content="A registry of Excel patterns, formulas, and architectures â€” typed, tiered, and connected by governed edges. Not a glossary. Not a tutorial. A knowledge graph you can traverse.">
 <meta property="og:image" content="https://excelligence.dev/og-image.png">
 <meta property="og:url" content="https://excelligence.dev">
 <meta property="og:type" content="website">
@@ -27,14 +27,14 @@
 html{scroll-behavior:smooth}
 body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
 
-/* ── GRID TEXTURE ── */
+/* â”€â”€ GRID TEXTURE â”€â”€ */
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:linear-gradient(rgba(212,168,67,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.025) 1px,transparent 1px);
   background-size:48px 48px;
 }
 
-/* ── NAV ── */
+/* â”€â”€ NAV â”€â”€ */
 nav{
   position:sticky;top:0;z-index:100;
   background:rgba(13,27,42,0.94);backdrop-filter:blur(16px);
@@ -52,7 +52,7 @@ nav{
 .nav-links a:hover{color:var(--cream)}
 .nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--gold);letter-spacing:0.1em;background:var(--gold3);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
 
-/* ── TICKER ── */
+/* â”€â”€ TICKER â”€â”€ */
 .ticker{
   height:36px;background:rgba(13,27,42,0.6);border-bottom:1px solid var(--border);
   overflow:hidden;display:flex;align-items:center;position:relative;z-index:1;
@@ -67,10 +67,10 @@ nav{
 .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.05em}
 .ticker-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 
-/* ── SECTIONS ── */
+/* â”€â”€ SECTIONS â”€â”€ */
 section{position:relative;z-index:1}
 
-/* ── HERO ── */
+/* â”€â”€ HERO â”€â”€ */
 .hero{
   min-height:calc(100vh - 94px);
   display:grid;grid-template-columns:1fr 1fr;
@@ -129,7 +129,7 @@ section{position:relative;z-index:1}
 .hero-right{display:flex;align-items:center;justify-content:center;padding:48px 0}
 #radial-svg{width:100%;max-width:520px;height:520px}
 
-/* ── STAT STRIP ── */
+/* â”€â”€ STAT STRIP â”€â”€ */
 .stat-strip{
   display:grid;grid-template-columns:repeat(4,1fr);
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
@@ -143,7 +143,7 @@ section{position:relative;z-index:1}
 .sc-title{font-size:0.95rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
 .sc-sub{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;line-height:1.8}
 
-/* ── WHAT IT IS ── */
+/* â”€â”€ WHAT IT IS â”€â”€ */
 .what{padding:80px 48px;max-width:1280px;margin:0 auto}
 .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px}
 .section-h{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:48px}
@@ -155,7 +155,7 @@ section{position:relative;z-index:1}
 .pillar-sub{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);letter-spacing:0.08em;margin-bottom:16px}
 .pillar-body{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.65}
 
-/* ── TYPE GRID ── */
+/* â”€â”€ TYPE GRID â”€â”€ */
 .types-section{padding:0 48px 80px;max-width:1280px;margin:0 auto}
 .type-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .type-card{
@@ -175,7 +175,7 @@ section{position:relative;z-index:1}
 .type-name{font-size:0.72rem;color:var(--steel);margin-bottom:12px}
 .type-count{font-size:1.6rem;font-weight:700;letter-spacing:-0.04em}
 
-/* ── TIERS ── */
+/* â”€â”€ TIERS â”€â”€ */
 .tiers-section{padding:0 48px 80px;max-width:1280px;margin:0 auto}
 .tier-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
 .tier-card{
@@ -192,7 +192,7 @@ section{position:relative;z-index:1}
 .tier-name{font-size:0.9rem;font-weight:600;letter-spacing:-0.01em}
 .tier-count{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);letter-spacing:0.05em;margin-top:2px}
 
-/* ── QUOTE ── */
+/* â”€â”€ QUOTE â”€â”€ */
 .quote-section{
   padding:64px 48px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
   position:relative;z-index:1;
@@ -205,7 +205,7 @@ section{position:relative;z-index:1}
 }
 .quote-attr{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.1em}
 
-/* ── APPLIED LAYER ── */
+/* â”€â”€ APPLIED LAYER â”€â”€ */
 .applied-section{padding:80px 48px;max-width:1280px;margin:0 auto}
 .applied-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:0}
 .applied-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2px}
@@ -222,7 +222,7 @@ section{position:relative;z-index:1}
 .app-desc{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);line-height:1.55;flex:1}
 .app-arrow{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);margin-top:8px}
 
-/* ── CLOSING ── */
+/* â”€â”€ CLOSING â”€â”€ */
 .closing{
   padding:80px 48px;max-width:1280px;margin:0 auto;
   display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;
@@ -232,7 +232,7 @@ section{position:relative;z-index:1}
 .closing-h em{font-style:italic;font-family:'Source Serif 4',serif;font-weight:400;color:rgba(245,241,235,0.6)}
 .closing-sub{font-family:'Source Serif 4',serif;font-size:0.9rem;color:var(--steel);line-height:1.65;max-width:520px;margin-bottom:32px}
 
-/* ── FOOTER ── */
+/* â”€â”€ FOOTER â”€â”€ */
 footer{
   border-top:1px solid var(--border);padding:32px 48px;
   display:flex;justify-content:space-between;align-items:center;
@@ -244,7 +244,7 @@ footer{
 .footer-right{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.06em;text-align:right;line-height:1.8}
 .footer-right a{color:var(--gold);text-decoration:none}
 
-/* ── RESPONSIVE ── */
+/* â”€â”€ RESPONSIVE â”€â”€ */
 @media(max-width:900px){
   nav{padding:0 20px}
   .nav-links{display:none}
@@ -258,6 +258,19 @@ footer{
   .closing{grid-template-columns:1fr}
   footer{padding:24px 20px;flex-direction:column;gap:16px;text-align:center}
 }
+/* HAMBURGER NAV */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,241,235,0.13);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover{color:var(--cream)}
+.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
+@media(max-width:768px){.nav-links{display:none!important}.nav-hamburger{display:flex!important}}
 </style>
 </head>
 <body>
@@ -286,7 +299,18 @@ footer{
     <a href="/analytics/">Analytics</a>
     <span class="nav-tag">LIVE</span>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/explorer/">Graph</a>
+  <a href="/radial/">Radial</a>
+  <a href="/paths/">Paths</a>
+  <a href="/tools/">Tools</a>
+  <a href="/analytics/">Analytics</a>
+  <a href="/scanner/">Scanner</a>
+  <a href="/gridtactics/">GridTactics</a>
+  <span class="drawer-tag">BETA</span>
+</div>
 
 <!-- TICKER -->
 <div class="ticker">
@@ -306,17 +330,17 @@ footer{
     </div>
     <div class="hero-stats">
       <div class="hstat">
-        <div class="hstat-num gold" id="h-entries">—</div>
+        <div class="hstat-num gold" id="h-entries">â€”</div>
         <div class="hstat-lbl">Entries</div>
       </div>
       <div class="hstat-divider"></div>
       <div class="hstat">
-        <div class="hstat-num" id="h-edges">—</div>
+        <div class="hstat-num" id="h-edges">â€”</div>
         <div class="hstat-lbl">Edges</div>
       </div>
       <div class="hstat-divider"></div>
       <div class="hstat">
-        <div class="hstat-num" id="h-types">—</div>
+        <div class="hstat-num" id="h-types">â€”</div>
         <div class="hstat-lbl">Types</div>
       </div>
       <div class="hstat-divider"></div>
@@ -335,12 +359,12 @@ footer{
 <!-- STAT STRIP -->
 <div class="stat-strip">
   <div class="stat-cell">
-    <div class="sc-num" style="color:var(--gold)" id="s-entries">—</div>
+    <div class="sc-num" style="color:var(--gold)" id="s-entries">â€”</div>
     <div class="sc-title">Governed entries across 7 types</div>
     <div class="sc-sub" id="s-types-list">FRM &middot; PTN &middot; ARC &middot; ANT &middot; CON &middot; PQ &middot; KEY</div>
   </div>
   <div class="stat-cell">
-    <div class="sc-num" id="s-edges">—</div>
+    <div class="sc-num" id="s-edges">â€”</div>
     <div class="sc-title">Typed edges connecting entries</div>
     <div class="sc-sub">LEADS_TO &middot; DEPENDS_ON &middot; PAIRS_WITH</div>
   </div>
@@ -484,7 +508,7 @@ footer{
 </footer>
 
 <script>
-// ── CONSTANTS ────────────────────────────────────
+// â”€â”€ CONSTANTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const TYPE_COLORS={FRM:'#6B9DC2',PTN:'#4A9E6B',ARC:'#8a6cc9',ANT:'#B23531',CON:'#C49A3C',PQ:'#4AADAD',KEY:'#D4A843'};
 const TYPE_NAMES={FRM:'Formula',PTN:'Pattern',ARC:'Architecture',ANT:'Anti-Pattern',CON:'Convention',PQ:'Power Query',KEY:'Shortcut'};
 const TYPE_ORDER=['FRM','PTN','ARC','ANT','CON','PQ','KEY'];
@@ -494,7 +518,7 @@ const TIER_LETTERS={Beginner:'B',Intermediate:'I',Advanced:'A',Expert:'E'};
 const TIER_RADII={Expert:70,Advanced:120,Intermediate:175,Beginner:225};
 const cx=260,cy=260;
 
-// ── ANIMATE NUMBER ───────────────────────────────
+// â”€â”€ ANIMATE NUMBER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function animN(el,to,dur=700){
   if(!el)return;
   const s=performance.now();
@@ -505,7 +529,7 @@ function animN(el,to,dur=700){
   })(s);
 }
 
-// ── BUILD RADIAL ─────────────────────────────────
+// â”€â”€ BUILD RADIAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildRadial(entries,edges){
   const svg=document.getElementById('radial-svg');
   const ns='http://www.w3.org/2000/svg';
@@ -593,7 +617,7 @@ function buildRadial(entries,edges){
   })();
 }
 
-// ── BUILD TYPE GRID ──────────────────────────────
+// â”€â”€ BUILD TYPE GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildTypeGrid(typeDist){
   const grid=document.getElementById('type-grid');
   TYPE_ORDER.forEach(type=>{
@@ -616,7 +640,7 @@ function buildTypeGrid(typeDist){
   });
 }
 
-// ── BUILD TIER ROW ───────────────────────────────
+// â”€â”€ BUILD TIER ROW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildTierRow(tierDist){
   const row=document.getElementById('tier-row');
   TIER_ORDER.forEach(tier=>{
@@ -640,7 +664,7 @@ function hexToRgb(hex){
   return `${r},${g},${b}`;
 }
 
-// ── BUILD TICKER ─────────────────────────────────
+// â”€â”€ BUILD TICKER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildTicker(entries){
   const track=document.getElementById('ticker-track');
   const items=[...entries,...entries];
@@ -654,7 +678,7 @@ function buildTicker(entries){
   });
 }
 
-// ── MAIN ─────────────────────────────────────────
+// â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 fetch('/api/excelligence.json')
   .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
   .then(data=>{
@@ -698,5 +722,15 @@ fetch('/api/excelligence.json')
     if(cs)cs.textContent='93 entries. 200 edges. Four tiers from first shortcut to institutional-grade architecture. Built by one CPA with a governed methodology and too much Excel experience.';
   });
 </script>
+<script>
+(function(){
+  var btn=document.getElementById("nav-hamburger");
+  var drw=document.getElementById("nav-drawer");
+  if(!btn||!drw)return;
+  btn.addEventListener("click",function(e){e.stopPropagation();btn.classList.toggle("open");drw.classList.toggle("open");});
+  document.addEventListener("click",function(e){if(!drw.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove("open");drw.classList.remove("open");}});
+})();
+</script>
 </body>
 </html>
+
