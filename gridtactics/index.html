@@ -1,0 +1,460 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GridTactics â€” Formula Battle Game Â· Excelligence</title>
+<meta name="description" content="A formula battle game built on a real Excel dataset. Write formulas to capture cells. The registry is the rulebook.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.06);--border2:rgba(245,241,235,0.12);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:96px 40px 80px;text-align:center;
+  animation:fadeUp 0.6s ease both}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.16em;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:10px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:24px;height:1px;background:var(--gold);opacity:0.5}
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:700;letter-spacing:-0.04em;line-height:0.95;margin-bottom:16px}
+.hero h1 .grid{color:var(--cream)}
+.hero h1 .tactics{color:var(--gold)}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:1.05rem;color:var(--steel);line-height:1.7;
+  max-width:560px;margin:0 auto 32px}
+.hero-sub strong{color:var(--cream)}
+.cs-badge{display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.25);
+  padding:8px 16px;border-radius:4px;letter-spacing:0.06em}
+.cs-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+
+/* BOARD DEMO */
+.board-wrap{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
+  animation:fadeUp 0.6s ease 0.15s both}
+.board-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;text-align:center}
+
+.board{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
+.board-header-row{display:flex;border-bottom:1px solid var(--border2)}
+.board-corner{width:36px;height:32px;background:var(--card2);border-right:1px solid var(--border);flex-shrink:0}
+.board-col-head{flex:1;height:32px;background:var(--card2);display:flex;align-items:center;
+  justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+  color:var(--steel);border-right:1px solid var(--border)}
+.board-col-head:last-child{border-right:none}
+
+.board-row{display:flex;border-bottom:1px solid var(--border)}
+.board-row:last-child{border-bottom:none}
+.board-row-head{width:36px;display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  background:var(--card2);border-right:1px solid var(--border);flex-shrink:0}
+
+.cell{flex:1;min-height:56px;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;padding:6px 4px;background:var(--card);transition:background 0.2s}
+.cell:last-child{border-right:none}
+.cell.dark{background:var(--card2)}
+.cell.target{background:rgba(212,168,67,0.08);outline:2px solid var(--gold);outline-offset:-2px;animation:float 3s ease-in-out infinite}
+.cell.mine{background:rgba(178,53,49,0.08);outline:2px solid var(--crimson);outline-offset:-2px}
+.cell.hint{background:rgba(74,158,107,0.05)}
+
+.cell-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:500}
+.cell-val.text{color:var(--blue)}
+.cell-val.num{color:var(--cream)}
+.cell-val.header{color:var(--cream);font-weight:600;font-size:0.62rem}
+
+.piece{position:absolute;bottom:3px;right:3px;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:0.65rem;border:1.5px solid}
+.piece.red{background:rgba(178,53,49,0.9);border-color:#c44;color:white}
+.piece.green{background:rgba(74,158,107,0.9);border-color:#5ba;color:white}
+
+.target-label{position:absolute;top:2px;right:3px;font-family:'JetBrains Mono',monospace;
+  font-size:0.38rem;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase}
+
+/* MECHANIC STRIP */
+.mechanic-strip{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
+  animation:fadeUp 0.6s ease 0.2s both}
+.mech-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;
+  border-top:2px solid}
+.mech-card.one{border-top-color:var(--crimson)}
+.mech-card.two{border-top-color:var(--gold)}
+.mech-card.three{border-top-color:var(--green)}
+.mech-num{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;
+  text-transform:uppercase;margin-bottom:8px}
+.mech-card.one .mech-num{color:var(--crimson)}
+.mech-card.two .mech-num{color:var(--gold)}
+.mech-card.three .mech-num{color:var(--green)}
+.mech-title{font-size:0.88rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
+.mech-body{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);line-height:1.55}
+
+/* FORMULA DEMO */
+.formula-section{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
+  animation:fadeUp 0.6s ease 0.25s both}
+.formula-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px}
+.formula-input-demo{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+  color:var(--green);margin-bottom:12px}
+.formula-result{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 16px}
+.result-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.result-val{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600}
+.result-val.pass{color:var(--green)}
+.result-val.score{color:var(--gold)}
+
+/* REGISTRY CONNECTION */
+.registry-section{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
+  animation:fadeUp 0.6s ease 0.3s both}
+.registry-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;
+  display:flex;gap:20px;align-items:flex-start}
+.reg-icon{width:48px;height:48px;border-radius:8px;background:var(--gold2);border:1px solid rgba(212,168,67,0.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.reg-id{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.08em;margin-bottom:4px}
+.reg-name{font-size:0.95rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
+.reg-body{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);line-height:1.55}
+.reg-bonus{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--green);
+  margin-top:10px;background:var(--green2);border:1px solid rgba(74,158,107,0.2);
+  padding:4px 10px;border-radius:3px;display:inline-block}
+.reg-link{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:8px;
+  transition:opacity 0.2s}
+.reg-link:hover{opacity:0.7}
+
+/* TIERS */
+.tiers-section{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
+  animation:fadeUp 0.6s ease 0.35s both}
+.tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tier-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;
+  text-align:center}
+.tier-piece{font-size:1.4rem;margin-bottom:8px;display:block}
+.tier-name{font-size:0.78rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:4px}
+.tier-formula{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--steel);line-height:1.6}
+.tier-bonus{font-family:'JetBrains Mono',monospace;font-size:0.56rem;margin-top:6px;
+  padding:2px 8px;border-radius:3px;display:inline-block}
+.tier-bonus.base{color:var(--steel);background:rgba(107,123,141,0.1);border:1px solid rgba(107,123,141,0.2)}
+.tier-bonus.mid{color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2)}
+.tier-bonus.high{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.tier-bonus.expert{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+
+/* NOTIFY */
+.notify-section{position:relative;z-index:1;max-width:640px;margin:0 auto;
+  padding:0 40px 96px;text-align:center;animation:fadeUp 0.6s ease 0.4s both}
+.notify-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px}
+.notify-title{font-size:1.6rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:8px}
+.notify-title span{color:var(--gold)}
+.notify-sub{font-family:'Source Serif 4',serif;font-size:0.9rem;color:var(--steel);
+  line-height:1.65;margin-bottom:24px}
+.notify-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:12px 24px;background:var(--crimson);color:var(--cream);
+  border:none;border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;
+  font-size:0.88rem;text-decoration:none;transition:background 0.2s,transform 0.15s;display:inline-flex}
+.btn-primary:hover{background:#9a2b28;transform:translateY(-1px)}
+.btn-secondary{padding:12px 24px;background:transparent;color:var(--cream);
+  border:1px solid var(--border2);border-radius:6px;font-family:'Space Grotesk',sans-serif;
+  font-weight:500;font-size:0.88rem;text-decoration:none;transition:border-color 0.2s;display:inline-flex}
+.btn-secondary:hover{border-color:rgba(245,241,235,0.3)}
+
+/* SECTION LABELS */
+.section-wrap{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 24px}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.section-eyebrow::before{content:'';width:16px;height:1px;background:var(--gold)}
+.section-title{font-size:1.3rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:4px}
+.section-sub{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);margin-bottom:0}
+
+/* DIVIDER */
+.divider{position:relative;z-index:1;max-width:800px;margin:0 auto 48px;padding:0 40px}
+.divider hr{border:none;border-top:1px solid var(--border)}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .nav-right .nav-link{display:none}
+  .hero{padding:64px 20px 48px}
+  .board-wrap,.mechanic-strip,.formula-section,.registry-section,.tiers-section,.notify-section,.section-wrap,.divider{padding-left:20px;padding-right:20px}
+  .mechanic-strip{grid-template-columns:1fr}
+  .tiers-grid{grid-template-columns:repeat(2,1fr)}
+  .formula-result{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/explorer/" class="nav-link">Graph</a>
+    <a href="/scanner/" class="nav-link">Scanner</a>
+    <a href="/analytics/" class="nav-link">Analytics</a>
+    <span class="nav-tag">Coming Soon</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Excelligence &middot; Applied Layer</div>
+  <h1><span class="grid">Grid</span><span class="tactics">Tactics</span></h1>
+  <p class="hero-sub">A formula battle game built on a real Excel dataset.<br>
+  <strong>The dataset is the board. The formula is the move.</strong><br>
+  Write formulas to capture cells. The registry is the rulebook.</p>
+  <div class="cs-badge"><div class="cs-dot"></div>In development &middot; Excelligence wing</div>
+</div>
+
+<!-- BOARD -->
+<div class="board-wrap">
+  <div class="board-label">The board &mdash; a real dataset. Pieces sit on actual data cells.</div>
+  <div class="board">
+    <div class="board-header-row">
+      <div class="board-corner"></div>
+      <div class="board-col-head">A</div>
+      <div class="board-col-head">B</div>
+      <div class="board-col-head">C</div>
+      <div class="board-col-head">D</div>
+      <div class="board-col-head">E</div>
+      <div class="board-col-head">F</div>
+    </div>
+    <!-- Row 1 -->
+    <div class="board-row">
+      <div class="board-row-head">1</div>
+      <div class="cell dark"><div class="cell-val header">Region</div></div>
+      <div class="cell dark"><div class="cell-val header">Quarter</div></div>
+      <div class="cell dark"><div class="cell-val header">Product</div></div>
+      <div class="cell dark"><div class="cell-val header">Amount</div></div>
+      <div class="cell dark"><div class="cell-val header">Units</div></div>
+      <div class="cell dark"><div class="cell-val header">Status</div></div>
+    </div>
+    <!-- Row 2 -->
+    <div class="board-row">
+      <div class="board-row-head">2</div>
+      <div class="cell mine"><div class="cell-val text">North</div><div class="piece red">â™œ</div></div>
+      <div class="cell"><div class="cell-val text">Q1</div></div>
+      <div class="cell"><div class="cell-val text">Widgets</div></div>
+      <div class="cell"><div class="cell-val num">4,280</div></div>
+      <div class="cell"><div class="cell-val num">142</div></div>
+      <div class="cell"><div class="cell-val text">Active</div></div>
+    </div>
+    <!-- Row 3 -->
+    <div class="board-row">
+      <div class="board-row-head">3</div>
+      <div class="cell dark"><div class="cell-val text">South</div></div>
+      <div class="cell dark"><div class="cell-val text">Q1</div></div>
+      <div class="cell dark"><div class="cell-val text">Gadgets</div></div>
+      <div class="cell dark hint"><div class="cell-val num">2,190</div></div>
+      <div class="cell dark"><div class="cell-val num">87</div></div>
+      <div class="cell dark"><div class="cell-val text">Active</div></div>
+    </div>
+    <!-- Row 4 â€” TARGET -->
+    <div class="board-row">
+      <div class="board-row-head">4</div>
+      <div class="cell"><div class="cell-val text">North</div></div>
+      <div class="cell"><div class="cell-val text">Q2</div></div>
+      <div class="cell"><div class="cell-val text">Widgets</div></div>
+      <div class="cell target">
+        <div class="target-label">target</div>
+        <div class="cell-val num">6,540</div>
+        <div class="piece green">â™ž</div>
+      </div>
+      <div class="cell"><div class="cell-val num">218</div></div>
+      <div class="cell"><div class="cell-val text">Active</div></div>
+    </div>
+    <!-- Row 5 -->
+    <div class="board-row">
+      <div class="board-row-head">5</div>
+      <div class="cell dark"><div class="cell-val text">East</div></div>
+      <div class="cell dark"><div class="cell-val text">Q2</div></div>
+      <div class="cell dark"><div class="cell-val text">Gadgets</div></div>
+      <div class="cell dark"><div class="cell-val num">3,870</div></div>
+      <div class="cell dark"><div class="cell-val num">129</div><div class="piece red">â™›</div></div>
+      <div class="cell dark"><div class="cell-val text">Active</div></div>
+    </div>
+    <!-- Row 6 -->
+    <div class="board-row">
+      <div class="board-row-head">6</div>
+      <div class="cell"><div class="cell-val text">West</div></div>
+      <div class="cell"><div class="cell-val text">Q3</div></div>
+      <div class="cell"><div class="cell-val text">Widgets</div></div>
+      <div class="cell"><div class="cell-val num">5,110</div></div>
+      <div class="cell"><div class="cell-val num">170</div></div>
+      <div class="cell"><div class="cell-val text">Active</div><div class="piece green">â™Ÿ</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- THE MECHANIC -->
+<div class="section-wrap">
+  <div class="section-eyebrow">The Mechanic</div>
+  <h2 class="section-title">Three rules. One capture.</h2>
+  <p class="section-sub">Any formula that passes all three rules wins the cell. Higher-tier formulas score bonus points.</p>
+</div>
+<div class="mechanic-strip">
+  <div class="mech-card one">
+    <div class="mech-num">Rule 1 &mdash; ISFORMULA</div>
+    <div class="mech-title">Must be a formula</div>
+    <div class="mech-body">Not a hardcoded value. =6540 fails. =800+852 fails. The workbook checks ISFORMULA() before anything else.</div>
+  </div>
+  <div class="mech-card two">
+    <div class="mech-num">Rule 2 &mdash; Banned Patterns</div>
+    <div class="mech-title">Must derive the answer</div>
+    <div class="mech-body">No direct cell references to the target. No arithmetic that manufactures the answer. FORMULATEXT checks your formula against the banned patterns table.</div>
+  </div>
+  <div class="mech-card three">
+    <div class="mech-num">Rule 3 &mdash; Value Match</div>
+    <div class="mech-title">Must return the correct value</div>
+    <div class="mech-body">Your formula must return exactly the value in the target cell. The workbook compares your result against the target. Pass all three &mdash; capture confirmed.</div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- FORMULA DEMO -->
+<div class="section-wrap">
+  <div class="section-eyebrow">Example Capture</div>
+  <h2 class="section-title">Your Rook wants D4.</h2>
+  <p class="section-sub">D4 contains 6,540 &mdash; the North / Q2 / Widgets amount. Write a formula that derives it from the dataset.</p>
+</div>
+<div class="formula-section">
+  <div class="formula-label">Your formula</div>
+  <div class="formula-input-demo">=SUMIFS(D:D, A:A, "North", B:B, "Q2", C:C, "Widgets")</div>
+  <div class="formula-result">
+    <div class="result-box">
+      <div class="result-label">Result</div>
+      <div class="result-val pass">6,540 &mdash; CAPTURED</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Score</div>
+      <div class="result-val score">+100 base &middot; +50 SUMIFS bonus</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- REGISTRY CONNECTION -->
+<div class="section-wrap">
+  <div class="section-eyebrow">Registry Connection</div>
+  <h2 class="section-title">Every capture cites a registry entry.</h2>
+  <p class="section-sub">Governed formulas score bonus points. After each capture the game surfaces the Excelligence entry that governs the pattern you used &mdash; or the one you could have used for more points.</p>
+</div>
+<div class="registry-section">
+  <div class="registry-card">
+    <div class="reg-icon">Î£</div>
+    <div>
+      <div class="reg-id">FRM-0006 &middot; SUMIFS</div>
+      <div class="reg-name">SUMIFS &mdash; Multi-Condition Aggregation</div>
+      <div class="reg-body">Aggregates a range based on multiple criteria. The governed alternative to nested IFs for conditional summation. Structured references preferred over column letter ranges.</div>
+      <div class="reg-bonus">+50 bonus points &middot; Governed formula used</div>
+      <br>
+      <a href="/explorer/#FRM-0006" class="reg-link">View FRM-0006 in graph &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- PIECE TIERS -->
+<div class="section-wrap">
+  <div class="section-eyebrow">Piece Tiers</div>
+  <h2 class="section-title">Pieces mark formula difficulty.</h2>
+  <p class="section-sub">Any piece can attempt any capture. Higher-tier formulas score more. No chess movement rules &mdash; pieces are scoring markers, not chess pieces.</p>
+</div>
+<div class="tiers-section">
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <span class="tier-piece">â™™</span>
+      <div class="tier-name">Pawn</div>
+      <div class="tier-formula">COUNTIF Â· basic IF<br>simple arithmetic</div>
+      <div class="tier-bonus base">Base capture</div>
+    </div>
+    <div class="tier-card">
+      <span class="tier-piece">â™œ</span>
+      <div class="tier-name">Rook</div>
+      <div class="tier-formula">SUMIFS<br>Structured references</div>
+      <div class="tier-bonus mid">+50 bonus</div>
+    </div>
+    <div class="tier-card">
+      <span class="tier-piece">â™ž</span>
+      <div class="tier-name">Knight</div>
+      <div class="tier-formula">XLOOKUP<br>INDEX / MATCH</div>
+      <div class="tier-bonus mid">+75 bonus</div>
+    </div>
+    <div class="tier-card">
+      <span class="tier-piece">â™</span>
+      <div class="tier-name">Bishop</div>
+      <div class="tier-formula">INDEX/MATCH<br>combinations</div>
+      <div class="tier-bonus mid">+75 bonus</div>
+    </div>
+    <div class="tier-card">
+      <span class="tier-piece">â™›</span>
+      <div class="tier-name">Queen</div>
+      <div class="tier-formula">LET Â· LAMBDA<br>MAKEARRAY</div>
+      <div class="tier-bonus high">+100 bonus</div>
+    </div>
+    <div class="tier-card">
+      <span class="tier-piece">â™š</span>
+      <div class="tier-name">King</div>
+      <div class="tier-formula">Named ranges<br>Control Panel patterns</div>
+      <div class="tier-bonus expert">+100 bonus</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- NOTIFY / CTA -->
+<div class="notify-section">
+  <div class="notify-eyebrow">Coming to Excelligence</div>
+  <h2 class="notify-title">The registry <span>is the rulebook.</span></h2>
+  <p class="notify-sub">GridTactics ships as a downloadable .xlsx &mdash; a real Excel workbook, no macros, works on Mac. The game runs on data validation and formula chains. No web app required. The spreadsheet IS the game.</p>
+  <div class="notify-links">
+    <a href="/explorer/" class="btn-primary">Enter the Graph &rarr;</a>
+    <a href="/scanner/" class="btn-secondary">Try the Scanner</a>
+  </div>
+</div>
+
+</body>
+</html>
