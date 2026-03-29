@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="/og-image.png">
-<title>GridTactics â€” Formula Battle Game Â· Excelligence</title>
+<title>GridTactics — Formula Battle Game · Excelligence</title>
 <meta name="description" content="A formula battle game built on a real Excel dataset. Write formulas to capture cells. The registry is the rulebook.">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
 <style>
@@ -212,19 +212,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
   .tiers-grid{grid-template-columns:repeat(2,1fr)}
   .formula-result{grid-template-columns:1fr}
 }
-/* HAMBURGER NAV */
-.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
-.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
-.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.nav-hamburger.open span:nth-child(2){opacity:0}
-.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,241,235,0.13);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
-.nav-drawer.open{display:flex}
-.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
-.nav-drawer a:last-child{border-bottom:none}
-.nav-drawer a:hover{color:var(--cream)}
-.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
-@media(max-width:768px){.nav-links{display:none!important}.nav-hamburger{display:flex!important}}
 </style>
 </head>
 <body>
@@ -247,18 +234,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
     <a href="/analytics/" class="nav-link">Analytics</a>
     <span class="nav-tag">Coming Soon</span>
   </div>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
-<div class="nav-drawer" id="nav-drawer">
-  <a href="/explorer/">Graph</a>
-  <a href="/radial/">Radial</a>
-  <a href="/paths/">Paths</a>
-  <a href="/tools/">Tools</a>
-  <a href="/analytics/">Analytics</a>
-  <a href="/scanner/">Scanner</a>
-  <a href="/gridtactics/">GridTactics</a>
-  <span class="drawer-tag">BETA</span>
-</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -368,7 +344,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="cell dark"><div class="cell-val num">87</div></div>
       <div class="cell dark"><div class="cell-val text">Active</div></div>
     </div>
-    <!-- Row 4 â€” TARGET -->
+    <!-- Row 4 — TARGET -->
     <div class="board-row">
       <div class="board-row-head">4</div>
       <div class="cell"><div class="cell-val text">North</div></div>
@@ -462,7 +438,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 </div>
 <div class="registry-section">
   <div class="registry-card">
-    <div class="reg-icon">Î£</div>
+    <div class="reg-icon">Σ</div>
     <div>
       <div class="reg-id">FRM-0006 &middot; SUMIFS</div>
       <div class="reg-name">SUMIFS &mdash; Multi-Condition Aggregation</div>
@@ -487,7 +463,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
     <div class="tier-card">
       <span class="tier-piece">&#9817;</span>
       <div class="tier-name">Pawn</div>
-      <div class="tier-formula">COUNTIF Â· basic IF<br>simple arithmetic</div>
+      <div class="tier-formula">COUNTIF · basic IF<br>simple arithmetic</div>
       <div class="tier-bonus base">Base capture</div>
     </div>
     <div class="tier-card">
@@ -511,7 +487,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
     <div class="tier-card">
       <span class="tier-piece">&#9819;</span>
       <div class="tier-name">Queen</div>
-      <div class="tier-formula">LET Â· LAMBDA<br>MAKEARRAY</div>
+      <div class="tier-formula">LET · LAMBDA<br>MAKEARRAY</div>
       <div class="tier-bonus high">+100 bonus</div>
     </div>
     <div class="tier-card">
@@ -521,6 +497,123 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="tier-bonus expert">+100 bonus</div>
     </div>
   </div>
+</div>
+
+
+<div class="divider"><hr></div>
+
+<!-- ANALYTICS SECTION -->
+<div class="section-wrap">
+  <div class="section-eyebrow">Game Analytics</div>
+  <h2 class="section-title">The game logs itself.</h2>
+  <p class="section-sub">Every capture is recorded via FORMULATEXT. At the end of a session you see exactly what you used, what you missed, and where you left points on the table.</p>
+</div>
+<div style="position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+  <!-- Capture rate card -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;grid-column:1/-1">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px">Session Log</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:0 12px 10px 0">Turn</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:0 12px 10px 0">Target</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:0 12px 10px 0">Formula Used</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:0 12px 10px 0">Tier</th>
+          <th style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;text-align:right;padding:0 0 10px 0">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(245,241,235,0.04)">
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--steel);padding:9px 12px 9px 0">1</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--cream);padding:9px 12px 9px 0">D4</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#4A9E6B;padding:9px 12px 9px 0">=SUMIFS(D:D,A:A,"North",B:B,"Q2")</td>
+          <td style="padding:9px 12px 9px 0"><span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2);padding:2px 7px;border-radius:3px">Rook</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--gold);text-align:right;padding:9px 0">+150</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(245,241,235,0.04);background:rgba(245,241,235,0.02)">
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--steel);padding:9px 12px 9px 0">2</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--cream);padding:9px 12px 9px 0">E5</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#4A9E6B;padding:9px 12px 9px 0">=XLOOKUP("East",A:A,E:E)</td>
+          <td style="padding:9px 12px 9px 0"><span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2);padding:2px 7px;border-radius:3px">Knight</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--gold);text-align:right;padding:9px 0">+175</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(245,241,235,0.04)">
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--steel);padding:9px 12px 9px 0">3</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--cream);padding:9px 12px 9px 0">D6</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#B23531;padding:9px 12px 9px 0">=D6 &nbsp;&nbsp;&#x2715; banned pattern</td>
+          <td style="padding:9px 12px 9px 0"><span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);background:rgba(107,123,141,0.1);border:1px solid rgba(107,123,141,0.2);padding:2px 7px;border-radius:3px">Rejected</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--steel);text-align:right;padding:9px 0">+0</td>
+        </tr>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--steel);padding:9px 12px 9px 0">4</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--cream);padding:9px 12px 9px 0">D6</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#4A9E6B;padding:9px 12px 9px 0">=LET(r,"West",SUMIFS(D:D,A:A,r))</td>
+          <td style="padding:9px 12px 9px 0"><span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--gold);background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.2);padding:2px 7px;border-radius:3px">Queen</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--gold);text-align:right;padding:9px 0">+200</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Tier distribution -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px">Formula Tier Mix</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel)">Rook (SUMIFS)</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--amber)">40%</span>
+        </div>
+        <div style="height:4px;background:rgba(245,241,235,0.07);border-radius:2px"><div style="height:100%;width:40%;background:var(--amber);border-radius:2px"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel)">Knight (XLOOKUP)</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--amber)">30%</span>
+        </div>
+        <div style="height:4px;background:rgba(245,241,235,0.07);border-radius:2px"><div style="height:100%;width:30%;background:var(--amber);border-radius:2px"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel)">Queen (LET/LAMBDA)</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold)">20%</span>
+        </div>
+        <div style="height:4px;background:rgba(245,241,235,0.07);border-radius:2px"><div style="height:100%;width:20%;background:var(--gold);border-radius:2px"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel)">Pawn (basic)</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel)">10%</span>
+        </div>
+        <div style="height:4px;background:rgba(245,241,235,0.07);border-radius:2px"><div style="height:100%;width:10%;background:var(--steel);border-radius:2px"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registry hit rate -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px">Registry Stats</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <div style="font-size:2rem;font-weight:700;letter-spacing:-0.04em;color:var(--green)">73%</div>
+        <div style="font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);margin-top:2px">Captures matched a registry entry</div>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div>
+        <div style="font-size:1.6rem;font-weight:700;letter-spacing:-0.04em;color:var(--gold)">3</div>
+        <div style="font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);margin-top:2px">Banned pattern rejections this session</div>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div>
+        <div style="font-size:1.6rem;font-weight:700;letter-spacing:-0.04em;color:var(--crimson)">+125</div>
+        <div style="font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);margin-top:2px">Points left on table (could have used LET)</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="divider"><hr></div>
@@ -536,15 +629,5 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
   </div>
 </div>
 
-<script>
-(function(){
-  var btn=document.getElementById("nav-hamburger");
-  var drw=document.getElementById("nav-drawer");
-  if(!btn||!drw)return;
-  btn.addEventListener("click",function(e){e.stopPropagation();btn.classList.toggle("open");drw.classList.toggle("open");});
-  document.addEventListener("click",function(e){if(!drw.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove("open");drw.classList.remove("open");}});
-})();
-</script>
 </body>
 </html>
-
