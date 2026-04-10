@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="/og-image.png">
-<title>GridTactics — Formula Battle Game · Excelligence</title>
-<meta name="description" content="A formula battle game built on a real Excel dataset. Write formulas to capture cells. The registry is the rulebook.">
+<title>GridTactics — Formula Scoring Game · Excelligence</title>
+<meta name="description" content="A formula scoring game built on a real Excel dataset. Write formulas to capture cells. The registry is the rulebook.">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -68,41 +68,48 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 .board-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
   letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;text-align:center}
 
-.board{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
-.board-header-row{display:flex;border-bottom:1px solid var(--border2)}
-.board-corner{width:36px;height:32px;background:var(--card2);border-right:1px solid var(--border);flex-shrink:0}
-.board-col-head{flex:1;height:32px;background:var(--card2);display:flex;align-items:center;
-  justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.58rem;
-  color:var(--steel);border-right:1px solid var(--border)}
-.board-col-head:last-child{border-right:none}
+/* BOARD — static mockup, matches the demo board language */
+.board{background:#10202f;border:1px solid var(--border);border-radius:10px;
+  padding:14px;display:grid;
+  grid-template-columns:24px repeat(6,1fr);
+  grid-template-rows:18px repeat(6,minmax(40px,1fr));
+  gap:3px;overflow:hidden}
+.board-corner{}
+.board-col-head,.board-row-head{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,241,235,0.2);user-select:none;letter-spacing:0.04em}
+.cell{display:flex;align-items:center;justify-content:center;
+  padding:0 6px;
+  background:transparent;border:1px solid rgba(255,255,255,0.05);
+  border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:0.66rem;
+  color:rgba(245,241,235,0.42);
+  position:relative;
+  transition:all 0.3s ease;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell.header{color:rgba(245,241,235,0.7);font-weight:600;font-size:0.6rem}
+.cell.target{color:#C49A3C;background:rgba(196,154,60,0.09);
+  border:1.5px solid rgba(196,154,60,0.55);
+  animation:gt-target-pulse 2.6s ease-in-out infinite}
+@keyframes gt-target-pulse{
+  0%,100%{box-shadow:0 0 0 rgba(196,154,60,0)}
+  50%{box-shadow:0 0 14px rgba(196,154,60,0.22)}
+}
+.target-label{position:absolute;top:2px;right:4px;
+  font-family:'JetBrains Mono',monospace;font-size:0.42rem;
+  color:#C49A3C;letter-spacing:0.06em;text-transform:uppercase;opacity:0.75}
 
-.board-row{display:flex;border-bottom:1px solid var(--border)}
-.board-row:last-child{border-bottom:none}
-.board-row-head{width:36px;display:flex;align-items:center;justify-content:center;
-  font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
-  background:var(--card2);border-right:1px solid var(--border);flex-shrink:0}
-
-.cell{flex:1;min-height:56px;border-right:1px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;padding:6px 4px;background:var(--card);transition:background 0.2s}
-.cell:last-child{border-right:none}
-.cell.dark{background:var(--card2)}
-.cell.target{background:rgba(212,168,67,0.08);outline:2px solid var(--gold);outline-offset:-2px;animation:float 3s ease-in-out infinite}
-.cell.mine{background:rgba(178,53,49,0.08);outline:2px solid var(--crimson);outline-offset:-2px}
-.cell.hint{background:rgba(74,158,107,0.05)}
-
-.cell-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:500}
-.cell-val.text{color:var(--blue)}
-.cell-val.num{color:var(--cream)}
-.cell-val.header{color:var(--cream);font-weight:600;font-size:0.62rem}
-
-.piece{position:absolute;bottom:3px;right:3px;width:18px;height:18px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:0.65rem;border:1.5px solid}
-.piece.red{background:rgba(178,53,49,0.9);border-color:#c44;color:white}
-.piece.green{background:rgba(74,158,107,0.9);border-color:#5ba;color:white}
-
-.target-label{position:absolute;top:2px;right:3px;font-family:'JetBrains Mono',monospace;
-  font-size:0.38rem;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase}
+/* HARD MODE CALLOUT — Game A note under the three rules */
+.hard-mode-wrap{position:relative;z-index:1;max-width:800px;margin:24px auto 0;padding:0 40px;
+  animation:fadeUp 0.6s ease 0.25s both}
+.hard-mode-box{background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--crimson);border-radius:0 6px 6px 0;
+  padding:14px 18px}
+.hard-mode-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);
+  letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.hard-mode-body{font-family:'Source Serif 4',serif;font-size:0.84rem;color:var(--steel);line-height:1.55}
+.hard-mode-body em{color:var(--cream);font-style:italic;font-weight:600}
 
 /* MECHANIC STRIP */
 .mechanic-strip{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px;
@@ -353,9 +360,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 <div class="hero">
   <div class="hero-eyebrow">Excelligence &middot; Applied Layer</div>
   <h1><span class="grid">Grid</span><span class="tactics">Tactics</span></h1>
-  <p class="hero-sub">A formula battle game built on a real Excel dataset.<br>
+  <p class="hero-sub">A formula scoring game built on a real Excel dataset.<br>
   <strong>The dataset is the board. The formula is the move.</strong><br>
-  Write formulas to capture cells. The registry is the rulebook.</p>
+  Write formulas to capture cells. The registry is the rulebook.<br>
+  <span style="display:inline-block;margin-top:14px;color:var(--cream)">Here&rsquo;s the target. Get there however you want. We score the formula you used.</span></p>
   <div class="cs-badge"><div class="cs-dot"></div>
 
 <div style="display:flex;justify-content:center;margin:24px 0 8px;">
@@ -409,9 +417,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
     <animate attributeName="opacity" values="1;0.4;1" dur="2.5s" repeatCount="indefinite"/>
   </rect>
   <text x="160" y="164" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#D4A843" opacity="0.8">TARGET</text>
-  <text x="160" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#6B7B8D" letter-spacing="2" opacity="0.6">FORMULA BATTLE</text>
+  <text x="160" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#6B7B8D" letter-spacing="2" opacity="0.6">FORMULA SCORING</text>
 </svg>
-</div>In development &middot; Excelligence wing</div>
+</div>Live Demo Available &middot; Excelligence wing</div>
 </div>
 
 <!-- LIVE DEMO -->
@@ -457,81 +465,71 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 
 <!-- BOARD -->
 <div class="board-wrap">
-  <div class="board-label">The board &mdash; a real dataset. Pieces sit on actual data cells.</div>
+  <div class="board-label">The board &mdash; a real dataset. Any cell can be a target.</div>
   <div class="board">
-    <div class="board-header-row">
-      <div class="board-corner"></div>
-      <div class="board-col-head">A</div>
-      <div class="board-col-head">B</div>
-      <div class="board-col-head">C</div>
-      <div class="board-col-head">D</div>
-      <div class="board-col-head">E</div>
-      <div class="board-col-head">F</div>
-    </div>
-    <!-- Row 1 -->
-    <div class="board-row">
-      <div class="board-row-head">1</div>
-      <div class="cell dark"><div class="cell-val header">Region</div></div>
-      <div class="cell dark"><div class="cell-val header">Quarter</div></div>
-      <div class="cell dark"><div class="cell-val header">Product</div></div>
-      <div class="cell dark"><div class="cell-val header">Amount</div></div>
-      <div class="cell dark"><div class="cell-val header">Units</div></div>
-      <div class="cell dark"><div class="cell-val header">Status</div></div>
-    </div>
+    <!-- Top-left corner -->
+    <div class="board-corner"></div>
+    <!-- Column letters -->
+    <div class="board-col-head">A</div>
+    <div class="board-col-head">B</div>
+    <div class="board-col-head">C</div>
+    <div class="board-col-head">D</div>
+    <div class="board-col-head">E</div>
+    <div class="board-col-head">F</div>
+
+    <!-- Row 1 — table headers -->
+    <div class="board-row-head">1</div>
+    <div class="cell header">Region</div>
+    <div class="cell header">Quarter</div>
+    <div class="cell header">Product</div>
+    <div class="cell header">Amount</div>
+    <div class="cell header">Units</div>
+    <div class="cell header">Status</div>
+
     <!-- Row 2 -->
-    <div class="board-row">
-      <div class="board-row-head">2</div>
-      <div class="cell mine"><div class="cell-val text">North</div><div class="piece red">&#9820;</div></div>
-      <div class="cell"><div class="cell-val text">Q1</div></div>
-      <div class="cell"><div class="cell-val text">Widgets</div></div>
-      <div class="cell"><div class="cell-val num">4,280</div></div>
-      <div class="cell"><div class="cell-val num">142</div></div>
-      <div class="cell"><div class="cell-val text">Active</div></div>
-    </div>
+    <div class="board-row-head">2</div>
+    <div class="cell">North</div>
+    <div class="cell">Q1</div>
+    <div class="cell target">Widgets<span class="target-label">target</span></div>
+    <div class="cell">4,280</div>
+    <div class="cell">142</div>
+    <div class="cell">Active</div>
+
     <!-- Row 3 -->
-    <div class="board-row">
-      <div class="board-row-head">3</div>
-      <div class="cell dark"><div class="cell-val text">South</div></div>
-      <div class="cell dark"><div class="cell-val text">Q1</div></div>
-      <div class="cell dark"><div class="cell-val text">Gadgets</div></div>
-      <div class="cell dark hint"><div class="cell-val num">2,190</div></div>
-      <div class="cell dark"><div class="cell-val num">87</div></div>
-      <div class="cell dark"><div class="cell-val text">Active</div></div>
-    </div>
-    <!-- Row 4 — TARGET -->
-    <div class="board-row">
-      <div class="board-row-head">4</div>
-      <div class="cell"><div class="cell-val text">North</div></div>
-      <div class="cell"><div class="cell-val text">Q2</div></div>
-      <div class="cell"><div class="cell-val text">Widgets</div></div>
-      <div class="cell target">
-        <div class="target-label">target</div>
-        <div class="cell-val num">6,540</div>
-        <div class="piece green">&#9822;</div>
-      </div>
-      <div class="cell"><div class="cell-val num">218</div></div>
-      <div class="cell"><div class="cell-val text">Active</div></div>
-    </div>
+    <div class="board-row-head">3</div>
+    <div class="cell">South</div>
+    <div class="cell">Q1</div>
+    <div class="cell">Gadgets</div>
+    <div class="cell">2,190</div>
+    <div class="cell">87</div>
+    <div class="cell">Active</div>
+
+    <!-- Row 4 -->
+    <div class="board-row-head">4</div>
+    <div class="cell">North</div>
+    <div class="cell">Q2</div>
+    <div class="cell">Widgets</div>
+    <div class="cell target">6,540<span class="target-label">target</span></div>
+    <div class="cell">218</div>
+    <div class="cell">Active</div>
+
     <!-- Row 5 -->
-    <div class="board-row">
-      <div class="board-row-head">5</div>
-      <div class="cell dark"><div class="cell-val text">East</div></div>
-      <div class="cell dark"><div class="cell-val text">Q2</div></div>
-      <div class="cell dark"><div class="cell-val text">Gadgets</div></div>
-      <div class="cell dark"><div class="cell-val num">3,870</div></div>
-      <div class="cell dark"><div class="cell-val num">129</div><div class="piece red">&#9819;</div></div>
-      <div class="cell dark"><div class="cell-val text">Active</div></div>
-    </div>
+    <div class="board-row-head">5</div>
+    <div class="cell">East</div>
+    <div class="cell">Q2</div>
+    <div class="cell">Gadgets</div>
+    <div class="cell">3,870</div>
+    <div class="cell">129</div>
+    <div class="cell">Active</div>
+
     <!-- Row 6 -->
-    <div class="board-row">
-      <div class="board-row-head">6</div>
-      <div class="cell"><div class="cell-val text">West</div></div>
-      <div class="cell"><div class="cell-val text">Q3</div></div>
-      <div class="cell"><div class="cell-val text">Widgets</div></div>
-      <div class="cell"><div class="cell-val num">5,110</div></div>
-      <div class="cell"><div class="cell-val num">170</div></div>
-      <div class="cell"><div class="cell-val text">Active</div><div class="piece green">&#9823;</div></div>
-    </div>
+    <div class="board-row-head">6</div>
+    <div class="cell">West</div>
+    <div class="cell">Q3</div>
+    <div class="cell">Widgets</div>
+    <div class="cell">5,110</div>
+    <div class="cell">170</div>
+    <div class="cell target">Active<span class="target-label">target</span></div>
   </div>
 </div>
 
@@ -539,7 +537,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 <div class="section-wrap">
   <div class="section-eyebrow">The Mechanic</div>
   <h2 class="section-title">Three rules. One capture.</h2>
-  <p class="section-sub">Any formula that passes all three rules wins the cell. Higher-tier formulas score bonus points.</p>
+  <p class="section-sub"><strong style="color:var(--cream)">Game B &mdash; the default mode.</strong> No declaration required. Solve the target cell with any legal formula. The registry evaluates what you used and scores accordingly.</p>
 </div>
 <div class="mechanic-strip">
   <div class="mech-card one">
@@ -559,48 +557,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
   </div>
 </div>
 
-<div class="divider"><hr></div>
-
-<!-- FORMULA DEMO -->
-<div class="section-wrap">
-  <div class="section-eyebrow">Example Capture</div>
-  <h2 class="section-title">Your Rook wants D4.</h2>
-  <p class="section-sub">D4 contains 6,540 &mdash; the North / Q2 / Widgets amount. Write a formula that derives it from the dataset.</p>
-</div>
-<div class="formula-section">
-  <div class="formula-label">Your formula</div>
-  <div class="formula-input-demo">=SUMIFS(D:D, A:A, "North", B:B, "Q2", C:C, "Widgets")</div>
-  <div class="formula-result">
-    <div class="result-box">
-      <div class="result-label">Result</div>
-      <div class="result-val pass">6,540 &mdash; CAPTURED</div>
-    </div>
-    <div class="result-box">
-      <div class="result-label">Score</div>
-      <div class="result-val score">+100 base &middot; +50 SUMIFS bonus</div>
-    </div>
-  </div>
-</div>
-
-<div class="divider"><hr></div>
-
-<!-- REGISTRY CONNECTION -->
-<div class="section-wrap">
-  <div class="section-eyebrow">Registry Connection</div>
-  <h2 class="section-title">Every capture cites a registry entry.</h2>
-  <p class="section-sub">Governed formulas score bonus points. After each capture the game surfaces the Excelligence entry that governs the pattern you used &mdash; or the one you could have used for more points.</p>
-</div>
-<div class="registry-section">
-  <div class="registry-card">
-    <div class="reg-icon">Σ</div>
-    <div>
-      <div class="reg-id">FRM-0006 &middot; SUMIFS</div>
-      <div class="reg-name">SUMIFS &mdash; Multi-Condition Aggregation</div>
-      <div class="reg-body">Aggregates a range based on multiple criteria. The governed alternative to nested IFs for conditional summation. Structured references preferred over column letter ranges.</div>
-      <div class="reg-bonus">+50 bonus points &middot; Governed formula used</div>
-      <br>
-      <a href="/explorer/#FRM-0006" class="reg-link">View FRM-0006 in graph &rarr;</a>
-    </div>
+<!-- HARD MODE CALLOUT -->
+<div class="hard-mode-wrap">
+  <div class="hard-mode-box">
+    <div class="hard-mode-tag">Game A &mdash; Hard Mode</div>
+    <div class="hard-mode-body">Declare your piece <em>before</em> the target is revealed. Commit to a formula tier. The pressure is the point.</div>
   </div>
 </div>
 
@@ -609,8 +570,8 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 <!-- PIECE TIERS -->
 <div class="section-wrap">
   <div class="section-eyebrow">Piece Tiers</div>
-  <h2 class="section-title">Pieces mark formula difficulty.</h2>
-  <p class="section-sub">Any piece can attempt any capture. Higher-tier formulas score more. No chess movement rules &mdash; pieces are scoring markers, not chess pieces.</p>
+  <h2 class="section-title">Pieces are scoring markers, not chess pieces.</h2>
+  <p class="section-sub">In Game B, pieces are <strong style="color:var(--cream)">result badges</strong> &mdash; the registry assigns one after you solve. In Game A (Hard Mode), you <strong style="color:var(--cream)">declare</strong> a piece before you see the target. Higher tier, higher stakes, higher score.</p>
 </div>
 <div class="tiers-section">
   <div class="tiers-grid">
@@ -772,11 +733,33 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 
 <div class="divider"><hr></div>
 
+<!-- REGISTRY CONNECTION -->
+<div class="section-wrap">
+  <div class="section-eyebrow">Registry Connection</div>
+  <h2 class="section-title">Every capture cites a registry entry.</h2>
+  <p class="section-sub">Governed formulas score bonus points. After each capture the game surfaces the Excelligence entry that governs the pattern you used &mdash; or the one you could have used for more points.</p>
+</div>
+<div class="registry-section">
+  <div class="registry-card">
+    <div class="reg-icon">Σ</div>
+    <div>
+      <div class="reg-id">FRM-0011 &middot; SUMIFS</div>
+      <div class="reg-name">SUMIFS &mdash; Multi-Condition Aggregation</div>
+      <div class="reg-body">Aggregates a range based on multiple criteria. The governed alternative to nested IFs for conditional summation. Structured references preferred over column letter ranges.</div>
+      <div class="reg-bonus">+50 bonus points &middot; Governed formula used</div>
+      <br>
+      <a href="/explorer/#FRM-0011" class="reg-link">View FRM-0011 in graph &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
 <!-- NOTIFY / CTA -->
 <div class="notify-section">
   <div class="notify-eyebrow">Coming to Excelligence</div>
   <h2 class="notify-title">The registry <span>is the rulebook.</span></h2>
-  <p class="notify-sub">GridTactics ships as a downloadable .xlsx &mdash; a real Excel workbook, no macros, works on Mac. The game runs on data validation and formula chains. No web app required. The spreadsheet IS the game.</p>
+  <p class="notify-sub">GridTactics ships as a downloadable .xlsx &mdash; a real Excel workbook, no macros, works on Mac. The game runs on data validation and formula chains. No web app required. The spreadsheet IS the game.<br><br><strong style="color:var(--cream)">A live demo is available above.</strong> The full .xlsx ships when the scoring engine is complete.</p>
   <div class="notify-links">
     <a href="/explorer/" class="btn-primary">Enter the Graph &rarr;</a>
     <a href="/scanner/" class="btn-secondary">Try the Scanner</a>
