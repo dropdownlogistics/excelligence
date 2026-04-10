@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAMBDA &mdash; Excelligence Registry</title>
+<meta name="description" content="LAMBDA creates custom functions inside Excel without VBA, encapsulating logic into reusable, portable, testable function objects. The Expert-tier gateway to MAP, REDUCE, MAKEARRAY, and SCAN.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
+  animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--gold)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;
+  line-height:1;margin-bottom:10px}
+.entry-name span{color:#6B9DC2}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);
+  line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-type{color:var(--blue);border-color:rgba(107,157,194,0.3);background:rgba(107,157,194,0.08)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-freq{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.pill-ver{color:var(--steel);border-color:rgba(107,123,141,0.3);background:rgba(107,123,141,0.08)}
+.pill-diff{color:var(--crimson);border-color:rgba(178,53,49,0.3);background:rgba(178,53,49,0.08)}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:36px;
+  animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);
+  line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+.gov-box{border-left:3px solid var(--crimson);background:rgba(178,53,49,0.06);
+  padding:14px 18px;border-radius:0 4px 4px 0;margin:4px 0}
+.gov-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.78);line-height:1.7}
+
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  padding:18px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--green);
+  line-height:1.7;white-space:pre}
+.code-comment{color:var(--steel)}
+.code-name{color:var(--gold)}
+.code-val{color:var(--blue)}
+.code-fn{color:var(--crimson)}
+
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+
+.decomp-step{border-bottom:1px solid var(--border);padding:0}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1;overflow:hidden;text-overflow:ellipsis}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;
+  border-radius:3px;flex-shrink:0}
+.badge-name{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.badge-calc{color:var(--blue);background:rgba(107,157,194,0.1);border:1px solid rgba(107,157,194,0.2)}
+.badge-output{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.badge-arg{color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);
+  line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;
+  padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);
+  display:inline-block;margin-bottom:8px}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.04em;font-style:italic}
+
+.full-formula{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:18px 20px;margin:12px 0}
+.formula-line{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.9;white-space:pre}
+
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;
+  text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.leads{color:var(--green)}
+.conn-type.depends{color:var(--crimson)}
+.conn-type.pairs{color:var(--amber)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+.tags-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  background:var(--card);border:1px solid var(--border);padding:4px 10px;border-radius:3px}
+
+.paired-cta{margin-top:48px;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:22px 24px}
+.paired-cta-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+.paired-cta-link{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  text-decoration:none;color:var(--cream);
+  padding:16px 20px;background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  transition:border-color 0.2s,background 0.2s}
+.paired-cta-link:hover{border-color:rgba(107,157,194,0.4);background:rgba(107,157,194,0.05)}
+.paired-cta-headline{font-family:'Source Serif 4',serif;font-size:0.94rem;color:var(--cream);margin-bottom:4px;line-height:1.45}
+.paired-cta-sub{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.06em}
+.paired-cta-arrow{font-family:'JetBrains Mono',monospace;color:var(--blue);font-size:1.3rem;flex-shrink:0}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .page{padding:40px 20px 0}
+  .paired-cta-link{flex-direction:column;align-items:flex-start;gap:10px}
+  .tabs{overflow-x:auto}
+  .tab{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">All Entries</a>
+    <a href="/explorer/#FRM-0004" class="nav-link">View in Graph</a>
+    <a href="/explorer/" class="nav-link">Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ENTRY HEADER -->
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Excelligence Registry &middot; Formula</div>
+    <div class="entry-id">FRM-0004</div>
+    <h1 class="entry-name"><span>LAMBDA</span> Function</h1>
+    <p class="entry-what">Creates custom functions by encapsulating logic into reusable, portable, testable function objects without VBA, enabling higher-order patterns like MAP, REDUCE, and MAKEARRAY. The Expert-tier gateway that turns Excel into a real programming environment.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-type">FRM &mdash; Formula</span>
+      <span class="meta-pill pill-tier">Expert</span>
+      <span class="meta-pill pill-diff">Difficulty 5/5</span>
+      <span class="meta-pill pill-freq">Weekly use</span>
+      <span class="meta-pill pill-ver">Excel 365</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(event,'explained')">Explained</button>
+    <button class="tab" onclick="switchTab(event,'entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab(event,'examples')">Examples</button>
+    <button class="tab" onclick="switchTab(event,'connections')">Connections</button>
+  </div>
+
+  <!-- TAB: EXPLAINED -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Idea</div>
+      <p class="section-body">LAMBDA lets you write your own Excel function. You declare parameters, write a body, and call it &mdash; either inline (immediately after defining it) or by saving it to the Name Manager so it works like a built-in function across the entire workbook. Before LAMBDA, the only way to create reusable logic in Excel was VBA, which meant macros, security warnings, and code that lived in a separate window from your spreadsheet. LAMBDA does the same job, in the formula bar, with no macros, on Mac and Windows. It is the function that turns Excel into a programming environment.</p>
+    </div>
+
+    <!-- DECOMPOSITION -->
+    <div class="section">
+      <div class="section-label">Formula Walkthrough &mdash; Anatomy of a LAMBDA</div>
+      <p class="section-body" style="margin-bottom:16px">Here&rsquo;s a real LAMBDA, defined and called inline. Click each part to understand what it does.</p>
+
+      <div class="full-formula">
+        <div class="formula-line"><span style="color:var(--crimson)">= LAMBDA(</span></div>
+        <div class="formula-line">    <span class="code-name">price</span>, <span class="code-name">qty</span>, <span class="code-name">tax</span>,                       <span class="code-comment">// parameters</span></div>
+        <div class="formula-line">    <span class="code-fn">LET</span>(</div>
+        <div class="formula-line">      <span class="code-name">subtotal</span>, <span class="code-name">price</span> * <span class="code-name">qty</span>,            <span class="code-comment">// inner calc</span></div>
+        <div class="formula-line">      <span class="code-name">subtotal</span> * (<span class="code-val">1</span> + <span class="code-name">tax</span>)              <span class="code-comment">// output</span></div>
+        <div class="formula-line">    )</div>
+        <div class="formula-line">  <span style="color:var(--crimson)">)</span>(<span class="code-val">B2</span>, <span class="code-val">C2</span>, <span class="code-val">D2</span>)                         <span class="code-comment">// invocation</span></div>
+      </div>
+    </div>
+
+    <div class="decomp-wrap">
+      <div class="decomp-header">
+        <div class="decomp-title">Each Part Explained</div>
+        <div class="decomp-desc">Click any step to expand</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">01</div>
+          <div class="step-formula"><span class="code-fn">LAMBDA</span>( <span class="code-name">price</span>, <span class="code-name">qty</span>, <span class="code-name">tax</span>, &hellip; )</div>
+          <span class="step-badge badge-name">Parameters</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">The first arguments to LAMBDA are <strong>parameter names</strong>. They are placeholders &mdash; not cell references, not values &mdash; that you give names to so you can use them inside the body. Here we&rsquo;re saying: &ldquo;this function takes three inputs which I&rsquo;ll call <strong style="color:var(--gold)">price</strong>, <strong style="color:var(--gold)">qty</strong>, and <strong style="color:var(--gold)">tax</strong>.&rdquo; You can have up to 253 parameters, but past 4 or 5 you should be passing a structured object instead.</p>
+          <div class="step-value">price, qty, tax  &mdash;  three named placeholders</div>
+          <div class="step-why">Parameter names cannot match Excel cell addresses (A1, B2, etc.) or function names. Choose names that describe the role, not the type &mdash; "rate" not "num1".</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">02</div>
+          <div class="step-formula"><span class="code-fn">LET</span>(&hellip;) &mdash; the body of the function</div>
+          <span class="step-badge badge-calc">Body</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">The <strong>last</strong> argument to LAMBDA is its body &mdash; the expression that runs when you call the function. Anything is allowed here, but in practice the body should almost always be a LET. LET names your intermediate calculations, which makes the LAMBDA self-documenting and lets you compute each value once.</p>
+          <div class="step-value">Body wraps the actual logic</div>
+          <div class="step-why">A LAMBDA without LET is allowed but rarely defensible. The combination LAMBDA + LET is so common it should be your default shape: parameters at the top, named intermediates, named output.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">03</div>
+          <div class="step-formula"><span class="code-name">subtotal</span>, <span class="code-name">price</span> * <span class="code-name">qty</span></div>
+          <span class="step-badge badge-calc">Inner calc</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">Inside the LET, we compute <strong style="color:var(--gold)">subtotal</strong> from two of our LAMBDA parameters. This is the moment where parameters stop being abstract names and start being values &mdash; whatever you passed to the LAMBDA at call time becomes the value of <strong style="color:var(--gold)">price</strong> and <strong style="color:var(--gold)">qty</strong> here.</p>
+          <div class="step-value">If price=10 and qty=3, subtotal = 30</div>
+          <div class="step-why">LAMBDA parameters are scoped to the LAMBDA &mdash; they don&rsquo;t leak out, and they don&rsquo;t collide with sheet cells of the same name. This scoping is what makes LAMBDAs safe to compose.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">04</div>
+          <div class="step-formula"><span class="code-name">subtotal</span> * (<span class="code-val">1</span> + <span class="code-name">tax</span>)</div>
+          <span class="step-badge badge-output">Output</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">The last expression in LET (which is itself the LAMBDA body) is the <strong>return value</strong> &mdash; what the function gives back when you call it. Here we apply tax to subtotal and that&rsquo;s the answer the LAMBDA produces.</p>
+          <div class="step-value">If price=10, qty=3, tax=0.08  -->  result = 32.40</div>
+          <div class="step-why">A LAMBDA returns whatever its body evaluates to. If the body is a LET, the return value is the LET&rsquo;s last expression. Trace your return value backward through the LETs &mdash; that&rsquo;s how you reason about what a LAMBDA does.</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">05</div>
+          <div class="step-formula">)(<span class="code-val">B2</span>, <span class="code-val">C2</span>, <span class="code-val">D2</span>)</div>
+          <span class="step-badge badge-arg">Invocation</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">A LAMBDA on its own is just a function object &mdash; it doesn&rsquo;t do anything until you <em>call</em> it. The trailing <strong style="color:var(--gold)">(B2, C2, D2)</strong> calls the LAMBDA with three arguments: B2 becomes price, C2 becomes qty, D2 becomes tax. This pattern &mdash; defining and immediately calling &mdash; is called an &ldquo;inline LAMBDA&rdquo; and is how you test a LAMBDA before saving it to the Name Manager.</p>
+          <div class="step-value">Final result: B2 * C2 * (1 + D2)</div>
+          <div class="step-why">Inline LAMBDAs are for testing and one-shot logic. Once the LAMBDA works, save it via Name Manager &mdash; then you can call it anywhere in the workbook by name, like <strong>=PriceWithTax(B2, C2, D2)</strong>.</div>
+        </div>
+      </div>
+
+    </div><!-- /decomp-wrap -->
+
+    <!-- BEFORE / AFTER -->
+    <div class="section">
+      <div class="section-label">VBA Macro vs LAMBDA</div>
+      <p class="section-body" style="margin-bottom:12px">The same custom function &mdash; one is a macro that lives in VBA, the other is a formula in the workbook.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2717; VBA UDF</div>
+          <div class="code-block" style="border-color:rgba(178,53,49,0.2)">
+            <pre style="color:rgba(245,241,235,0.5)">Function PriceWithTax(
+  price As Double,
+  qty As Double,
+  tax As Double) As Double
+
+  Dim subtotal As Double
+  subtotal = price * qty
+  PriceWithTax = subtotal * _
+                 (1 + tax)
+End Function</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Lives in a code module. Triggers macro warnings. Doesn&rsquo;t run on Mac (for older code). Cannot be tested without opening the VBA editor. Workbook becomes .xlsm.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2713; LAMBDA</div>
+          <div class="code-block" style="border-color:rgba(74,158,107,0.2)">
+            <pre>=LAMBDA(
+  price, qty, tax,
+  LET(
+    <span class="code-name">subtotal</span>, price*qty,
+    <span class="code-name">subtotal</span>*(1+tax)
+  )
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Lives in the Name Manager. No macro warnings. Works on Mac and Windows identically. Tests in the formula bar. Workbook stays .xlsx.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHEN TO USE -->
+    <div class="section">
+      <div class="section-label">When to Use LAMBDA</div>
+      <div class="gov-box">
+        <p>LAMBDA is the <strong>Expert-tier gateway</strong>. Reach for it when the same calculation appears in three or more places in a workbook, or when a formula has grown beyond 200 characters and resists further LET decomposition. <strong>All DDL custom functions must be LAMBDA-based, never VBA.</strong> Combined with LET, LAMBDA enables MAP, REDUCE, MAKEARRAY, and SCAN &mdash; the higher-order patterns that move Excel from spreadsheet to compute engine.</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- TAB: REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When you need to create reusable custom functions without VBA, use LAMBDA to encapsulate logic into named, portable, testable function objects.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">Unnamed LAMBDA functions are untestable &mdash; if a LAMBDA only exists inline inside another formula, you can&rsquo;t verify its behavior in isolation. Scope confusion happens when a LAMBDA parameter name accidentally matches a sheet-level named range or cell address. Recursive LAMBDA without a termination condition causes Excel to crash hard &mdash; the formula evaluates until the call stack overflows. Treat LAMBDA recursion the same way you&rsquo;d treat recursion in any language: write the base case first.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">No inherent performance cost. Performance depends entirely on what the LAMBDA contains. <strong>Named LAMBDA functions via Name Manager enable reuse without recalculation overhead</strong> &mdash; the function object itself is cached, only its body re-evaluates when inputs change. Inline LAMBDAs lose this benefit and recompute every time.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="gov-box">
+        <p>LAMBDA is the Expert-tier gateway. Combined with LET, it enables MAKEARRAY, MAP, REDUCE, and SCAN. <strong>All DDL custom functions should be LAMBDA-based, never VBA.</strong> Every Name Manager LAMBDA must have a comment describing inputs, outputs, and intended use &mdash; an undocumented LAMBDA in the Name Manager is a future mystery.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tags</div>
+      <div class="tags-wrap">
+        <span class="tag">custom-function</span>
+        <span class="tag">higher-order</span>
+        <span class="tag">no-vba</span>
+        <span class="tag">expert-tier</span>
+        <span class="tag">365</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Aliases</div>
+      <p class="section-body">LAMBDA function &middot; user-defined-function &middot; named-function &middot; UDF-without-vba</p>
+    </div>
+
+  </div><!-- /tab-entry -->
+
+  <!-- TAB: EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Inline LAMBDA (Define and Call)</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Define a function and call it immediately</span>
+=LAMBDA(
+  price, qty, tax,
+  LET(
+    <span class="code-name">subtotal</span>, price * qty,
+    <span class="code-name">subtotal</span> * (1 + tax)
+  )
+)(B2, C2, D2)
+
+<span class="code-comment">-- The trailing (B2, C2, D2) is the call.
+-- Use this shape to test a LAMBDA before saving it.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; Named LAMBDA via Name Manager</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- In Name Manager, create a name "PriceWithTax" with this value:</span>
+=LAMBDA(
+  price, qty, tax,
+  LET(
+    <span class="code-name">subtotal</span>, price * qty,
+    <span class="code-name">subtotal</span> * (1 + tax)
+  )
+)
+
+<span class="code-comment">-- Then anywhere in the workbook:</span>
+=PriceWithTax(B2, C2, D2)
+
+<span class="code-comment">-- The function is now reusable across every sheet,
+-- documented once, tested once, called many times.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 3 &mdash; LAMBDA Inside MAP</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Apply a function to every element of an array</span>
+=MAP(
+  Sales[Revenue],
+  LAMBDA(rev,
+    LET(
+      <span class="code-name">band</span>,
+      IF(rev &gt; 10000, "Large",
+      IF(rev &gt; 1000,  "Medium",
+                       "Small")),
+      <span class="code-name">band</span>
+    )
+  )
+)
+
+<span class="code-comment">-- LAMBDA defines the per-element logic.
+-- MAP applies it to every value in the column.
+-- The result spills into a column of size labels.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 4 &mdash; LAMBDA Inside REDUCE</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Roll up an array to a single value</span>
+=REDUCE(
+  0,
+  Sales[Revenue],
+  LAMBDA(acc, val,
+    acc + IF(val &gt; 1000, val, 0)
+  )
+)
+
+<span class="code-comment">-- Sum only the revenue values above 1000.
+-- acc is the running total. val is the current element.
+-- This is what SUMIF would do, but inside a higher-order pattern.</span></pre>
+      </div>
+    </div>
+
+  </div><!-- /tab-examples -->
+
+  <!-- TAB: CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/explorer/#FRM-0002" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">FRM-0002</span>
+          <span class="conn-name">LET &mdash; the body of every LAMBDA should be a LET</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0002" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0002</span>
+          <span class="conn-name">LET &mdash; the canonical LAMBDA + LET shape</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#ARC-0001" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">ARC-0001</span>
+          <span class="conn-name">MAKEARRAY Engine</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0019" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0019</span>
+          <span class="conn-name">MAP &mdash; apply LAMBDA to every element</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0020" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0020</span>
+          <span class="conn-name">REDUCE &mdash; collapse an array via LAMBDA</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#PTN-0002" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">PTN-0002</span>
+          <span class="conn-name">Named Ranges &mdash; Name Manager hosts every reusable LAMBDA</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See FRM-0004 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#FRM-0004" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2);transition:opacity 0.2s" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">
+        Open FRM-0004 in Graph &rarr;
+      </a>
+    </div>
+
+  </div><!-- /tab-connections -->
+
+  <!-- PAIRED CTA -->
+  <div class="paired-cta">
+    <div class="paired-cta-eyebrow">Paired Entry</div>
+    <a href="/learn/let/" class="paired-cta-link">
+      <div>
+        <div class="paired-cta-headline">See how LET and LAMBDA work together</div>
+        <div class="paired-cta-sub">FRM-0002 &middot; LET &middot; Decomposition</div>
+      </div>
+      <span class="paired-cta-arrow">&rarr;</span>
+    </a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function switchTab(e, name) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  e.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleStep(el) {
+  el.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

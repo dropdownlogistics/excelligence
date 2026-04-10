@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMIFS &mdash; Excelligence Registry</title>
+<meta name="description" content="SUMIFS sums values across a range based on multiple criteria, enabling governed multi-condition aggregation without array formulas. The default aggregation pattern for DDL dashboards.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
+  animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--gold)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;
+  line-height:1;margin-bottom:10px}
+.entry-name span{color:#6B9DC2}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);
+  line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-type{color:var(--blue);border-color:rgba(107,157,194,0.3);background:rgba(107,157,194,0.08)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-freq{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.pill-ver{color:var(--steel);border-color:rgba(107,123,141,0.3);background:rgba(107,123,141,0.08)}
+.pill-diff{color:var(--crimson);border-color:rgba(178,53,49,0.3);background:rgba(178,53,49,0.08)}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:36px;
+  animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);
+  line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+.gov-box{border-left:3px solid var(--crimson);background:rgba(178,53,49,0.06);
+  padding:14px 18px;border-radius:0 4px 4px 0;margin:4px 0}
+.gov-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.78);line-height:1.7}
+
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  padding:18px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--green);
+  line-height:1.7;white-space:pre}
+.code-comment{color:var(--steel)}
+.code-name{color:var(--gold)}
+.code-val{color:var(--blue)}
+.code-fn{color:var(--crimson)}
+
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+
+.decomp-step{border-bottom:1px solid var(--border);padding:0}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1;overflow:hidden;text-overflow:ellipsis}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;
+  border-radius:3px;flex-shrink:0}
+.badge-name{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.badge-calc{color:var(--blue);background:rgba(107,157,194,0.1);border:1px solid rgba(107,157,194,0.2)}
+.badge-output{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.badge-arg{color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);
+  line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;
+  padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);
+  display:inline-block;margin-bottom:8px}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.04em;font-style:italic}
+
+.full-formula{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:18px 20px;margin:12px 0}
+.formula-line{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.9;white-space:pre}
+
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;
+  text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.leads{color:var(--green)}
+.conn-type.depends{color:var(--crimson)}
+.conn-type.pairs{color:var(--amber)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+.tags-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  background:var(--card);border:1px solid var(--border);padding:4px 10px;border-radius:3px}
+
+.paired-cta{margin-top:48px;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:22px 24px}
+.paired-cta-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+.paired-cta-link{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  text-decoration:none;color:var(--cream);
+  padding:16px 20px;background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  transition:border-color 0.2s,background 0.2s}
+.paired-cta-link:hover{border-color:rgba(107,157,194,0.4);background:rgba(107,157,194,0.05)}
+.paired-cta-headline{font-family:'Source Serif 4',serif;font-size:0.94rem;color:var(--cream);margin-bottom:4px;line-height:1.45}
+.paired-cta-sub{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.06em}
+.paired-cta-arrow{font-family:'JetBrains Mono',monospace;color:var(--blue);font-size:1.3rem;flex-shrink:0}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .page{padding:40px 20px 0}
+  .paired-cta-link{flex-direction:column;align-items:flex-start;gap:10px}
+  .tabs{overflow-x:auto}
+  .tab{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">All Entries</a>
+    <a href="/explorer/#FRM-0011" class="nav-link">View in Graph</a>
+    <a href="/explorer/" class="nav-link">Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ENTRY HEADER -->
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Excelligence Registry &middot; Formula</div>
+    <div class="entry-id">FRM-0011</div>
+    <h1 class="entry-name"><span>SUMIFS</span> Function</h1>
+    <p class="entry-what">Sums values across a range based on multiple criteria applied to corresponding ranges, enabling governed multi-condition aggregation without array formulas. The default aggregation pattern for every DDL dashboard.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-type">FRM &mdash; Formula</span>
+      <span class="meta-pill pill-tier">Intermediate</span>
+      <span class="meta-pill pill-diff">Difficulty 2/5</span>
+      <span class="meta-pill pill-freq">Daily use</span>
+      <span class="meta-pill pill-ver">Excel 2013+</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(event,'explained')">Explained</button>
+    <button class="tab" onclick="switchTab(event,'entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab(event,'examples')">Examples</button>
+    <button class="tab" onclick="switchTab(event,'connections')">Connections</button>
+  </div>
+
+  <!-- TAB: EXPLAINED -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Idea</div>
+      <p class="section-body">SUMIFS answers the question every dashboard asks: <em>add up the numbers in this column, but only the rows that match these conditions</em>. Region equals West, year equals 2026, status equals Closed &mdash; sum the revenue. SUMIFS does this in one function, with no helper columns and no array formulas. It is the most-used aggregation function in DDL workbooks for a reason: it&rsquo;s the simplest possible expression of multi-criteria math.</p>
+    </div>
+
+    <!-- DECOMPOSITION -->
+    <div class="section">
+      <div class="section-label">Formula Walkthrough &mdash; Argument by Argument</div>
+      <p class="section-body" style="margin-bottom:16px">Here&rsquo;s a real SUMIFS. Click each argument to see what it does and how the pairs work.</p>
+
+      <div class="full-formula">
+        <div class="formula-line"><span style="color:var(--crimson)">= SUMIFS(</span></div>
+        <div class="formula-line">    <span class="code-val">Sales[Revenue]</span>,                <span class="code-comment">// sum_range</span></div>
+        <div class="formula-line">    <span class="code-val">Sales[Region]</span>,  <span class="code-val">"West"</span>,        <span class="code-comment">// criteria pair 1</span></div>
+        <div class="formula-line">    <span class="code-val">Sales[Year]</span>,    <span class="code-val">2026</span>,            <span class="code-comment">// criteria pair 2</span></div>
+        <div class="formula-line">    <span class="code-val">Sales[Status]</span>,  <span class="code-val">"Closed"</span>         <span class="code-comment">// criteria pair 3</span></div>
+        <div class="formula-line"><span style="color:var(--crimson)">)</span></div>
+      </div>
+    </div>
+
+    <div class="decomp-wrap">
+      <div class="decomp-header">
+        <div class="decomp-title">Each Argument Explained</div>
+        <div class="decomp-desc">Click any step to expand</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">01</div>
+          <div class="step-formula"><span class="code-val">Sales[Revenue]</span> &mdash; the column being summed</div>
+          <span class="step-badge badge-arg">sum_range</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This is the column whose values get added up. SUMIFS will only add values from rows that satisfy <em>every</em> criteria pair that follows. Notice it&rsquo;s the <strong>first</strong> argument &mdash; the inverse of SUMIF, where the sum_range is last. This argument order trips up everyone exactly once. After that, you remember.</p>
+          <div class="step-value">Sales[Revenue] = entire Revenue column of the Sales table</div>
+          <div class="step-why">Use a structured table reference (Sales[Revenue]) instead of B:B or B2:B10000. Structured references auto-expand as the table grows and survive column insertion. Raw ranges don&rsquo;t.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">02</div>
+          <div class="step-formula"><span class="code-val">Sales[Region]</span>, <span class="code-val">"West"</span> &mdash; the first criterion</div>
+          <span class="step-badge badge-arg">criteria pair 1</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">Criteria come in <strong>pairs</strong>: a range to look in, and a value to match against. The first item (<strong style="color:var(--gold)">Sales[Region]</strong>) is the column to inspect; the second (<strong style="color:var(--gold)">"West"</strong>) is the value the row must have in that column to be included in the sum. Each pair narrows the matching rows further &mdash; SUMIFS uses AND logic across all pairs.</p>
+          <div class="step-value">Includes only rows where Region = "West"</div>
+          <div class="step-why">Text criteria are case-insensitive by default. "West" matches "west" and "WEST". If your data has inconsistent case and you need case-sensitive matching, you have to use SUMPRODUCT or array formulas instead.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">03</div>
+          <div class="step-formula"><span class="code-val">Sales[Year]</span>, <span class="code-val">2026</span> &mdash; the second criterion</div>
+          <span class="step-badge badge-arg">criteria pair 2</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">A second pair narrows the matching rows further. Now we&rsquo;re only summing rows where Region is "West" <em>and</em> Year is 2026. Numeric criteria can be literal values, cell references, or comparison strings like <strong style="color:var(--gold)">"&gt;1000"</strong> or <strong style="color:var(--gold)">"&lt;="&amp;Threshold</strong>.</p>
+          <div class="step-value">Now: Region = "West" AND Year = 2026</div>
+          <div class="step-why">Comparison operators in criteria must be wrapped in quotes and concatenated with &amp; if comparing to a cell. ">"&amp;A1 means greater-than the value in A1. ">A1" looks for the literal text ">A1" and matches nothing.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">04</div>
+          <div class="step-formula"><span class="code-val">Sales[Status]</span>, <span class="code-val">"Closed"</span> &mdash; the third criterion</div>
+          <span class="step-badge badge-arg">criteria pair 3</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">A third pair narrows further. Now we&rsquo;re summing only the Revenue from rows where Region = "West", Year = 2026, <em>and</em> Status = "Closed". You can keep adding criteria pairs &mdash; SUMIFS supports up to 127 of them &mdash; though if you find yourself approaching that number, you should be using Power Query instead.</p>
+          <div class="step-value">Final filter: Region = "West" AND Year = 2026 AND Status = "Closed"</div>
+          <div class="step-why">Each criteria_range must be the same shape as sum_range. Mismatched shapes throw #VALUE!. If you accidentally pass Sales[Status] as Region:Status, the formula breaks &mdash; not silently, but loudly.</div>
+        </div>
+      </div>
+
+    </div><!-- /decomp-wrap -->
+
+    <!-- BEFORE / AFTER -->
+    <div class="section">
+      <div class="section-label">Helper Columns vs SUMIFS</div>
+      <p class="section-body" style="margin-bottom:12px">The same aggregation &mdash; one needs three helper columns and a SUM, the other is one formula.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2717; Helper-column approach</div>
+          <div class="code-block" style="border-color:rgba(178,53,49,0.2)">
+            <pre style="color:rgba(245,241,235,0.5)"><span class="code-comment">-- 3 helper columns + a SUM</span>
+H2: =IF(AND(
+       A2="West",
+       B2=2026,
+       C2="Closed"),
+     E2, 0)
+
+=SUM(H2:H10000)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Three helper columns. One SUM. Logic spread across two places. Helper columns must be maintained as data grows. Audit nightmare.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2713; SUMIFS</div>
+          <div class="code-block" style="border-color:rgba(74,158,107,0.2)">
+            <pre>=SUMIFS(
+  Sales[Revenue],
+  Sales[Region], "West",
+  Sales[Year],   2026,
+  Sales[Status], "Closed"
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">One formula. No helper columns. The criteria are visible in plain text. Anyone reading the formula understands what it returns without exploring the workbook.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHEN TO USE -->
+    <div class="section">
+      <div class="section-label">When to Use SUMIFS</div>
+      <div class="gov-box">
+        <p>SUMIFS (and its sibling COUNTIFS) is the <strong>default aggregation pattern</strong> for DDL dashboards. Reach for SUMPRODUCT only when SUMIFS cannot express the condition &mdash; for example, when criteria require calculation across multiple columns at once. Always reference table columns through structured references, never raw ranges.</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- TAB: REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When you need to aggregate values based on two or more conditions across different columns, use COUNTIFS or SUMIFS to perform governed multi-criteria counting or summation.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">Criteria ranges must be identical in size to the sum_range or SUMIFS returns <strong>#VALUE!</strong>. Text criteria are case-insensitive by default &mdash; "Closed" matches "closed", which can cause unexpected matches in dirty data. Wildcard characters (* and ?) in criteria strings are interpreted as wildcards, so a criterion like <strong>"7*"</strong> matches anything starting with 7, not the literal text "7*".</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">Faster than SUMPRODUCT for simple multi-criteria aggregation. Use SUMIFS over SUMPRODUCT when all criteria are direct column comparisons. SUMPRODUCT is only justified for calculated or cross-array criteria that SUMIFS cannot express.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="gov-box">
+        <p>COUNTIFS/SUMIFS is the default aggregation pattern for DDL dashboards. Use SUMPRODUCT only when SUMIFS cannot express the condition. The Selector-Driven Reconfiguration pattern (ARC-0003) uses SUMIFS internally. <strong>Criteria values should reference Control Panel cells</strong>, never be hardcoded inside the formula.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tags</div>
+      <div class="tags-wrap">
+        <span class="tag">aggregation</span>
+        <span class="tag">multi-criteria</span>
+        <span class="tag">dashboard-default</span>
+        <span class="tag">2013+</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Aliases</div>
+      <p class="section-body">SUMIFS function &middot; COUNTIFS &middot; multi-condition-sum &middot; governed-aggregation</p>
+    </div>
+
+  </div><!-- /tab-entry -->
+
+  <!-- TAB: EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Two-Criteria Sum</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Total revenue for one region in one year</span>
+=SUMIFS(
+  Sales[Revenue],
+  Sales[Region], <span class="code-val">"West"</span>,
+  Sales[Year],   <span class="code-val">2026</span>
+)
+
+<span class="code-comment">-- One number. Both filters explicit. No helper columns.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; COUNTIFS for Row Counts</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Same syntax. No sum_range. Returns the row count instead of the sum.</span>
+=COUNTIFS(
+  Orders[Status],   <span class="code-val">"Pending"</span>,
+  Orders[DaysOpen], <span class="code-val">"&gt;30"</span>
+)
+
+<span class="code-comment">-- How many orders have been pending more than 30 days?
+-- The "&gt;30" is the criterion, not a separate argument.
+-- Comparison operators always live inside the criteria string.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 3 &mdash; Criteria From the Control Panel</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Pull criteria values from named cells on the Config tab</span>
+=SUMIFS(
+  Sales[Revenue],
+  Sales[Region], Config!RegionFilter,
+  Sales[Year],   Config!YearFilter,
+  Sales[Status], Config!StatusFilter
+)
+
+<span class="code-comment">-- Change the filter on the Config tab and the
+-- entire dashboard updates. No formula edits.
+-- This is the foundation of Selector-Driven Reconfiguration.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 4 &mdash; Wrapped in LET for a KPI Card</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- A "% of target" KPI built from two SUMIFS calls</span>
+=LET(
+  <span class="code-name">actual</span>,  SUMIFS(Sales[Revenue],
+                  Sales[Region], <span class="code-val">"West"</span>,
+                  Sales[Year], <span class="code-val">2026</span>),
+  <span class="code-name">target</span>,  SUMIFS(Targets[Goal],
+                  Targets[Region], <span class="code-val">"West"</span>,
+                  Targets[Year], <span class="code-val">2026</span>),
+  <span class="code-name">pct</span>,     IFERROR(<span class="code-name">actual</span> / <span class="code-name">target</span>, 0),
+  <span class="code-name">pct</span>
+)
+
+<span class="code-comment">-- The KPI Card pattern (PTN-0014) uses exactly this shape:
+-- two named SUMIFS calls and a final ratio.</span></pre>
+      </div>
+    </div>
+
+  </div><!-- /tab-examples -->
+
+  <!-- TAB: CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/explorer/#ARC-0003" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">ARC-0003</span>
+          <span class="conn-name">Selector-Driven Reconfiguration</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0006" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0006</span>
+          <span class="conn-name">SUMPRODUCT &mdash; for criteria SUMIFS can&rsquo;t express</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#PTN-0014" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">PTN-0014</span>
+          <span class="conn-name">KPI Card Pattern</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#KEY-0001" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">KEY-0001</span>
+          <span class="conn-name">Ctrl+T &mdash; structured references for sum and criteria ranges</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0002" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0002</span>
+          <span class="conn-name">LET &mdash; name multiple SUMIFS calls inside a KPI</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See FRM-0011 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#FRM-0011" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2);transition:opacity 0.2s" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">
+        Open FRM-0011 in Graph &rarr;
+      </a>
+    </div>
+
+  </div><!-- /tab-connections -->
+
+  <!-- PAIRED CTA -->
+  <div class="paired-cta">
+    <div class="paired-cta-eyebrow">Paired Entry</div>
+    <a href="/learn/control-panel/" class="paired-cta-link">
+      <div>
+        <div class="paired-cta-headline">See how Control Panel governs your criteria</div>
+        <div class="paired-cta-sub">PTN-0018 &middot; Control Panel &middot; Pattern</div>
+      </div>
+      <span class="paired-cta-arrow">&rarr;</span>
+    </a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function switchTab(e, name) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  e.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleStep(el) {
+  el.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

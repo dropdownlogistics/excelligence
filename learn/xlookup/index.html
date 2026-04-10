@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XLOOKUP &mdash; Excelligence Registry</title>
+<meta name="description" content="XLOOKUP retrieves a value from a range based on a lookup key, returning exact or approximate matches without column index dependency. The governed replacement for VLOOKUP.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+/* ENTRY HEADER */
+.entry-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
+  animation:fadeUp 0.5s ease both}
+.entry-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.entry-breadcrumb::before{content:'';width:16px;height:1px;background:var(--gold)}
+.entry-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:6px}
+.entry-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.04em;
+  line-height:1;margin-bottom:10px}
+.entry-name span{color:#6B9DC2}
+.entry-what{font-family:'Source Serif 4',serif;font-size:1rem;color:rgba(245,241,235,0.7);
+  line-height:1.7;margin-bottom:18px;max-width:620px}
+.entry-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-type{color:var(--blue);border-color:rgba(107,157,194,0.3);background:rgba(107,157,194,0.08)}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-freq{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.pill-ver{color:var(--steel);border-color:rgba(107,123,141,0.3);background:rgba(107,123,141,0.08)}
+.pill-diff{color:var(--crimson);border-color:rgba(178,53,49,0.3);background:rgba(178,53,49,0.08)}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:36px;
+  animation:fadeUp 0.5s ease 0.1s both}
+.tab{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s;
+  background:none;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* TAB PANELS */
+.tab-panel{display:none;animation:fadeUp 0.3s ease both}
+.tab-panel.active{display:block}
+
+/* SECTIONS */
+.section{margin-bottom:36px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);
+  line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+/* GOV BOX */
+.gov-box{border-left:3px solid var(--crimson);background:rgba(178,53,49,0.06);
+  padding:14px 18px;border-radius:0 4px 4px 0;margin:4px 0}
+.gov-box p{font-family:'Source Serif 4',serif;font-size:0.88rem;color:rgba(245,241,235,0.78);line-height:1.7}
+
+/* CODE BLOCK */
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  padding:18px 20px;margin:12px 0;overflow-x:auto}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--green);
+  line-height:1.7;white-space:pre}
+.code-comment{color:var(--steel)}
+.code-name{color:var(--gold)}
+.code-val{color:var(--blue)}
+.code-fn{color:var(--crimson)}
+
+/* DECOMPOSITION VIEW */
+.decomp-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:32px}
+.decomp-header{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.decomp-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.decomp-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel)}
+
+.decomp-step{border-bottom:1px solid var(--border);padding:0}
+.decomp-step:last-child{border-bottom:none}
+.step-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:background 0.15s;user-select:none}
+.step-header:hover{background:rgba(245,241,235,0.02)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  width:20px;flex-shrink:0}
+.step-formula{font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1;overflow:hidden;text-overflow:ellipsis}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:0.55rem;padding:2px 8px;
+  border-radius:3px;flex-shrink:0}
+.badge-name{color:var(--gold);background:var(--gold2);border:1px solid rgba(212,168,67,0.2)}
+.badge-calc{color:var(--blue);background:rgba(107,157,194,0.1);border:1px solid rgba(107,157,194,0.2)}
+.badge-output{color:var(--green);background:var(--green2);border:1px solid rgba(74,158,107,0.2)}
+.badge-arg{color:var(--amber);background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.2)}
+.step-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s;flex-shrink:0}
+.decomp-step.open .step-chevron{transform:rotate(180deg)}
+
+.step-body{display:none;padding:0 20px 16px 52px}
+.decomp-step.open .step-body{display:block}
+.step-explains{font-family:'Source Serif 4',serif;font-size:0.85rem;color:rgba(245,241,235,0.7);
+  line-height:1.65;margin-bottom:10px}
+.step-value{background:var(--card2);border:1px solid var(--border);border-radius:4px;
+  padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);
+  display:inline-block;margin-bottom:8px}
+.step-why{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.04em;font-style:italic}
+
+/* FULL FORMULA */
+.full-formula{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:18px 20px;margin:12px 0}
+.formula-line{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.9;white-space:pre}
+
+/* CONNECTIONS */
+.connections{display:flex;flex-direction:column;gap:8px}
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color 0.2s}
+.conn-item:hover{border-color:var(--border2)}
+.conn-type{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;
+  text-transform:uppercase;width:90px;flex-shrink:0}
+.conn-type.leads{color:var(--green)}
+.conn-type.depends{color:var(--crimson)}
+.conn-type.pairs{color:var(--amber)}
+.conn-id{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);width:80px;flex-shrink:0}
+.conn-name{font-size:0.82rem;color:var(--cream);flex:1}
+.conn-arrow{color:var(--steel);font-size:0.7rem}
+
+/* TAGS */
+.tags-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  background:var(--card);border:1px solid var(--border);padding:4px 10px;border-radius:3px}
+
+/* PAIRED CTA */
+.paired-cta{margin-top:48px;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:22px 24px}
+.paired-cta-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+.paired-cta-link{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  text-decoration:none;color:var(--cream);
+  padding:16px 20px;background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  transition:border-color 0.2s,background 0.2s}
+.paired-cta-link:hover{border-color:rgba(107,157,194,0.4);background:rgba(107,157,194,0.05)}
+.paired-cta-headline{font-family:'Source Serif 4',serif;font-size:0.94rem;color:var(--cream);margin-bottom:4px;line-height:1.45}
+.paired-cta-sub{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);letter-spacing:0.06em}
+.paired-cta-arrow{font-family:'JetBrains Mono',monospace;color:var(--blue);font-size:1.3rem;flex-shrink:0}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .page{padding:40px 20px 0}
+  .paired-cta-link{flex-direction:column;align-items:flex-start;gap:10px}
+  .tabs{overflow-x:auto}
+  .tab{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">All Entries</a>
+    <a href="/explorer/#FRM-0001" class="nav-link">View in Graph</a>
+    <a href="/explorer/" class="nav-link">Graph</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ENTRY HEADER -->
+  <div class="entry-header">
+    <div class="entry-breadcrumb">Excelligence Registry &middot; Formula</div>
+    <div class="entry-id">FRM-0001</div>
+    <h1 class="entry-name"><span>XLOOKUP</span> Function</h1>
+    <p class="entry-what">Retrieves a value from a range or array based on a lookup key, returning exact or approximate matches without requiring a column index number. The governed replacement for VLOOKUP in every DDL workbook.</p>
+    <div class="entry-meta">
+      <span class="meta-pill pill-type">FRM &mdash; Formula</span>
+      <span class="meta-pill pill-tier">Intermediate</span>
+      <span class="meta-pill pill-diff">Difficulty 2/5</span>
+      <span class="meta-pill pill-freq">Daily use</span>
+      <span class="meta-pill pill-ver">Excel 2019+</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(event,'explained')">Explained</button>
+    <button class="tab" onclick="switchTab(event,'entry')">Registry Entry</button>
+    <button class="tab" onclick="switchTab(event,'examples')">Examples</button>
+    <button class="tab" onclick="switchTab(event,'connections')">Connections</button>
+  </div>
+
+  <!-- TAB: EXPLAINED -->
+  <div class="tab-panel active" id="tab-explained">
+
+    <div class="section">
+      <div class="section-label">The Idea</div>
+      <p class="section-body">XLOOKUP is the answer to a question every spreadsheet eventually asks: <em>given a key, find the matching value in another table</em>. VLOOKUP did this for two decades, but it counted columns instead of naming them, broke when columns moved, and stayed silent when keys were missing. XLOOKUP fixes all three problems in one function. You give it the value you&rsquo;re looking for, the column to search, the column to return, and a fallback for misses. No counting. No column index. No silent failures.</p>
+    </div>
+
+    <!-- DECOMPOSITION -->
+    <div class="section">
+      <div class="section-label">Formula Walkthrough &mdash; Argument by Argument</div>
+      <p class="section-body" style="margin-bottom:16px">Here&rsquo;s a real XLOOKUP. Click each argument to understand what it does and why it&rsquo;s there.</p>
+
+      <div class="full-formula">
+        <div class="formula-line"><span style="color:var(--crimson)">= XLOOKUP(</span></div>
+        <div class="formula-line">    <span class="code-val">A2</span>,                       <span class="code-comment">// lookup_value</span></div>
+        <div class="formula-line">    <span class="code-val">Products[SKU]</span>,            <span class="code-comment">// lookup_array</span></div>
+        <div class="formula-line">    <span class="code-val">Products[Price]</span>,          <span class="code-comment">// return_array</span></div>
+        <div class="formula-line">    <span class="code-val">"Not Found"</span>,              <span class="code-comment">// if_not_found</span></div>
+        <div class="formula-line">    <span class="code-val">0</span>                          <span class="code-comment">// match_mode (exact)</span></div>
+        <div class="formula-line"><span style="color:var(--crimson)">)</span></div>
+      </div>
+    </div>
+
+    <div class="decomp-wrap">
+      <div class="decomp-header">
+        <div class="decomp-title">Each Argument Explained</div>
+        <div class="decomp-desc">Click any step to expand</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">01</div>
+          <div class="step-formula"><span class="code-val">A2</span> &mdash; the value you&rsquo;re searching for</div>
+          <span class="step-badge badge-arg">lookup_value</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This is the key &mdash; the thing you have, that you want to find a match for. It can be a literal value, a cell reference, or another formula that produces a value. In this case, A2 holds an SKU like <strong style="color:var(--gold)">SKU-1042</strong> and we want to find the price for it in the Products table.</p>
+          <div class="step-value">A2 = "SKU-1042" &nbsp;(example)</div>
+          <div class="step-why">XLOOKUP&rsquo;s lookup_value can be anything: text, number, date, even a formula result. Unlike VLOOKUP, it doesn&rsquo;t care about case for text matches by default.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">02</div>
+          <div class="step-formula"><span class="code-val">Products[SKU]</span> &mdash; the column to search in</div>
+          <span class="step-badge badge-arg">lookup_array</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">This is where XLOOKUP looks for matches. It must be a single column or row &mdash; the same shape as the return_array. Here we&rsquo;re using a structured reference (<strong style="color:var(--gold)">Products[SKU]</strong>) instead of a range like B2:B500. That matters: when someone adds a new product, the table grows automatically and the formula keeps working without edits.</p>
+          <div class="step-value">Products[SKU] = entire SKU column of the Products table</div>
+          <div class="step-why">Always use structured references (Ctrl+T tables) instead of raw ranges. Raw ranges like B2:B500 break when rows are added beyond row 500. Structured references never break.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">03</div>
+          <div class="step-formula"><span class="code-val">Products[Price]</span> &mdash; the column to return</div>
+          <span class="step-badge badge-arg">return_array</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">Once XLOOKUP finds the matching SKU in the lookup_array, it looks at the same row position in the return_array and returns that value. In VLOOKUP you had to count columns &mdash; <em>&ldquo;the price is the 4th column over&rdquo;</em> &mdash; and pray nobody inserted a column. XLOOKUP names the column directly. No counting. No fragility.</p>
+          <div class="step-value">Returns: 24.99 &nbsp;(the price for SKU-1042)</div>
+          <div class="step-why">The return_array can be to the left or right of the lookup_array. VLOOKUP could only look right. XLOOKUP doesn&rsquo;t care which direction. This single change eliminates an entire category of helper-column workarounds.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">04</div>
+          <div class="step-formula"><span class="code-val">"Not Found"</span> &mdash; the fallback when there&rsquo;s no match</div>
+          <span class="step-badge badge-arg">if_not_found</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">If the SKU in A2 doesn&rsquo;t exist anywhere in Products[SKU], XLOOKUP returns this value instead of throwing #N/A. This is the argument most people skip &mdash; and it&rsquo;s the most important one for governance. Without it, every missing match becomes a visible error or, worse, propagates as #N/A through every downstream formula.</p>
+          <div class="step-value">If A2 = "SKU-9999" (missing) &rarr; returns "Not Found"</div>
+          <div class="step-why">The if_not_found argument is what makes XLOOKUP <em>defensible</em>. A formula that handles missing keys gracefully is one you can ship. A formula that returns #N/A on edge cases is a future bug report.</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="decomp-step" onclick="toggleStep(this)">
+        <div class="step-header">
+          <div class="step-num">05</div>
+          <div class="step-formula"><span class="code-val">0</span> &mdash; require an exact match</div>
+          <span class="step-badge badge-arg">match_mode</span>
+          <span class="step-chevron">&#9660;</span>
+        </div>
+        <div class="step-body">
+          <p class="step-explains">XLOOKUP supports four match modes: <strong>0</strong> exact (the default and what you almost always want), <strong>-1</strong> exact or next smaller, <strong>1</strong> exact or next larger, and <strong>2</strong> wildcard. Setting it explicitly to 0 documents your intent &mdash; future readers know you considered the question. Approximate matches are how silent wrong-answer bugs ship.</p>
+          <div class="step-value">match_mode = 0 (exact)</div>
+          <div class="step-why">Always pass match_mode explicitly. Defaulting to exact is correct, but writing it out tells the next person reading the formula that you thought about it. Implicit defaults are how knowledge gets lost.</div>
+        </div>
+      </div>
+
+    </div><!-- /decomp-wrap -->
+
+    <!-- BEFORE / AFTER -->
+    <div class="section">
+      <div class="section-label">VLOOKUP vs XLOOKUP</div>
+      <p class="section-body" style="margin-bottom:12px">The same task &mdash; one formula is fragile, one is not.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--crimson);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2717; VLOOKUP</div>
+          <div class="code-block" style="border-color:rgba(178,53,49,0.2)">
+            <pre style="color:rgba(245,241,235,0.5)">=VLOOKUP(
+  A2,
+  B2:E500,
+  4,
+  FALSE
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Counts columns. Breaks when a column is inserted. Returns #N/A on misses. Range stops at row 500. Cannot look left.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">&#x2713; XLOOKUP</div>
+          <div class="code-block" style="border-color:rgba(74,158,107,0.2)">
+            <pre>=XLOOKUP(
+  A2,
+  Products[SKU],
+  Products[Price],
+  "Not Found",
+  0
+)</pre>
+          </div>
+          <p style="font-family:'Source Serif 4',serif;font-size:0.75rem;color:var(--steel);margin-top:6px;line-height:1.55">Names the column. Survives column insertion. Handles missing keys explicitly. Auto-expands with the table. Looks any direction.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHEN TO USE -->
+    <div class="section">
+      <div class="section-label">When to Use XLOOKUP</div>
+      <div class="gov-box">
+        <p>XLOOKUP replaces VLOOKUP in every DDL workbook. <strong>VLOOKUP should never appear in new builds.</strong> Always pass the if_not_found argument, even when you think a miss is impossible &mdash; the day someone deletes a row, your formula becomes a quiet liability instead of a loud one.</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-explained -->
+
+  <!-- TAB: REGISTRY ENTRY -->
+  <div class="tab-panel" id="tab-entry">
+
+    <div class="section">
+      <div class="section-label">Intent</div>
+      <p class="section-body">When you need to retrieve a value from another table based on a lookup key, use XLOOKUP to return exact or approximate matches without column index dependency.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Failure Modes</div>
+      <p class="section-body">Returns <strong>#N/A</strong> on a missing match unless if_not_found is provided. Approximate match modes (-1, 1) silently return the wrong neighbor when the lookup_array isn&rsquo;t sorted &mdash; producing plausible but incorrect results that pass review and ship to production. Mismatched lookup_array and return_array shapes throw #VALUE!. The lookup is case-insensitive for text by default, which can cause unintended matches when SKU formats vary.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Performance Notes</div>
+      <p class="section-body">Faster than INDEX/MATCH on large datasets. Binary search mode (match_mode 2 or -2) is significantly faster on sorted data &mdash; reserve it for sorted lookup arrays where the speed gain is real and worth the maintenance burden of keeping the array sorted.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Governance Notes</div>
+      <div class="gov-box">
+        <p>Replaces VLOOKUP in all new builds. <strong>VLOOKUP should never appear in DDL workbooks.</strong> Every XLOOKUP must pass an explicit if_not_found argument and an explicit match_mode &mdash; defaults are how silent bugs ship.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tags</div>
+      <div class="tags-wrap">
+        <span class="tag">lookup</span>
+        <span class="tag">replaces-vlookup</span>
+        <span class="tag">structured-references</span>
+        <span class="tag">2019+</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Aliases</div>
+      <p class="section-body">XLOOKUP function &middot; governed-lookup &middot; vlookup-replacement</p>
+    </div>
+
+  </div><!-- /tab-entry -->
+
+  <!-- TAB: EXAMPLES -->
+  <div class="tab-panel" id="tab-examples">
+
+    <div class="section">
+      <div class="section-label">Example 1 &mdash; Basic Price Lookup</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Look up a price by SKU, return "Not Found" on misses</span>
+=XLOOKUP(
+  A2,
+  Products[SKU],
+  Products[Price],
+  <span class="code-val">"Not Found"</span>,
+  <span class="code-val">0</span>
+)
+
+<span class="code-comment">-- A2 = "SKU-1042"  -->  24.99
+-- A2 = "SKU-9999"  -->  "Not Found"</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 2 &mdash; Look Left (Reverse Lookup)</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- VLOOKUP could not do this. XLOOKUP doesn't care which side.</span>
+=XLOOKUP(
+  <span class="code-val">"Hayes"</span>,
+  Reps[Name],
+  Reps[ID],          <span class="code-comment">// ID column is to the LEFT of Name</span>
+  <span class="code-val">""</span>,
+  <span class="code-val">0</span>
+)
+
+<span class="code-comment">-- Returns the rep ID associated with name "Hayes"
+-- No helper column. No reordering. No INDEX/MATCH workaround.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 3 &mdash; Wrapped in LET for Readability</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- The pattern that ships in production</span>
+=LET(
+  <span class="code-name">key</span>,        A2,
+  <span class="code-name">price</span>,      XLOOKUP(<span class="code-name">key</span>, Products[SKU], Products[Price], 0, 0),
+  <span class="code-name">discount</span>,   XLOOKUP(<span class="code-name">key</span>, Products[SKU], Products[Discount], 0, 0),
+  <span class="code-name">net</span>,        <span class="code-name">price</span> * (1 - <span class="code-name">discount</span>),
+  <span class="code-name">net</span>
+)
+
+<span class="code-comment">-- The lookup is named once. The math is named.
+-- Anyone reading this knows what each step represents.</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Example 4 &mdash; Nested Fallback Chain</div>
+      <div class="code-block">
+        <pre><span class="code-comment">-- Try the customer table first, fall back to defaults</span>
+=XLOOKUP(
+  A2,
+  Customers[ID],
+  Customers[Tier],
+  <span class="code-fn">XLOOKUP</span>(A2, Defaults[ID], Defaults[Tier], <span class="code-val">"Standard"</span>, <span class="code-val">0</span>),
+  <span class="code-val">0</span>
+)
+
+<span class="code-comment">-- if_not_found is itself another XLOOKUP
+-- This is the foundation of the Fallback Chain pattern (FRM-0018)</span></pre>
+      </div>
+    </div>
+
+  </div><!-- /tab-examples -->
+
+  <!-- TAB: CONNECTIONS -->
+  <div class="tab-panel" id="tab-connections">
+
+    <div class="section">
+      <div class="section-label">Registry Connections</div>
+      <div class="connections">
+        <a href="/explorer/#FRM-0002" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0002</span>
+          <span class="conn-name">LET &mdash; wrap multi-lookup logic in named variables</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0018" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">FRM-0018</span>
+          <span class="conn-name">XLOOKUP with Fallback Chain</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#ARC-0001" class="conn-item">
+          <span class="conn-type leads">LEADS_TO</span>
+          <span class="conn-id">ARC-0001</span>
+          <span class="conn-name">MAKEARRAY Engine</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0005" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0005</span>
+          <span class="conn-name">FILTER &mdash; for many-to-many returns</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#FRM-0003" class="conn-item">
+          <span class="conn-type pairs">PAIRS_WITH</span>
+          <span class="conn-id">FRM-0003</span>
+          <span class="conn-name">INDEX/MATCH &mdash; the legacy equivalent</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#KEY-0001" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">KEY-0001</span>
+          <span class="conn-name">Ctrl+T &mdash; tables enable structured references</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#PTN-0001" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">PTN-0001</span>
+          <span class="conn-name">Star Schema Layout</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+        <a href="/explorer/#PTN-0015" class="conn-item">
+          <span class="conn-type depends">DEPENDS_ON</span>
+          <span class="conn-id">PTN-0015</span>
+          <span class="conn-name">Lookup Table Pattern</span>
+          <span class="conn-arrow">&#8599;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:32px">
+      <div class="section-label">View in Graph</div>
+      <p class="section-body" style="margin-bottom:12px">See FRM-0001 and all its edges in the live knowledge graph.</p>
+      <a href="/explorer/#FRM-0001" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(212,168,67,0.25);padding:8px 16px;border-radius:4px;background:var(--gold2);transition:opacity 0.2s" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">
+        Open FRM-0001 in Graph &rarr;
+      </a>
+    </div>
+
+  </div><!-- /tab-connections -->
+
+  <!-- PAIRED CTA -->
+  <div class="paired-cta">
+    <div class="paired-cta-eyebrow">Paired Entry</div>
+    <a href="/learn/let/" class="paired-cta-link">
+      <div>
+        <div class="paired-cta-headline">See how LET keeps lookups readable</div>
+        <div class="paired-cta-sub">FRM-0002 &middot; LET &middot; Decomposition</div>
+      </div>
+      <span class="paired-cta-arrow">&rarr;</span>
+    </a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function switchTab(e, name) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  e.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleStep(el) {
+  el.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
