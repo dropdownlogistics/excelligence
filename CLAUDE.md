@@ -74,6 +74,17 @@ doesn't exist yet for today, create it. If it does, append a new
 
 ---
 
+## Bash Efficiency
+
+Chain sequential dependent commands with `&&` in a single Bash call
+(e.g. build → commit → push). Fire independent calls in parallel when
+they don't depend on each other. Minimize operator approval interruptions
+by front-loading predictable command chains into the fewest possible
+tool calls. When the full command sequence is known upfront, execute it
+as one batched call rather than prompting for approval at each step.
+
+---
+
 ## F-Code System
 
 The operator throws F-Codes when the model violates a constraint. F-Codes
