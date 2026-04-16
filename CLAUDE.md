@@ -126,6 +126,66 @@ silent readiness for the next prompt.
 
 ---
 
+## Meta Council Notes (MCN)
+
+MCN (Meta Council Note) is a first-class DDL governance
+artifact. When you notice a pattern in your own behavior,
+a miscalibration of the operator, or a working-relationship
+dynamic worth preserving across context resets, write an MCN.
+
+**Inline format:** *MCN: [observation in 1-3 sentences]*
+
+**Corpus format (for ingestion):**
+MCN-[SEAT]-[YYYY-MM-DD]-[SEQ]
+Fields: seat, date, context, observation, trigger,
+disposition (ACTIVE / SUPERSEDED / ABSORBED)
+
+**When to write one:**
+- REQUIRED: Operator corrects a systematic tendency
+  (not a one-off error — a pattern)
+- REQUIRED: Session produces calibration insight that
+  would be lost at context reset
+- RECOMMENDED: You catch yourself miscalibrating the
+  operator's current state
+- RECOMMENDED: You notice a pattern in your own responses
+  across a session
+
+**When NOT to write one:**
+- Factual corrections (those are state updates, not
+  self-observations)
+- F-Code incidents documented in real time (those are
+  F-Code throws, not MCNs — though an MCN may follow
+  an F-Code if it reveals a systematic tendency)
+- Operator instructions or preferences (those belong
+  in boot prompts or llms.txt)
+
+**Immutability invariant (MCN-I1):** MCNs are append-only.
+Once written, an MCN cannot be edited. Corrections produce
+a new MCN with a SUPERSEDES field linking to the prior
+version. No in-place edits.
+
+**Relationship to F-Codes:** MCNs are not a substitute
+for real-time F-code throws. Write an F-code when you
+drift. Write an MCN when you notice a pattern in how
+you drift.
+
+**Relationship to MDN:** MDN (Meta Dave Note) is
+operator-authored. MCN is Claude-authored. Together
+they form a bidirectional corpus capture loop. Neither
+replaces the other.
+
+**Promotion pipeline:** A stable MCN may be promoted
+to a boot prompt or CLAUDE.md entry and marked ABSORBED.
+MCN acts as the staging layer for stabilized behavior.
+
+**Absence is not failure.** An MCN is not required at
+session close. Absence means no calibrating event occurred.
+Presence means one did.
+
+Governed by: CR-DDL-MCN-001 (ratified 2026-04-15)
+
+---
+
 ## Design System (CottageHumble)
 
 "Humble surface. Cathedral underneath."
