@@ -290,17 +290,27 @@
       "name": "UNIQUE",
       "type": "FRM",
       "tier": "Intermediate",
-      "what_it_does": "Returns a dynamic array of distinct values from a range, automatically removing duplicates and updating as source data changes.",
-      "intent": "When you need a deduplicated list for validation, dropdowns, or aggregation, use UNIQUE to extract distinct values as a self-updating spill range.",
-      "example": "=SORT(UNIQUE(Sales[Region]))\nReturns a sorted list of unique regions that updates as new regions appear in the data.",
-      "failure_modes": "Returns all rows if applied to a multi-column range without specifying by_col/exactly_once arguments; spill errors when output area is occupied; blank cells in source create blank entries in output.",
-      "performance_notes": "Fast on single columns up to 100K rows. For multi-column unique combinations, performance degrades — use Power Query DISTINCT instead.",
-      "governance_notes": "Use UNIQUE for dropdown source lists and aggregation keys. Combine with SORT for alphabetical output. Never hardcode dropdown lists that could be generated dynamically.",
+      "what_it_does": "Returns a dynamic spill array of distinct values from a range, automatically updating when source data changes, replacing manual Remove Duplicates operations and static unique-value lists.",
+      "intent": "When you need a deduplicated list of values for a dropdown, a summary table, or a distinct-count analysis, use UNIQUE to generate a live, auto-updating array instead of a static copy.",
+      "example": "=UNIQUE(Sales[Region])\nSpills a dynamic list of unique regions from the Sales table.\nUpdate the source data — the unique list updates automatically.\n\nCOMBINED:\n=SORT(UNIQUE(Sales[Region])) — sorted unique list\n=COUNTA(UNIQUE(Sales[Region])) — count of distinct regions",
+      "failure_modes": "#SPILL! if the spill range is blocked by existing content; UNIQUE requires Excel 365 or Excel 2021 — not available in Excel 2019 or earlier; returns all unique rows when given multiple columns.",
+      "performance_notes": "UNIQUE is a dynamic array function — it spills automatically and recalculates when source data changes. More efficient than COUNTIF-based dedup patterns on large ranges.",
+      "governance_notes": "UNIQUE replaces all manual Remove Duplicates operations in governed workbooks. Any static unique-value list that is manually maintained must be replaced with UNIQUE + SORT on the source column. Pairs with FILTER for conditional distinct-value extraction.",
       "created_at": "2026-03-07 13:35:53",
-      "updated_at": "2026-03-07 13:35:53",
+      "updated_at": "2026-04-17 00:00:00",
       "difficulty_score": 2,
       "usage_frequency": "Daily",
-      "excel_version": "365"
+      "excel_version": "Excel 365 / 2021+",
+      "tags": [
+        "dynamic-array",
+        "deduplication",
+        "365"
+      ],
+      "aliases": [
+        "UNIQUE function",
+        "distinct-values",
+        "deduplicate"
+      ]
     },
     {
       "id": "FRM-0009",
@@ -1744,6 +1754,8 @@
       "name": "UNIQUE",
       "type": "FRM",
       "tier": "Intermediate",
+      "status": "DEPRECATED",
+      "redirect_to": "FRM-0008",
       "what_it_does": "Returns a dynamic spill array of distinct values from a range, automatically updating when source data changes, replacing manual Remove Duplicates operations and static unique-value lists.",
       "intent": "When you need a deduplicated list of values for a dropdown, a summary table, or a distinct-count analysis, use UNIQUE to generate a live, auto-updating array instead of a static copy.",
       "example": "=UNIQUE(Sales[Region])\nSpills a dynamic list of unique regions from the Sales table.\nUpdate the source data — the unique list updates automatically.\n\nCOMBINED:\n=SORT(UNIQUE(Sales[Region])) — sorted unique list\n=COUNTA(UNIQUE(Sales[Region])) — count of distinct regions",

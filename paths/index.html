@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
+:root{--navy:#0D1B2A;--card:#10202f;--card2:#152535;--cream:#F5F1EB;--crimson:#B23531;--amber:#C49A3C;--green:#4A9E6B;--blue:#6B9DC2;--teal:#4AADAD;--violet:#8a6cc9;--dim:rgba(245,241,235,0.45);--border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.12)}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh}
 nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,27,42,0.95);backdrop-filter:blur(12px);z-index:100;gap:20px}
@@ -17,6 +17,19 @@ nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid va
 .nav-crumb{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
 .nav-crumb a{color:var(--dim);text-decoration:none;transition:color .15s}.nav-crumb a:hover{color:var(--cream)}
 .nav-right{margin-left:auto}.nav-cta{padding:6px 16px;background:var(--crimson);border-radius:6px;color:var(--cream);font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s}.nav-cta:hover{opacity:.85}
+.nav-links{display:flex;gap:24px;align-items:center}.nav-links a{font-family:"JetBrains Mono",monospace;font-size:0.62rem;color:rgba(245,241,235,0.5);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s}.nav-links a:hover,.nav-links a.active{color:#F5F1EB}.nav-tag{font-family:"JetBrains Mono",monospace;font-size:0.56rem;color:#D4A843;letter-spacing:0.1em;background:rgba(212,168,67,0.07);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,241,235,0.13);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover{color:var(--cream)}
+.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
+@media(max-width:768px){.nav-links{display:none!important}.nav-hamburger{display:flex!important}}
 
 /* HERO */
 .hero{max-width:860px;margin:0 auto;padding:56px 48px 40px}
@@ -25,23 +38,24 @@ nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid va
 .hero-title em{font-family:'Source Serif 4',serif;font-style:italic;color:rgba(245,241,235,.7)}
 .hero-sub{font-family:'Source Serif 4',serif;font-size:16px;color:rgba(245,241,235,.65);line-height:1.7;max-width:580px;margin-bottom:32px}
 
+/* SECTION GROUP LABELS */
+.group-label{max-width:860px;margin:0 auto;padding:0 48px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.group-label::after{content:'';flex:1;height:1px;background:var(--border2)}
+.group-label.canonical{color:var(--amber)}
+.group-label.satellite{color:var(--dim)}
+
 /* PATH SELECTOR */
-.path-selector{max-width:860px;margin:0 auto;padding:0 48px 48px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.path-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;text-decoration:none;display:block}
+.path-selector{max-width:860px;margin:0 auto;padding:0 48px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.path-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;text-decoration:none;display:block}
 .path-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transition:opacity .2s}
-.path-card.p1::before{background:var(--blue)}
-.path-card.p2::before{background:var(--crimson)}
 .path-card:hover{border-color:var(--border2);transform:translateY(-2px)}
 .path-card.active{border-color:var(--border2)}
-.path-card.p1.active{border-color:rgba(107,157,194,.4)}
-.path-card.p2.active{border-color:rgba(178,53,49,.4)}
-.path-card-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.path-card.p1 .path-card-label{color:var(--blue)}
-.path-card.p2 .path-card-label{color:var(--crimson)}
-.path-card-title{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:8px}
-.path-card-desc{font-size:13px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.62);line-height:1.55;margin-bottom:14px}
-.path-card-meta{display:flex;gap:10px;flex-wrap:wrap}
-.path-meta-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--dim)}
+.path-card-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.path-card-title{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:6px}
+.path-card-desc{font-size:12px;font-family:'Source Serif 4',serif;color:rgba(245,241,235,.55);line-height:1.5;margin-bottom:10px}
+.path-card-meta{display:flex;gap:6px;flex-wrap:wrap}
+.path-meta-chip{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--dim)}
+.path-card .start-badge{position:absolute;top:10px;right:10px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
 
 /* PATH CONTENT */
 .path-content{max-width:700px;margin:0 auto;padding:0 48px 80px;display:none}
@@ -50,6 +64,8 @@ nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid va
 .path-header-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
 .path-header-title{font-size:22px;font-weight:700;color:var(--cream);margin-bottom:6px}
 .path-header-sub{font-family:'Source Serif 4',serif;font-size:14px;color:rgba(245,241,235,.6);line-height:1.6}
+.path-prereq{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);margin-top:10px;padding:8px 12px;background:rgba(196,154,60,0.06);border:1px solid rgba(196,154,60,0.15);border-radius:6px}
+.path-exit{font-family:'Source Serif 4',serif;font-size:13px;color:rgba(245,241,235,.55);font-style:italic;margin-top:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:6px}
 
 /* STEP */
 .path-step{display:flex;gap:0;margin-bottom:0}
@@ -80,6 +96,8 @@ nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid va
 .step-governance{font-family:'Source Serif 4',serif;font-size:12px;color:rgba(245,241,235,.65);padding:8px 10px;border-left:2px solid var(--crimson);border-radius:0 4px 4px 0;background:rgba(178,53,49,.06);line-height:1.55;font-style:italic}
 .step-explore-link{display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);text-decoration:none;transition:opacity .15s}
 .step-explore-link:hover{opacity:.7}
+.step-dive-link{display:inline-block;margin-top:6px;margin-left:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);text-decoration:none;transition:opacity .15s}
+.step-dive-link:hover{opacity:.7}
 
 /* PATH CTA */
 .path-cta{margin-top:32px;padding:24px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;text-align:center}
@@ -93,22 +111,15 @@ nav{display:flex;align-items:center;padding:12px 48px;border-bottom:1px solid va
 /* FOOTER */
 footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48px;display:flex;align-items:center;justify-content:space-between}
 .footer-left{font-size:12px;color:var(--dim)}.footer-left strong{color:var(--cream)}.footer-left a{color:var(--dim);text-decoration:none}
-.footer-right{display:flex;gap:18px}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
-.nav-link-small{font-family:"JetBrains Mono",monospace;font-size:0.62rem;color:var(--steel);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;margin-right:16px;}
-.nav-link-small:hover{color:var(--cream)}
-.nav-links{display:flex;gap:24px;align-items:center}.nav-links a{font-family:"JetBrains Mono",monospace;font-size:0.62rem;color:rgba(245,241,235,0.5);text-decoration:none;letter-spacing:0.07em;text-transform:uppercase;transition:color 0.2s}.nav-links a:hover,.nav-links a.active{color:#F5F1EB}.nav-tag{font-family:"JetBrains Mono",monospace;font-size:0.56rem;color:#D4A843;letter-spacing:0.1em;background:rgba(212,168,67,0.07);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}/* HAMBURGER NAV */
-.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
-.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
-.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.nav-hamburger.open span:nth-child(2){opacity:0}
-.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,241,235,0.13);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
-.nav-drawer.open{display:flex}
-.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
-.nav-drawer a:last-child{border-bottom:none}
-.nav-drawer a:hover{color:var(--cream)}
-.nav-drawer .drawer-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:#D4A843;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px;display:inline-block;margin-top:8px;letter-spacing:0.1em}
-@media(max-width:768px){.nav-links{display:none!important}.nav-hamburger{display:flex!important}}
+.footer-right{display:flex;gap:18px;flex-wrap:wrap}.footer-right a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}.footer-right a:hover{color:var(--cream)}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .hero,.group-label,.path-selector{padding-left:20px;padding-right:20px}
+  .path-selector{grid-template-columns:1fr}
+  .path-content{padding-left:20px;padding-right:20px}
+  footer{padding:20px;flex-direction:column;gap:12px;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -122,6 +133,8 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
     <a href="/tools/">Tools</a>
     <a href="/analytics/">Analytics</a>
     <a href="/scanner/">Scanner</a>
+    <a href="/gridtactics/">GridTactics</a>
+    <a href="/formulalab/">FormulaLab</a>
     <span class="nav-tag">LIVE</span>
   </div>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -134,384 +147,23 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:20px 48
   <a href="/analytics/">Analytics</a>
   <a href="/scanner/">Scanner</a>
   <a href="/gridtactics/">GridTactics</a>
+  <a href="/formulalab/">FormulaLab</a>
   <span class="drawer-tag">BETA</span>
 </div>
 
 <div class="hero">
   <div class="hero-label">Excelligence &middot; Learning Paths</div>
-  <h1 class="hero-title">Two paths.<br><em>One governed graph.</em></h1>
-  <p class="hero-sub">Curated entry sequences through the knowledge graph. Each step connects to the next via governed LEADS_TO edges. Click a path to begin. Click any step to expand it.</p>
+  <h1 class="hero-title">Twelve paths.<br><em>One governed graph.</em></h1>
+  <p class="hero-sub">Curated entry sequences through the knowledge graph. Each step connects to the next via governed LEADS_TO edges. Start with a canonical spine. Graduate to the satellites.</p>
 </div>
 
-<div class="path-selector">
-  <a class="path-card p1" onclick="selectPath('p1');return false;" href="#">
-    <div class="path-card-label">Path 01 &middot; Beginner</div>
-    <div class="path-card-title">Your First Hour</div>
-    <div class="path-card-desc">Five foundational entries every Excel user needs before anything else. No prerequisites. Start here.</div>
-    <div class="path-card-meta">
-      <span class="path-meta-chip">5 entries</span>
-      <span class="path-meta-chip">Beginner &rarr; Intermediate</span>
-      <span class="path-meta-chip">KEY &middot; CON &middot; FRM</span>
-    </div>
-  </a>
-  <a class="path-card p2" onclick="selectPath('p2');return false;" href="#">
-    <div class="path-card-label">Path 02 &middot; Advanced</div>
-    <div class="path-card-title">The Star Schema Path</div>
-    <div class="path-card-desc">The DDL methodology applied to Excel. From grain definition to institutional-grade matrix architecture. This is how the Assurance Map was built.</div>
-    <div class="path-card-meta">
-      <span class="path-meta-chip">5 entries</span>
-      <span class="path-meta-chip">Beginner &rarr; Expert</span>
-      <span class="path-meta-chip">CON &middot; PTN &middot; ARC</span>
-    </div>
-  </a>
-</div>
+<div class="group-label canonical">Canonical Spines &middot; Start Here</div>
+<div class="path-selector" id="canonical-selector"></div>
 
-<!-- PATH 1 -->
-<div class="path-content" id="path-p1">
-  <div class="path-header">
-    <div class="path-header-label">Path 01 &middot; Your First Hour</div>
-    <div class="path-header-title">Five entries. One solid foundation.</div>
-    <div class="path-header-sub">These are the five things every Excel user should know before learning anything else. Each one is a stone. Together they build the floor everything else stands on.</div>
-  </div>
+<div class="group-label satellite">Satellite Paths</div>
+<div class="path-selector" id="satellite-selector"></div>
 
-    <div class="path-step" id="step-KEY-0001">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#C49A3C;color:#0D1B2A">1</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">KEY-0001</span>
-            <span class="step-type-badge" style="background:#C49A3C;color:#0D1B2A">KEY</span>
-            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
-          </div>
-          <h3 class="step-name">Ctrl+T (Table Conversion)</h3>
-          <p class="step-what">Converts a data range into a structured Excel Table, enabling auto-expanding ranges, structured references, built-in filtering, consistent formatting, and Power Query readiness.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need structured references, auto-expansion, and Power Query readiness, use Ctrl+T to convert a range into a proper Excel Table.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select any cell in your data range &rarr; Ctrl+T &rarr; Confirm range &rarr; Rename table in Table Design tab.
-Result: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)</div></div>
-          <div class="step-section"><div class="step-governance">Every data range in every DDL workbook must be a Table. This is the single most impactful Excel action. The foundation everything else builds on.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-CON-0004">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">2</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">CON-0004</span>
-            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
-            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
-          </div>
-          <h3 class="step-name">No Blank Rows or Columns</h3>
-          <p class="step-what">Ensures that data ranges contain no empty rows or columns within the data boundary, preventing silent failures in tables, filters, sorts, pivot tables, and range detection.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you structure any data range, use continuous rows and columns with no internal blanks to ensure Excel correctly detects the data boundary for all operations.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">WRONG: Data in A1:D10 with row 5 completely blank
-&rarr; Ctrl+Shift+End selects A1:D4 (stops at blank)
-&rarr; Pivot table only reads rows 1-4
-&rarr; COUNTA returns wrong count
-
-RIGHT: Data in A1:D10 with no blank rows
-&rarr; All operations detect the full range correctly</div></div>
-          <div class="step-section"><div class="step-governance">No blank rows or columns within any DDL data range. Period. This is the most common cause of 'my formula works but the answer is wrong' in Excel. If you need visual separation, use borders or conditional formatting &mdash; never blank rows.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-CON-0001">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">3</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">CON-0001</span>
-            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
-            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
-          </div>
-          <h3 class="step-name">Center Across Selection</h3>
-          <p class="step-what">Centers text visually across multiple columns without merging cells, preserving sorting, filtering, references, and copy-paste operations.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need centered text spanning multiple columns, use Center Across Selection to achieve visual alignment without merging cells.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Select cells A1:D1 &rarr; Format Cells (Ctrl+1) &rarr; Alignment tab &rarr; Horizontal &rarr; Center Across Selection &rarr; OK.
-Text in A1 appears centered across A1:D1. Cells B1:D1 remain independently addressable.</div></div>
-          <div class="step-section"><div class="step-governance">The approved alternative to merged cells (ANT-0001). Mandatory in any DDL workbook where visual centering is needed. Resolves the most common formatting anti-pattern.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-FRM-0001">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#6B9DC2;color:#0D1B2A">4</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">FRM-0001</span>
-            <span class="step-type-badge" style="background:#6B9DC2;color:#0D1B2A">FRM</span>
-            <span class="step-tier-badge" style="color:#4A9E6B;border-color:#4A9E6B30">Intermediate</span>
-          </div>
-          <h3 class="step-name">XLOOKUP</h3>
-          <p class="step-what">Retrieves a value from a range or array based on a lookup key, returning exact or approximate matches without requiring a column index number.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need to retrieve a value from another table based on a lookup key, use XLOOKUP to return exact or approximate matches without column index dependency.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=XLOOKUP(A2, Products[SKU], Products[Price], &ldquo;Not Found&ldquo;, 0)</div></div>
-          <div class="step-section"><div class="step-governance">Replaces VLOOKUP in all new builds. VLOOKUP should never appear in DDL workbooks.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-FRM-0010">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#6B9DC2;color:#0D1B2A">5</div>
-        </div>
-        
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">FRM-0010</span>
-            <span class="step-type-badge" style="background:#6B9DC2;color:#0D1B2A">FRM</span>
-            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
-          </div>
-          <h3 class="step-name">IF/IFS</h3>
-          <p class="step-what">Evaluates a condition and returns one value if true and another if false. IFS extends this to multiple conditions without nesting, improving readability for multi-branch logic.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need conditional logic with multiple branches, use IF or IFS to evaluate conditions and return governed outcomes without deep nesting.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=IF(A2&gt;100, &ldquo;High&ldquo;, &ldquo;Low&ldquo;)
-=IFS(A2&gt;100, &ldquo;High&ldquo;, A2&gt;50, &ldquo;Medium&ldquo;, TRUE, &ldquo;Low&ldquo;)</div></div>
-          <div class="step-section"><div class="step-governance">IF is acceptable for binary conditions. For 3+ branches, use IFS or SWITCH instead of nested IF. For 5+ branches with complex logic, wrap in LET for named intermediate values.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-  <div class="path-cta">
-    <p>You&rsquo;ve walked the foundation. The graph has 50 more entries waiting &mdash; and 130 edges connecting them.</p>
-    <a href="/explorer/">Explore the Full Graph &rarr;</a>
-  </div>
-</div>
-
-<!-- PATH 2 -->
-<div class="path-content" id="path-p2">
-  <div class="path-header">
-    <div class="path-header-label">Path 02 &middot; The Star Schema Path</div>
-    <div class="path-header-title">From raw data to governed architecture.</div>
-    <div class="path-header-sub">This is the DDL methodology applied to Excel. Start with documentation and grain discipline. End with a self-constructing matrix that updates as your data changes. This is how the Assurance Map was built.</div>
-  </div>
-
-    <div class="path-step" id="step-CON-0006">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">1</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">CON-0006</span>
-            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
-            <span class="step-tier-badge" style="color:#6B9DC2;border-color:#6B9DC230">Beginner</span>
-          </div>
-          <h3 class="step-name">README Tab Convention</h3>
-          <p class="step-what">Establishes a dedicated README sheet as the first tab in every governed workbook, documenting purpose, owner, schema, change log, and usage instructions &mdash; making the workbook self-describing.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When building any workbook intended for reuse or sharing, add a README tab first to document what the workbook does, who owns it, and how it is structured.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Tab name: README (or _README to sort first)
-Required sections:
-  Purpose &mdash; one sentence
-  Owner &mdash; name + date
-  Sheet Index &mdash; list all tabs + their role
-  Change Log &mdash; date, author, change
-  Governance Notes &mdash; any rules or constraints</div></div>
-          <div class="step-section"><div class="step-governance">Mandatory on all DDL workbooks per STD-EXCEL-001 Rule 0. A workbook without a README is ungoverned by definition. README must be updated on every structural change.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-CON-0002">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#8a6cc9;color:#0D1B2A">2</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">CON-0002</span>
-            <span class="step-type-badge" style="background:#8a6cc9;color:#0D1B2A">CON</span>
-            <span class="step-tier-badge" style="color:#C49A3C;border-color:#C49A3C30">Advanced</span>
-          </div>
-          <h3 class="step-name">Consistent Grain</h3>
-          <p class="step-what">Enforces that every row in a data table represents the same unit of measurement &mdash; one transaction, one period, one entity &mdash; preventing aggregation errors and ambiguous analysis.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need reliable aggregation and filtering, use consistent grain to ensure every row in a table represents exactly one instance of the same thing.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">CORRECT: Every row = one sale (Date, Product, Qty, Revenue)
-WRONG: Row 1 = daily total, Row 2 = individual sale, Row 3 = monthly summary
-
-Test: &ldquo;Can I SUM this column and get a meaningful number?&ldquo;
-If yes &rarr; grain is consistent. If no &rarr; grain is mixed.</div></div>
-          <div class="step-section"><div class="step-governance">Every DDL fact table must have documented grain. STD-FACT-001 enforces this &mdash; one row = one fact at one grain. Mixed grain is the most common cause of 'the numbers don't add up' in enterprise spreadsheets.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-PTN-0001">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#4A9E6B;color:#0D1B2A">3</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">PTN-0001</span>
-            <span class="step-type-badge" style="background:#4A9E6B;color:#0D1B2A">PTN</span>
-            <span class="step-tier-badge" style="color:#C49A3C;border-color:#C49A3C30">Advanced</span>
-          </div>
-          <h3 class="step-name">Star Schema Layout</h3>
-          <p class="step-what">Organizes workbook data into dimension tables (descriptive attributes) and fact tables (transactional measures), enabling scalable lookups, consistent grain, and pivot-ready architecture.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need to organize workbook data for scalable analysis, use star schema layout to separate dimension tables from fact tables, enabling governed lookups and pivot-ready architecture.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">Dimension tables: dim_Product (ProductID, Name, Category)
-Fact table: fct_Sales (Date, ProductID, Qty, Revenue)
-Lookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name])</div></div>
-          <div class="step-section"><div class="step-governance">The DDL standard for any workbook with more than one entity type. All Assurance Map, BlindSpot, and dashboard workbooks use this pattern. Non-negotiable at Advanced tier and above.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-PTN-0008">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#4A9E6B;color:#0D1B2A">4</div>
-        </div>
-        <div class="step-line"></div>
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">PTN-0008</span>
-            <span class="step-type-badge" style="background:#4A9E6B;color:#0D1B2A">PTN</span>
-            <span class="step-tier-badge" style="color:#4A9E6B;border-color:#4A9E6B30">Intermediate</span>
-          </div>
-          <h3 class="step-name">Surrogate Key Generation</h3>
-          <p class="step-what">Generates a stable, system-assigned integer key for each row using ROW() offset or a counter column, decoupled from any business attribute &mdash; providing a reliable join key that survives source data changes.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When a fact table row needs a stable, non-business join key, use surrogate key generation to produce an integer ID that never changes even when source attributes do.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=ROW()-1   // in a table starting at row 2 &mdash; simple offset
-=TEXT(ROW()-1,&ldquo;00000&ldquo;)  // zero-padded for display
-// Or: named column SK_ID with sequence starting at 1</div></div>
-          <div class="step-section"><div class="step-governance">Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys &mdash; they couple your workbook to upstream naming conventions.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="path-step" id="step-ARC-0001">
-      <div class="step-connector">
-        <div class="step-num-wrap">
-          <div class="step-num" style="background:#B23531;color:#0D1B2A">5</div>
-        </div>
-        
-      </div>
-      <div class="step-card" onclick="toggleStep(this)">
-        <div class="step-card-header">
-          <div class="step-meta">
-            <span class="step-id">ARC-0001</span>
-            <span class="step-type-badge" style="background:#B23531;color:#0D1B2A">ARC</span>
-            <span class="step-tier-badge" style="color:#B23531;border-color:#B2353130">Expert</span>
-          </div>
-          <h3 class="step-name">MAKEARRAY Engine</h3>
-          <p class="step-what">Generates a dynamic grid of calculated values across two dimensions using MAKEARRAY with LAMBDA, building self-constructing matrices that eliminate manual cell-by-cell formulas.</p>
-          <div class="step-chevron">&#9662;</div>
-        </div>
-        <div class="step-card-body">
-          <div class="step-section">
-            <div class="step-section-label">Intent</div>
-            <div class="step-section-body">When you need to generate a dynamic grid of calculated values across two dimensions, use MAKEARRAY with LAMBDA to build self-constructing matrices that eliminate manual cell-by-cell formulas.</div>
-          </div>
-          <div class="step-section"><div class="step-section-label">Example</div><div class="step-example">=LET(
-  rows, COUNTA(RowHeaders),
-  cols, COUNTA(ColHeaders),
-  MAKEARRAY(rows, cols, LAMBDA(r,c,
-    XLOOKUP(INDEX(RowHeaders,r), Data[Key], INDEX(Data,,c+1))
-  ))
-)</div></div>
-          <div class="step-section"><div class="step-governance">The DDL signature architecture. Used in Assurance Map, Keith's audit dashboard, BlindSpot analytics. Every DDL dashboard matrix should use this pattern.</div></div>
-          <a href="/explorer/" class="step-explore-link">Explore in graph &rarr;</a>
-        </div>
-      </div>
-    </div>
-  <div class="path-cta">
-    <p>You&rsquo;ve walked the star schema path. This is the architecture behind every DDL analytical workbook.</p>
-    <a href="/explorer/">Continue in the Graph &rarr;</a>
-  </div>
-</div>
+<div id="path-panels"></div>
 
 <div class="divider"></div>
 
@@ -520,42 +172,279 @@ Lookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name
   <div class="footer-right">
     <a href="/">Home</a><a href="/explorer/">Explorer</a>
     <a href="/radial/">Radial</a><a href="/paths/">Paths</a><a href="/standards/excel-001/">STD-001</a>
-    <a href="/tools/cf-patterns/">CF Patterns</a>
+    <a href="/tools/cf-patterns/">CF Patterns</a><a href="/formulalab/">FormulaLab</a>
   </div>
 </footer>
 
 <script>
-function selectPath(id) {
-  document.querySelectorAll('.path-card').forEach(function(c){ c.classList.remove('active'); });
-  document.querySelectorAll('.path-content').forEach(function(c){ c.classList.remove('visible'); });
-  var card = document.querySelector('.path-card.'+id);
-  if(card) card.classList.add('active');
-  var content = document.getElementById('path-'+id);
-  if(content){ content.classList.add('visible'); content.scrollIntoView({behavior:'smooth',block:'start'}); }
-}
-
-function toggleStep(card) {
-  card.classList.toggle('open');
-}
-
-// Auto-open first path
-selectPath('p1');
-// Auto-open first step of each path
-document.querySelectorAll('.step-card').forEach(function(card, i){
-  if(i === 0) card.classList.add('open');
-});
-</script>
-<script>
 (function(){
-  var btn=document.getElementById("nav-hamburger");
-  var drw=document.getElementById("nav-drawer");
-  if(!btn||!drw)return;
-  btn.addEventListener("click",function(e){e.stopPropagation();btn.classList.toggle("open");drw.classList.toggle("open");});
-  document.addEventListener("click",function(e){if(!drw.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove("open");drw.classList.remove("open");}});
+/* ── COLOR MAPS ── */
+var TYPE_COLORS = {KEY:'#C49A3C',CON:'#8a6cc9',FRM:'#6B9DC2',ANT:'#B23531',PTN:'#4A9E6B',ARC:'#B23531',PQ:'#4AADAD'};
+var TIER_COLORS = {Beginner:'#6B9DC2',Intermediate:'#4A9E6B',Advanced:'#C49A3C',Expert:'#B23531'};
+var PATH_COLORS = {beginner:'#6B9DC2',intermediate:'#C49A3C',expert:'#B23531'};
+
+/* ── LEARN MAP — entries that have /learn/ pages ── */
+var LEARN_MAP = {
+  'ANT-0003':'/learn/hardcoded-values/',
+  'FRM-0001':'/learn/xlookup/',
+  'FRM-0002':'/learn/let/',
+  'FRM-0004':'/learn/lambda/',
+  'FRM-0011':'/learn/sumifs/'
+};
+
+/* ── REGISTRY DATA (all entries used across 12 paths) ── */
+var REG = {
+'KEY-0001':{name:'Ctrl+T (Table Conversion)',type:'KEY',tier:'Beginner',what:'Converts a data range into a structured Excel Table, enabling auto-expanding ranges, structured references, built-in filtering, consistent formatting, and Power Query readiness.',intent:'When you need structured references, auto-expansion, and Power Query readiness, use Ctrl+T to convert a range into a proper Excel Table.',example:'Select any cell in your data range \u2192 Ctrl+T \u2192 Confirm range \u2192 Rename table in Table Design tab.\nResult: =SUM(Sales[Revenue]) instead of =SUM(B2:B100)',gov:'Every data range in every DDL workbook must be a Table. This is the single most impactful Excel action. The foundation everything else builds on.'},
+'KEY-0002':{name:'Alt Shortcuts',type:'KEY',tier:'Beginner',what:'Uses Alt key sequences to access any ribbon command without a mouse, enabling keyboard-first Excel workflows.',intent:'When you need to execute ribbon commands without leaving the keyboard, use Alt shortcut sequences.',example:'Alt+E, S, V \u2192 Paste Values\nAlt+E, S, T \u2192 Paste Formats\nAlt+E, S, E \u2192 Paste Transpose\nAlt+H, O, R \u2192 Rename Sheet',gov:'Alt+E, S (Paste Special) is the most important shortcut in DDL workflows. Learn Paste Values, Paste Formats, and Paste Transpose by muscle memory.'},
+'KEY-0003':{name:'F2 (Edit Mode)',type:'KEY',tier:'Beginner',what:'Enters edit mode on the selected cell, revealing formula references with color-coded range highlights for visual auditing.',intent:'When you need to understand or debug what a formula references, use F2 to enter edit mode and see color-coded range highlights.',example:'Select a formula cell \u2192 Press F2\nEach referenced range highlights in a unique color.\nPress Escape to exit without changing.',gov:'F2 is the first step in formula auditing. Before changing any formula, press F2 to see what it touches.'},
+'KEY-0004':{name:'Ctrl+Shift+L (Filter Toggle)',type:'KEY',tier:'Beginner',what:'Toggles AutoFilter dropdowns on or off for the selected data range, enabling instant data exploration.',intent:'When you need to quickly explore or reset filtered data, use Ctrl+Shift+L to toggle filters on or off.',example:'Select any cell in data \u2192 Ctrl+Shift+L \u2192 Filter dropdowns appear\nCtrl+Shift+L again \u2192 Filters removed',gov:'Use Ctrl+Shift+L for data exploration. For governed filtered views, use FILTER function instead.'},
+'KEY-0006':{name:'Ctrl+Arrow (Range Navigation)',type:'KEY',tier:'Beginner',what:'Jumps to the last non-empty cell in the direction of the arrow key, enabling instant navigation across large datasets.',intent:'When you need to navigate quickly to the edge of a data range or find the last row of data, use Ctrl+Arrow.',example:'Ctrl+Down  \u2014 Jump to last filled cell in column\nCtrl+Right \u2014 Jump to last filled cell in row\nShift+Ctrl+Down \u2014 Select from current to last filled cell',gov:'Shift+Ctrl+Down for dynamic range selection replaces hardcoded range references in manual workflows.'},
+'CON-0001':{name:'Center Across Selection',type:'CON',tier:'Beginner',what:'Centers text visually across multiple columns without merging cells, preserving sorting, filtering, references, and copy-paste operations.',intent:'When you need centered text spanning multiple columns, use Center Across Selection to achieve visual alignment without merging cells.',example:'Select cells A1:D1 \u2192 Format Cells (Ctrl+1) \u2192 Alignment tab \u2192 Horizontal \u2192 Center Across Selection \u2192 OK.\nText in A1 appears centered across A1:D1. Cells B1:D1 remain independently addressable.',gov:'The approved alternative to merged cells (ANT-0001). Mandatory in any DDL workbook where visual centering is needed.'},
+'CON-0003':{name:'Sheet Naming Convention',type:'CON',tier:'Beginner',what:'Applies consistent prefix-based naming to worksheet tabs (Fact_, Dim_, Dash_, Ref_, Config_) making the workbook self-documenting.',intent:'When you create a new sheet in a governed workbook, use the DDL sheet naming convention with standardized prefixes.',example:'Fact_Sales \u2014 fact table (transactional data)\nDim_Product \u2014 dimension table (reference data)\nDash_Revenue \u2014 dashboard view\nRef_Rates \u2014 reference/lookup table\nConfig_ \u2014 control parameters',gov:'Every DDL workbook must use prefixed sheet names. STD-FACT-001 mandates Fact_[ProjectName] for all fact tables.'},
+'CON-0004':{name:'No Blank Rows or Columns',type:'CON',tier:'Beginner',what:'Ensures that data ranges contain no empty rows or columns within the data boundary, preventing silent failures in tables, filters, sorts, pivot tables, and range detection.',intent:'When you structure any data range, use continuous rows and columns with no internal blanks to ensure Excel correctly detects the data boundary.',example:'WRONG: Data in A1:D10 with row 5 completely blank\n\u2192 Ctrl+Shift+End selects A1:D4 (stops at blank)\n\u2192 Pivot table only reads rows 1-4\n\nRIGHT: Data in A1:D10 with no blank rows\n\u2192 All operations detect the full range correctly',gov:'No blank rows or columns within any DDL data range. Period. This is the most common cause of \u201cmy formula works but the answer is wrong\u201d in Excel.'},
+'CON-0006':{name:'README Tab Convention',type:'CON',tier:'Beginner',what:'Establishes a dedicated README sheet as the first tab in every governed workbook, documenting purpose, owner, schema, change log, and usage instructions.',intent:'When building any workbook intended for reuse or sharing, add a README tab first to document what the workbook does, who owns it, and how it is structured.',example:'Tab name: README (or _README to sort first)\nRequired sections:\n  Purpose \u2014 one sentence\n  Owner \u2014 name + date\n  Sheet Index \u2014 list all tabs + their role\n  Change Log \u2014 date, author, change\n  Governance Notes \u2014 any rules or constraints',gov:'Mandatory on all DDL workbooks per STD-EXCEL-001 Rule 0. A workbook without a README is ungoverned by definition.'},
+'CON-0007':{name:'Formula Comment Convention',type:'CON',tier:'Intermediate',what:'Adds human-readable documentation to complex formulas using the N() function or adjacent comment cells, making formula intent visible without external documentation.',intent:'When a formula encodes business logic that is not obvious from syntax alone, use the formula comment convention to embed the rule explanation.',example:'=SUMIFS(Sales[Rev], Sales[Region], "West",\n  Sales[Year], 2026)\n  +N("West region only \u2014 excludes CA per scope declaration")',gov:'Required for any LOGIC layer formula that encodes a non-obvious business rule.'},
+'CON-0008':{name:'Tab Color Coding',type:'CON',tier:'Beginner',what:'Assigns consistent colors to worksheet tabs based on their layer role (INPUT=blue, LOGIC=gray, OUTPUT=green, CONFIG=yellow) making workbook architecture visible.',intent:'When a workbook has multiple tabs serving different architectural roles, use tab color coding to make the structure visible at a glance.',example:'Right-click tab \u2192 Tab Color\nINPUT:  Light Blue  (#BDD7EE)\nLOGIC:  Light Gray  (#D9D9D9)\nOUTPUT: Light Green (#C6EFCE)\nCONFIG: Light Yellow (#FFEB9C)',gov:'Required in all DDL operational workbooks per STD-EXCEL-002 Rule 8.'},
+'CON-0009':{name:'Column Header Convention',type:'CON',tier:'Beginner',what:'Establishes consistent rules for column header formatting: PascalCase or snake_case with no spaces, type suffixes for clarity.',intent:'When naming columns in any Excel Table or data range, use the column header convention for consistent, machine-readable headers.',example:'CORRECT:\n  SalesRep_ID    OrderDate      Revenue_Amt\n  Product_Name   Status\n\nWRONG:\n  Sales Rep ID   order date     revenue',gov:'All DDL table columns must use PascalCase or snake_case with no spaces.'},
+'FRM-0001':{name:'XLOOKUP',type:'FRM',tier:'Intermediate',what:'Retrieves a value from a range or array based on a lookup key, returning exact or approximate matches without requiring a column index number.',intent:'When you need to retrieve a value from another table based on a lookup key, use XLOOKUP to return exact or approximate matches without column index dependency.',example:'=XLOOKUP(A2, Products[SKU], Products[Price], "Not Found", 0)',gov:'Replaces VLOOKUP in all new builds. VLOOKUP should never appear in DDL workbooks.'},
+'FRM-0002':{name:'LET',type:'FRM',tier:'Advanced',what:'Assigns names to intermediate calculation results within a formula, allowing reuse without redundant computation and improving readability.',intent:'When a formula requires intermediate calculations or repeated sub-expressions, use LET to name each component.',example:'=LET(\n  rate, B2/100,\n  base, C2*D2,\n  tax, base*rate,\n  base + tax\n)',gov:'All formulas with 3+ logical steps should use LET. Non-negotiable in DDL workbooks.'},
+'FRM-0003':{name:'INDEX/MATCH',type:'FRM',tier:'Intermediate',what:'Combines INDEX and MATCH to retrieve values from any position in a table, supporting left-facing lookups and flexible matching.',intent:'When you need flexible lookups in legacy workbooks or left-facing retrieval, use INDEX/MATCH.',example:'=INDEX(Products[Price], MATCH(A2, Products[SKU], 0))',gov:'Legacy pattern. Acceptable in existing workbooks. All new DDL builds should use XLOOKUP.'},
+'FRM-0004':{name:'LAMBDA',type:'FRM',tier:'Expert',what:'Creates custom functions by encapsulating logic into reusable, portable, testable function objects without VBA.',intent:'When you need to create reusable custom functions without VBA, use LAMBDA to encapsulate logic.',example:'=LAMBDA(price, qty, tax,\n  LET(\n    subtotal, price * qty,\n    subtotal * (1 + tax)\n  )\n)(B2, C2, D2)',gov:'LAMBDA is the Expert-tier gateway. Combined with LET, it enables MAKEARRAY, MAP, REDUCE.'},
+'FRM-0005':{name:'FILTER',type:'FRM',tier:'Intermediate',what:'Returns a dynamic array of rows from a range that meet specified criteria, automatically updating when source data changes.',intent:'When you need to extract a subset of rows based on criteria, use FILTER to return a dynamic spill range.',example:'=FILTER(Orders, (Orders[Region]="West") * (Orders[Amount]>1000), "No results")',gov:'Preferred over Advanced Filter in all DDL workbooks. Should be combined with structured references.'},
+'FRM-0007':{name:'SORT',type:'FRM',tier:'Intermediate',what:'Returns a sorted copy of a range or array by one or more columns, producing a dynamic spill range without altering the source.',intent:'When you need to reorder data dynamically without altering the source, use SORT to produce a governed sorted output.',example:'=SORT(FILTER(Sales, Sales[Region]="West"), 4, -1)\nSorts filtered Western region sales by column 4 descending.',gov:'Preferred over manual Sort buttons for any repeatable output. SORT + FILTER + TAKE is the DDL pipeline.'},
+'FRM-0008':{name:'UNIQUE',type:'FRM',tier:'Intermediate',what:'Returns a dynamic spill array of distinct values from a range, automatically updating when source data changes, replacing manual Remove Duplicates operations.',intent:'When you need a deduplicated list for validation, dropdowns, or aggregation, use UNIQUE to extract distinct values as a self-updating spill range.',example:'=UNIQUE(Sales[Region])\nSpills a dynamic list of unique regions.\n\n=SORT(UNIQUE(Sales[Region])) \u2014 sorted unique list\n=COUNTA(UNIQUE(Sales[Region])) \u2014 count of distinct regions',gov:'UNIQUE replaces all manual Remove Duplicates operations. Pairs with FILTER for conditional distinct-value extraction.'},
+'FRM-0010':{name:'IF/IFS',type:'FRM',tier:'Beginner',what:'Evaluates a condition and returns one value if true and another if false. IFS extends this to multiple conditions without nesting.',intent:'When you need conditional logic with multiple branches, use IF or IFS to evaluate conditions and return governed outcomes without deep nesting.',example:'=IF(A2>100, "High", "Low")\n=IFS(A2>100, "High", A2>50, "Medium", TRUE, "Low")',gov:'IF is acceptable for binary conditions. For 3+ branches, use IFS or SWITCH instead of nested IF.'},
+'FRM-0011':{name:'COUNTIFS/SUMIFS',type:'FRM',tier:'Intermediate',what:'Counts or sums values across a range based on multiple criteria applied to corresponding ranges, enabling governed multi-condition aggregation.',intent:'When you need to aggregate values based on two or more conditions across different columns, use COUNTIFS or SUMIFS.',example:'=COUNTIFS(Sales[Region], "West", Sales[Year], 2026)\n=SUMIFS(Sales[Revenue], Sales[Region], "West", Sales[Year], 2026, Sales[Status], "Closed")',gov:'COUNTIFS/SUMIFS is the default aggregation pattern for DDL dashboards. Use SUMPRODUCT only when SUMIFS cannot express the condition.'},
+'FRM-0015':{name:'TAKE/DROP',type:'FRM',tier:'Intermediate',what:'TAKE returns the first or last N rows/columns from an array. DROP removes the first or last N rows/columns. Both produce dynamic spill ranges.',intent:'When you need to extract the top N or bottom N rows from a dynamic array, use TAKE or DROP.',example:'=TAKE(SORT(Sales, 4, -1), 10)  \u2192 Top 10 by column 4\n=DROP(Results, 1)  \u2192 Remove header row',gov:'TAKE replaces all INDEX-based row-limiting patterns in DDL workbooks. FILTER\u2192SORT\u2192TAKE is the governed pipeline.'},
+'FRM-0019':{name:'MAP',type:'FRM',tier:'Advanced',what:'Applies a LAMBDA function to each element of one or more arrays and returns an array of results.',intent:'When you need to apply a custom calculation to every element in a range, use MAP with LAMBDA.',example:'=MAP(Sales[Amount], LAMBDA(x,\n  IF(x>1000, x*0.9, x)\n))\n// Applies 10% discount to amounts over 1000',gov:'MAP replaces all helper column patterns in DDL workbooks. If you have a column that applies the same formula row by row, MAP eliminates it.'},
+'FRM-0020':{name:'REDUCE',type:'FRM',tier:'Expert',what:'Applies a LAMBDA accumulator function across an array, reducing it to a single value \u2014 the Excel equivalent of a fold/reduce operation.',intent:'When you need to accumulate values across an array with custom logic that SUMIFS or COUNTIFS cannot express, use REDUCE.',example:'=REDUCE(0, Values, LAMBDA(acc, x,\n  acc + IF(x > threshold, x, 0)\n))\n// Running sum of values above threshold',gov:'Expert-tier function. Use only when SUMIFS, COUNTIFS, and SUMPRODUCT cannot express the required logic.'},
+'FRM-0024':{name:'Structured References',type:'FRM',tier:'Beginner',what:'Replaces raw cell addresses (B2:B100) with table-based column references (Table1[Amount]) that auto-expand and self-document.',intent:'When referencing data inside an Excel Table, use structured references to make formulas self-documenting and range-proof.',example:'FRAGILE: =SUMIF(B:B,"North",D:D)\nGOVERNED: =SUMIF(Sales[Region],"North",Sales[Amount])',gov:'All formula references to tabular data in DDL workbooks must use structured references.'},
+'FRM-0025':{name:'IFERROR',type:'FRM',tier:'Beginner',what:'Returns a specified value when a formula produces any error (#N/A, #VALUE!, #REF!, etc.), enabling graceful error handling.',intent:'When a formula has a known, expected failure condition, wrap it with IFERROR and a specific fallback.',example:'EXPECTED MISS (correct use):\n=IFERROR(VLOOKUP(A2, RefTable, 2, 0), "Not in reference")\n\nERROR MASKING (wrong use):\n=IFERROR(complex_formula, 0)  \u2014 hides all errors silently',gov:'IFERROR is a governed tool for expected exceptions only. It must never wrap a formula to suppress unknown errors.'},
+'FRM-0029':{name:'MAKEARRAY',type:'FRM',tier:'Expert',what:'Builds a two-dimensional array of specified dimensions by applying a LAMBDA function to each row and column index.',intent:'When you need to generate a custom two-dimensional array where each cell\'s value depends on its row and column position, use MAKEARRAY with LAMBDA.',example:'=MAKEARRAY(10, 10, LAMBDA(r, c, r*c))\nGenerates a 10x10 multiplication table dynamically.\n\n=MAKEARRAY(\n  ROWS(rowsDim), COLUMNS(qtrs),\n  LAMBDA(r, c, COUNTIFS(dimKey, INDEX(rowsDim,r), QuarterTag, INDEX(qtrs,c)))\n)',gov:'MAKEARRAY is an Expert-tier function reserved for cases where no simpler pattern produces the same governed output.'},
+'ANT-0001':{name:'Merged Cells',type:'ANT',tier:'Beginner',what:'Merged cells combine multiple cells into one for visual alignment, breaking sort, filter, references, copy-paste, and table conversion.',intent:'When you need visual alignment across cells, use Center Across Selection to achieve the same visual result without merging.',example:'Instead of Merge & Center, use:\nFormat Cells \u2192 Alignment \u2192 Horizontal \u2192 Center Across Selection\nVisually identical. Functionally intact.',gov:'Merged cells are banned in all DDL workbooks. Zero exceptions. The most fundamental anti-pattern in Excel.'},
+'ANT-0003':{name:'Hardcoded Values',type:'ANT',tier:'Beginner',what:'Embeds literal numbers or text directly into formulas instead of referencing named ranges or dedicated assumption cells.',intent:'When you find literal values embedded in formulas, use named ranges or dedicated assumption cells to make them governed and auditable.',example:'WRONG: =B5 * 1.08  (what is 1.08? Tax rate? Markup?)\nRIGHT: =B5 * TaxRate  (named range pointing to Config!B2)',gov:'Hardcoded values are banned in all DDL formulas. Every literal number in a formula is a governance failure.'},
+'ANT-0009':{name:'Numbers Stored as Text',type:'ANT',tier:'Beginner',what:'Cells containing numeric values stored as text strings cause SUM, AVERAGE, and VLOOKUP to silently return wrong results.',intent:'When you inherit a workbook with green triangle warnings or formulas returning zero on numeric-looking data, check for numbers stored as text.',example:'WRONG: Column D shows 1000, 2000, 3000 but =SUM(D:D) returns 0.\nCells are left-aligned (text). Green triangle warning in corner.',gov:'Numbers Stored as Text is the single most common invisible failure in inherited workbooks.'},
+'ANT-0013':{name:'Copy-Paste Values Over Formulas',type:'ANT',tier:'Beginner',what:'Live formula cells are overwritten with paste-special values to freeze a result, destroying the calculation chain permanently.',intent:'When a calculated result must be preserved at a point in time, use a dedicated archive pattern instead of overwriting formulas.',example:'WRONG: Month-end close. Controller pastes values over all formula cells to \u201clock\u201d the numbers.\nResult: Every formula in the workbook is destroyed.',gov:'Paste-values is a valid technique in one context only: intentional archiving with documented rollback.'},
+'ANT-0014':{name:'Over-Nesting',type:'ANT',tier:'Beginner',what:'Multiple levels of nested functions \u2014 especially nested IFs \u2014 create formulas that are unreadable, unauditable, and unmaintainable.',intent:'When logic requires multiple branching conditions, use LET to name intermediate results or IFS/SWITCH for multi-branch logic.',example:'WRONG:\n=IF(A2>100,IF(B2="Y",IF(C2<>"Z","Tier1","Tier2"),"Tier3"),IF(A2>50,"Tier4","Tier5"))\n\nRIGHT:\n=LET(val,A2,flag,B2,\n  IFS(val>100, IF(flag="Y","Tier1","Tier3"),\n      val>50, "Tier4",\n      TRUE, "Tier5"))',gov:'Maximum nesting depth in DDL workbooks: 2 levels. Any logic requiring more than 2 levels must use LET.'},
+'PTN-0004':{name:'Controlled Input Cells',type:'PTN',tier:'Intermediate',what:'Combines data validation, named ranges, and visual cues to create governed user input cells that prevent errors at the point of entry.',intent:'When you need users to enter data into a workbook without introducing errors, use controlled input cells with validation and visual markers.',example:'Data Validation: Data tab \u2192 Data Validation \u2192 List \u2192 Source: =SORT(UNIQUE(Ref[Category]))\nVisual: Blue fill (#BDD7EE) for input cells, locked cells for everything else.',gov:'Every DDL workbook with user inputs must use data validation on input cells. Blue fill = input. No exceptions.'},
+'PTN-0005':{name:'Audit Trail Pattern',type:'PTN',tier:'Advanced',what:'Maintains a structured log of changes within a workbook using timestamp, user, action, sheet, cell, old value, and new value columns.',intent:'When you need to track changes in a governed workbook, use the audit trail pattern to maintain a structured change log.',example:'Audit log columns:\nTimestamp | User | Action | Sheet | Cell | Old Value | New Value\nPopulated via VBA Worksheet_Change event or manual entry protocol.',gov:'Every DDL workbook with external users must have an audit trail.'},
+'PTN-0006':{name:'Data Validation Dropdowns',type:'PTN',tier:'Beginner',what:'Creates dropdown lists in cells using Data Validation, constraining user input to a defined set of allowed values.',intent:'When you need users to select from a governed set of options, use data validation dropdowns with dynamic sources.',example:'Static: Data \u2192 Data Validation \u2192 List \u2192 Source: "Q1,Q2,Q3,Q4"\nDynamic: Data \u2192 Data Validation \u2192 List \u2192 Source: =SORT(UNIQUE(Sales[Region]))',gov:'Every selector in a DDL dashboard must use data validation. Dynamic sources (UNIQUE+SORT) preferred over static lists.'},
+'PTN-0007':{name:'Conditional Formatting Rules',type:'PTN',tier:'Intermediate',what:'Applies visual formatting automatically based on cell values or formulas, making data communicate its own status visually.',intent:'When you need data to visually communicate its own status, use conditional formatting with governed rules.',example:'Highlight negatives: Select range \u2192 Conditional Formatting \u2192 Highlight Cell Rules \u2192 Less Than \u2192 0\nCustom formula: =AND($D2>1000, $E2="Open") \u2192 amber fill',gov:'Conditional formatting is visual governance \u2014 it makes the data enforce its own display rules.'},
+'PTN-0009':{name:'Status Lifecycle Pattern',type:'PTN',tier:'Intermediate',what:'Implements a governed status column with a fixed set of allowed values (e.g., Draft \u2192 Ready \u2192 Sent \u2192 Complete \u2192 Exception).',intent:'When a workbook tracks items that move through defined workflow stages, use the status lifecycle pattern.',example:'Status column: Data Validation \u2192 List\nAllowed: Draft, Ready, Sent, Complete, Exception\nCF rules: Draft=gray, Ready=blue, Sent=amber, Complete=green, Exception=red',gov:'Every governed operational workbook in DDL uses this pattern per STD-EXCEL-002 Rule 4b.'},
+'PTN-0014':{name:'KPI Card Pattern',type:'PTN',tier:'Intermediate',what:'Structures dashboard summary metrics as individual governed cells combining a primary value, comparison delta, directional indicator, and label.',intent:'When a dashboard needs to surface key metrics at a glance, use the KPI card pattern.',example:'KPI card components (4-cell group):\nLabel:  \u2018Revenue\u2019\nValue:  =SUMIFS(...)\nDelta:  =(Current/Prior)-1\nTrend:  =IF(Delta>0,"\u25b2","\u25bc")',gov:'Every DDL dashboard must have at minimum three KPI cards per STD-EXCEL-001 Rule 6.'},
+'PTN-0015':{name:'Lookup Table Pattern',type:'PTN',tier:'Intermediate',what:'Centralizes reference data (rates, categories, mappings, thresholds) in dedicated, named tables that serve as the single source of truth for all lookups.',intent:'When multiple formulas reference the same set of values, use a lookup table to centralize them.',example:'Ref_CommissionRates table:\nTier   | Rate\nBronze | 0.05\nSilver | 0.08\nGold   | 0.12\n\n=XLOOKUP([@Tier], Ref_CommissionRates[Tier], Ref_CommissionRates[Rate])',gov:'Every set of values used in more than one formula must live in a lookup table.'},
+'PQ-0001':{name:'Power Query Load to Table',type:'PQ',tier:'Intermediate',what:'Connects to external data sources, transforms data through a repeatable M-language pipeline, and loads the result into a governed Excel Table.',intent:'When you need to transform and load external data into a governed Excel Table, use Power Query.',example:'Data tab \u2192 Get Data \u2192 From File \u2192 From Workbook \u2192 Select source\n\u2192 Transform: Remove columns, filter rows, set types\n\u2192 Close & Load To \u2192 Table',gov:'Power Query is the governed data ingestion layer for DDL workbooks. Manual copy-paste from external sources is banned.'},
+'PQ-0003':{name:'Column Type Enforcement',type:'PQ',tier:'Intermediate',what:'Explicitly sets data types for every column in a Power Query step, preventing silent type coercion errors downstream.',intent:'When loading data through Power Query, use explicit column type enforcement to prevent silent failures.',example:'Home \u2192 Transform \u2192 Detect Data Types (starting point)\nThen manually verify: Date columns = Date, Currency = Decimal, IDs = Text',gov:'Every Power Query output must have explicit type enforcement as the final transform step.'},
+'PQ-0008':{name:'Unpivot Columns',type:'PQ',tier:'Intermediate',what:'Transforms wide-format data where months/categories are column headers into tall-format data where each value has its own row.',intent:'When you receive a report-style table with time periods as column headers, use Unpivot to normalize it into a fact-table structure.',example:'BEFORE (wide):\nRegion | Jan | Feb | Mar\nNorth  | 100 | 120 | 90\n\nAFTER (tall, unpivoted):\nRegion | Month | Amount\nNorth  | Jan   | 100\nNorth  | Feb   | 120',gov:'Any source data in wide/cross-tab format must be unpivoted in Power Query before loading to the model.'},
+'PQ-0009':{name:'Parameter Table',type:'PQ',tier:'Intermediate',what:'Stores query variables (file paths, filter criteria, date ranges, thresholds) in a dedicated Excel Table that Power Query reads at refresh time.',intent:'When a Power Query needs to be reconfigured for different runs, use a parameter table on a Config tab.',example:'PARAMETER TABLE (on Config tab):\nParameterName  | Value\nFilePath       | C:\\Data\\Sales\\\nStartDate      | 2026-01-01\nThreshold      | 500',gov:'Any Power Query that runs against variable inputs must use a parameter table. No hardcoded paths or dates in M code.'},
+'PQ-0010':{name:'Append vs Merge',type:'PQ',tier:'Intermediate',what:'Defines the structural difference between Append (stacking tables vertically \u2014 union) and Merge (joining tables horizontally \u2014 lookup).',intent:'When combining data from multiple sources in Power Query, use Append to stack rows from same-structure tables or Merge to join related tables.',example:'APPEND (vertical stack \u2014 same columns):\nJanuary sales + February sales + March sales\n\nMERGE (horizontal join \u2014 lookup):\nSales table joined to Product table on ProductID',gov:'Every PQ data combination must explicitly declare whether it is an Append or a Merge and document the join key.'},
+'ARC-0001':{name:'MAKEARRAY Engine',type:'ARC',tier:'Expert',what:'Generates a dynamic grid of calculated values across two dimensions using MAKEARRAY with LAMBDA, building self-constructing matrices.',intent:'When you need to generate a dynamic grid of calculated values across two dimensions, use MAKEARRAY with LAMBDA.',example:'=LET(\n  rows, COUNTA(RowHeaders),\n  cols, COUNTA(ColHeaders),\n  MAKEARRAY(rows, cols, LAMBDA(r,c,\n    XLOOKUP(INDEX(RowHeaders,r), Data[Key], INDEX(Data,,c+1))\n  ))\n)',gov:'The DDL signature architecture. Used in Assurance Map, audit dashboards, BlindSpot analytics.'},
+'ARC-0003':{name:'Selector-Driven Reconfiguration',type:'ARC',tier:'Expert',what:'Uses dropdown selectors to dynamically reconfigure dashboard matrices, charts, and summary views \u2014 changing what the dashboard displays without changing any formulas.',intent:'When you need a single dashboard to serve multiple views or audiences, use selector-driven reconfiguration.',example:'=LET(\n  dim, INDIRECT("Fact_Sales["&SelectorValue&"]"),\n  measure, INDIRECT("Fact_Sales["&MeasureSelector&"]"),\n  MAKEARRAY(ROWS(UniqueEntities), ROWS(UniquePeriods), LAMBDA(r,c,\n    SUMIFS(measure, dim, INDEX(UniqueEntities,r), Fact_Sales[Period], INDEX(UniquePeriods,c))\n  ))\n)',gov:'The DDL signature dashboard pattern. Used in Assurance Map (6 views, 2 formulas).'},
+'ARC-0004':{name:'FILTER-SORT-TAKE Pipeline',type:'ARC',tier:'Advanced',what:'Chains FILTER, SORT, and TAKE into a single spill-range formula that extracts matching rows, orders them, and limits the result \u2014 no helper columns.',intent:'When you need a governed top-N view of filtered data, use the FILTER-SORT-TAKE pipeline.',example:'=LET(\n  data, FILTER(Sales, Sales[Year]=2026),\n  sorted, SORT(data, 4, -1),\n  TAKE(sorted, 10)\n)',gov:'This is the standard DDL data pipeline for dashboard outputs. Always wrap in LET for readability.'},
+'ARC-0006':{name:'INPUT \u2192 LOGIC \u2192 OUTPUT Architecture',type:'ARC',tier:'Advanced',what:'Structures operational workbooks into three physically separated layers: INPUT (raw data entry), LOGIC (calculations), OUTPUT (reports/dashboards).',intent:'When building an operational workbook that mixes data entry with calculation and reporting, use the three-layer separation.',example:'Tab structure:\n  INPUT  \u2014 data entry cells only, validation rules, no formulas\n  STAGING \u2014 transforms, lookups, intermediate calcs\n  OUTPUT \u2014 dashboards, reports, KPI cards',gov:'Required architecture for all DDL operational workbooks per STD-EXCEL-002 Rule 1.'},
+'ARC-0007':{name:'Parameter-Driven Architecture',type:'ARC',tier:'Advanced',what:'Centralizes all configurable values (thresholds, rates, date ranges, flags) in a dedicated CONTROL or CONFIG tab as named parameter cells.',intent:'When a workbook contains values that may change between runs or by user, use parameter-driven architecture to centralize all configuration.',example:'// CONTROL tab:\nsel_Threshold = 500\nsel_Period    = "2026-Q1"\nsel_Rate      = 0.085\n\n// LOGIC tab references:\n=IF(Revenue > sel_Threshold, "Flag", "OK")\n=SUMIFS(Rev, Period, sel_Period) * sel_Rate',gov:'Required in all DDL operational workbooks per STD-EXCEL-002. Every sel_ prefixed cell is a governed parameter.'},
+'CON-0002':{name:'Consistent Grain',type:'CON',tier:'Advanced',what:'Enforces that every row in a data table represents the same unit of measurement \u2014 one transaction, one period, one entity \u2014 preventing aggregation errors.',intent:'When you need reliable aggregation and filtering, use consistent grain to ensure every row in a table represents exactly one instance of the same thing.',example:'CORRECT: Every row = one sale (Date, Product, Qty, Revenue)\nWRONG: Row 1 = daily total, Row 2 = individual sale, Row 3 = monthly summary\n\nTest: "Can I SUM this column and get a meaningful number?"\nIf yes \u2192 grain is consistent.',gov:'Every DDL fact table must have documented grain. Mixed grain is the most common cause of \u201cthe numbers don\'t add up.\u201d'},
+'PTN-0001':{name:'Star Schema Layout',type:'PTN',tier:'Advanced',what:'Organizes workbook data into dimension tables (descriptive attributes) and fact tables (transactional measures), enabling scalable lookups and pivot-ready architecture.',intent:'When you need to organize workbook data for scalable analysis, use star schema layout to separate dimension tables from fact tables.',example:'Dimension tables: dim_Product (ProductID, Name, Category)\nFact table: fct_Sales (Date, ProductID, Qty, Revenue)\nLookup: =XLOOKUP(fct_Sales[@ProductID], dim_Product[ProductID], dim_Product[Name])',gov:'The DDL standard for any workbook with more than one entity type. Non-negotiable at Advanced tier and above.'},
+'PTN-0008':{name:'Surrogate Key Generation',type:'PTN',tier:'Intermediate',what:'Generates a stable, system-assigned integer key for each row using ROW() offset or a counter column, decoupled from any business attribute.',intent:'When a fact table row needs a stable, non-business join key, use surrogate key generation.',example:'=ROW()-1   // in a table starting at row 2\n=TEXT(ROW()-1,"00000")  // zero-padded for display',gov:'Required on all DDL fact tables per STD-EXCEL-001 Rule 2b. Never use source system IDs as surrogate keys.'}
+};
+
+/* ── PATH DEFINITIONS ── */
+var PATHS = [
+  /* ── CANONICAL SPINES ── */
+  {id:'p01',group:'canonical',num:'01',tier:'beginner',title:'Keyboard-First Excel',
+   desc:'Pure muscle memory. No formulas. The path that makes everything else faster. Start here.',
+   longDesc:'Five keyboard shortcuts that eliminate mouse dependency. No formulas. No logic. Just the inputs that make every other path faster.',
+   startHere:true,types:'KEY',range:'Beginner',
+   steps:['KEY-0001','KEY-0003','KEY-0006','KEY-0004','KEY-0002'],
+   cta:'Muscle memory built. Now make your workbooks readable.',ctaLink:null},
+
+  {id:'p02',group:'canonical',num:'02',tier:'beginner',title:'Make It Readable',
+   desc:'Pure conventions. Zero formulas. The workbook someone else can actually maintain after you leave.',
+   longDesc:'Five conventions that make a workbook self-documenting. Zero formulas. The workbook someone else can actually maintain after you leave.',
+   types:'CON',range:'Beginner \u2192 Intermediate',
+   steps:['CON-0003','CON-0008','CON-0006','CON-0007','CON-0001'],
+   cta:'Readable workbook built. Now give it structure.',ctaLink:null},
+
+  {id:'p03',group:'canonical',num:'03',tier:'beginner',title:'Your First Governed Table',
+   desc:'From raw data to a proper governed table with your first real aggregation. The before-you-build-anything path.',
+   longDesc:'Ctrl+T a range, give it governed headers, structured references, and your first COUNTIFS. This is the starting line.',
+   types:'KEY \u00b7 CON \u00b7 FRM',range:'Beginner \u2192 Intermediate',
+   steps:['KEY-0001','CON-0004','FRM-0024','CON-0009','FRM-0011'],
+   cta:'Table built. Now learn the lookup patterns.',ctaLink:null},
+
+  {id:'p04',group:'canonical',num:'04',tier:'beginner',title:'Lookup Fundamentals',
+   desc:'IF to error handling to modern lookup to classic lookup to the pattern that governs all of them.',
+   longDesc:'The lookup progression every analyst actually walks. IF \u2192 error handling \u2192 modern lookup \u2192 classic lookup \u2192 the pattern that governs all of them.',
+   types:'FRM \u00b7 PTN',range:'Beginner \u2192 Intermediate',
+   steps:['FRM-0010','FRM-0025','FRM-0001','FRM-0003','PTN-0015'],
+   cta:'Lookups mastered. Time to see the anti-patterns.',ctaLink:null},
+
+  {id:'p05',group:'canonical',num:'05',tier:'beginner',title:'Stop Breaking Things',
+   desc:'Learn what NOT to do before learning what to do. Every one of these is something a manager does daily without knowing it\u2019s destructive.',
+   longDesc:'Five anti-patterns. Five things people do daily that silently break workbooks. Learn what NOT to do.',
+   types:'ANT',range:'Beginner',
+   steps:['ANT-0001','ANT-0003','ANT-0009','ANT-0013','ANT-0014'],
+   exitBridge:'Ready for what TO do? Try Your First Governed Table next.',
+   cta:'Anti-patterns identified. Now build something governed.',ctaLink:null},
+
+  {id:'p06',group:'canonical',num:'06',tier:'beginner',title:'Your First Hour',
+   desc:'Five foundational entries every Excel user needs before anything else. No prerequisites. The original path.',
+   longDesc:'These are the five things every Excel user should know before learning anything else. Each one is a stone. Together they build the floor everything else stands on.',
+   types:'KEY \u00b7 CON \u00b7 FRM',range:'Beginner \u2192 Intermediate',
+   steps:['KEY-0001','CON-0004','CON-0001','FRM-0001','FRM-0010'],
+   cta:'You\u2019ve walked the foundation. The graph has 100+ entries waiting \u2014 and 228 edges connecting them.',ctaLink:'/explorer/'},
+
+  /* ── SATELLITE PATHS ── */
+  {id:'p07',group:'satellite',num:'07',tier:'intermediate',title:'The Star Schema Path',
+   desc:'The DDL methodology applied to Excel. From grain definition to institutional-grade matrix architecture.',
+   longDesc:'This is the DDL methodology applied to Excel. Start with documentation and grain discipline. End with a self-constructing matrix. This is how the Assurance Map was built.',
+   types:'CON \u00b7 PTN \u00b7 ARC',range:'Beginner \u2192 Expert',
+   steps:['CON-0006','CON-0002','PTN-0001','PTN-0008','ARC-0001'],
+   cta:'You\u2019ve walked the star schema path. This is the architecture behind every DDL analytical workbook.',ctaLink:'/explorer/'},
+
+  {id:'p08',group:'satellite',num:'08',tier:'intermediate',title:'The Dashboard Builder',
+   desc:'From individual dashboard components to the architecture that holds them together. From \u201cI made a chart\u201d to \u201cI built a dashboard.\u201d',
+   longDesc:'Input cells, dropdowns, conditional formatting, KPI cards, and the INPUT\u2192LOGIC\u2192OUTPUT architecture that ties it all together.',
+   prereq:'Complete Your First Governed Table before this path.',
+   types:'PTN \u00b7 ARC',range:'Intermediate \u2192 Advanced',
+   steps:['PTN-0004','PTN-0006','PTN-0007','PTN-0014','ARC-0006'],
+   cta:'Dashboard architecture complete. Explore the full graph for more patterns.',ctaLink:'/explorer/'},
+
+  {id:'p09',group:'satellite',num:'09',tier:'intermediate',title:'Power Query On-Ramp',
+   desc:'The Power Query fundamentals path for people who\u2019ve never left the formula bar. Five entries that cover 80% of real PQ work.',
+   longDesc:'Load, type, unpivot, combine, parameterize. Five Power Query operations that cover 80% of real-world data transformation work.',
+   types:'PQ',range:'Intermediate',
+   steps:['PQ-0001','PQ-0003','PQ-0008','PQ-0010','PQ-0009'],
+   cta:'Power Query fundamentals complete. You can now ingest anything.',ctaLink:'/explorer/'},
+
+  {id:'p10',group:'satellite',num:'10',tier:'expert',title:'The Dynamic Array Pipeline',
+   desc:'Individual dynamic array functions to the architecture that chains them. Ends at the pipeline that replaces most helper-column workflows.',
+   longDesc:'UNIQUE, SORT, FILTER, TAKE/DROP \u2014 individual dynamic array functions. Then the FILTER-SORT-TAKE pipeline that chains them into a single governed output.',
+   types:'FRM \u00b7 ARC',range:'Intermediate \u2192 Advanced',
+   steps:['FRM-0008','FRM-0007','FRM-0005','FRM-0015','ARC-0004'],
+   cta:'Pipeline mastered. Ready for LAMBDA Engineering.',ctaLink:null},
+
+  {id:'p11',group:'satellite',num:'11',tier:'expert',title:'LAMBDA Engineering',
+   desc:'The functional programming path inside Excel. LET names things. LAMBDA makes them reusable. MAP/REDUCE/MAKEARRAY make them structural.',
+   longDesc:'LET \u2192 LAMBDA \u2192 MAP \u2192 REDUCE \u2192 MAKEARRAY. The functional programming path inside Excel, ending at the DDL signature architecture.',
+   prereq:'Complete The Dynamic Array Pipeline before this path.',
+   types:'FRM',range:'Advanced \u2192 Expert',
+   steps:['FRM-0002','FRM-0004','FRM-0019','FRM-0020','FRM-0029'],
+   cta:'You now command the full LAMBDA toolkit. The MAKEARRAY Engine awaits.',ctaLink:'/explorer/'},
+
+  {id:'p12',group:'satellite',num:'12',tier:'expert',title:'The Institutional Workbook',
+   desc:'Workbooks that survive personnel changes. Config-driven, auditable, lifecycle-aware, reconfigurable without formula edits.',
+   longDesc:'Parameter-driven architecture, three-layer separation, audit trails, status lifecycles, and selector-driven reconfiguration. The workbook that survives you leaving.',
+   types:'ARC \u00b7 PTN',range:'Advanced \u2192 Expert',
+   steps:['ARC-0007','ARC-0006','PTN-0005','PTN-0009','ARC-0003'],
+   cta:'Institutional-grade workbook architecture complete. This is the cathedral.',ctaLink:'/explorer/'}
+];
+
+/* ── RENDER HELPERS ── */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderPathCard(p){
+  var color = PATH_COLORS[p.tier] || '#6B9DC2';
+  var startBadge = p.startHere ? '<div class="start-badge" style="color:'+color+';background:'+color+'18;border:1px solid '+color+'40">Start Here</div>' : '';
+  return '<a class="path-card" id="card-'+p.id+'" onclick="selectPath(\''+p.id+'\');return false;" href="#" style="border-top:3px solid '+color+'22">' +
+    startBadge +
+    '<div class="path-card-label" style="color:'+color+'">Path '+p.num+' \u00b7 '+p.tier.charAt(0).toUpperCase()+p.tier.slice(1)+'</div>' +
+    '<div class="path-card-title">'+esc(p.title)+'</div>' +
+    '<div class="path-card-desc">'+esc(p.desc)+'</div>' +
+    '<div class="path-card-meta">' +
+      '<span class="path-meta-chip">5 entries</span>' +
+      '<span class="path-meta-chip">'+esc(p.range)+'</span>' +
+      '<span class="path-meta-chip">'+esc(p.types)+'</span>' +
+    '</div></a>';
+}
+
+function renderPathContent(p){
+  var color = PATH_COLORS[p.tier] || '#6B9DC2';
+  var html = '<div class="path-content" id="path-'+p.id+'">';
+  html += '<div class="path-header">';
+  html += '<div class="path-header-label">Path '+p.num+' \u00b7 '+esc(p.title)+'</div>';
+  html += '<div class="path-header-title">'+esc(p.longDesc.split('.')[0])+'.</div>';
+  html += '<div class="path-header-sub">'+esc(p.longDesc)+'</div>';
+  if(p.prereq) html += '<div class="path-prereq">\u26a0 '+esc(p.prereq)+'</div>';
+  if(p.exitBridge) html += '<div class="path-exit">'+esc(p.exitBridge)+'</div>';
+  html += '</div>';
+
+  for(var i=0;i<p.steps.length;i++){
+    var sid = p.steps[i];
+    var entry = REG[sid];
+    if(!entry) continue;
+    var tc = TYPE_COLORS[entry.type]||'#888';
+    var trc = TIER_COLORS[entry.tier]||'#888';
+    var isLast = i === p.steps.length - 1;
+
+    html += '<div class="path-step" id="step-'+p.id+'-'+sid+'">';
+    html += '<div class="step-connector"><div class="step-num-wrap">';
+    html += '<div class="step-num" style="background:'+tc+';color:#0D1B2A">'+(i+1)+'</div>';
+    html += '</div>';
+    if(!isLast) html += '<div class="step-line"></div>';
+    html += '</div>';
+
+    html += '<div class="step-card" onclick="toggleStep(this)">';
+    html += '<div class="step-card-header">';
+    html += '<div class="step-meta">';
+    html += '<span class="step-id">'+sid+'</span>';
+    html += '<span class="step-type-badge" style="background:'+tc+';color:#0D1B2A">'+entry.type+'</span>';
+    html += '<span class="step-tier-badge" style="color:'+trc+';border-color:'+trc+'30">'+entry.tier+'</span>';
+    html += '</div>';
+    html += '<h3 class="step-name">'+esc(entry.name)+'</h3>';
+    html += '<p class="step-what">'+esc(entry.what)+'</p>';
+    html += '<div class="step-chevron">&#9662;</div>';
+    html += '</div>';
+
+    html += '<div class="step-card-body">';
+    html += '<div class="step-section"><div class="step-section-label">Intent</div><div class="step-section-body">'+esc(entry.intent)+'</div></div>';
+    html += '<div class="step-section"><div class="step-section-label">Example</div><div class="step-example">'+esc(entry.example)+'</div></div>';
+    html += '<div class="step-section"><div class="step-governance">'+esc(entry.gov)+'</div></div>';
+    html += '<a href="/explorer/#'+sid+'" class="step-explore-link">Explore in graph \u2192</a>';
+    if(LEARN_MAP[sid]) html += '<a href="'+LEARN_MAP[sid]+'" class="step-dive-link">Deep Dive \u2192</a>';
+    html += '</div></div></div>';
+  }
+
+  var ctaHref = p.ctaLink || '/explorer/';
+  html += '<div class="path-cta"><p>'+esc(p.cta)+'</p><a href="'+esc(ctaHref)+'">Explore the Full Graph \u2192</a></div>';
+  html += '</div>';
+  return html;
+}
+
+/* ── BUILD PAGE ── */
+var canSel = document.getElementById('canonical-selector');
+var satSel = document.getElementById('satellite-selector');
+var panels = document.getElementById('path-panels');
+
+PATHS.forEach(function(p){
+  if(p.group === 'canonical') canSel.innerHTML += renderPathCard(p);
+  else satSel.innerHTML += renderPathCard(p);
+  panels.innerHTML += renderPathContent(p);
+});
+
+/* ── INTERACTIONS ── */
+window.selectPath = function(id){
+  document.querySelectorAll('.path-card').forEach(function(c){c.classList.remove('active');});
+  document.querySelectorAll('.path-content').forEach(function(c){c.classList.remove('visible');});
+  var card = document.getElementById('card-'+id);
+  if(card){card.classList.add('active');card.style.borderColor='var(--border2)';}
+  var content = document.getElementById('path-'+id);
+  if(content){content.classList.add('visible');content.scrollIntoView({behavior:'smooth',block:'start'});}
+};
+
+window.toggleStep = function(card){card.classList.toggle('open');};
+
+/* Auto-open first path */
+selectPath('p01');
+
+/* ── HAMBURGER NAV ── */
+var hbtn=document.getElementById("nav-hamburger");
+var hdrw=document.getElementById("nav-drawer");
+if(hbtn&&hdrw){
+  hbtn.addEventListener("click",function(e){e.stopPropagation();hbtn.classList.toggle("open");hdrw.classList.toggle("open");});
+  document.addEventListener("click",function(e){if(!hdrw.contains(e.target)&&!hbtn.contains(e.target)){hbtn.classList.remove("open");hdrw.classList.remove("open");}});
+}
 })();
 </script>
 </body>
 </html>
-
-
-
