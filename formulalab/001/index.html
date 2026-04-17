@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>#001 — The Overlapping Shifts · FormulaLab · Excelligence</title>
+<meta name="description" content="Pinecrest Urgent Care runs three overlapping shifts. For each hour of each day, how many nurses are on the floor? Figure out the formula from the problem.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;--violet:#8a6cc9;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding-bottom:96px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+.nav-link.active{color:var(--cream)}
+.nav-back{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.06em;display:flex;align-items:center;gap:6px;transition:color 0.2s}
+.nav-back:hover{color:var(--cream)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--border2);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover{color:var(--cream)}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:56px 40px 0}
+
+/* CHALLENGE HEADER */
+.ch-header{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
+  animation:fadeUp 0.5s ease both}
+.ch-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ch-breadcrumb::before{content:'';width:16px;height:1px;background:var(--gold)}
+.ch-id{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:6px}
+.ch-name{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-0.03em;
+  line-height:1.1;margin-bottom:14px}
+.ch-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.meta-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:3px;border:1px solid}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-tag{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.pill-env{color:var(--steel);border-color:rgba(107,123,141,0.3);background:rgba(107,123,141,0.08)}
+.env-contract{background:var(--card);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  color:var(--steel);letter-spacing:0.04em;line-height:1.8}
+.env-contract strong{color:var(--cream)}
+
+/* SECTIONS */
+.section{margin-bottom:36px;animation:fadeUp 0.5s ease both}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.section-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.72);
+  line-height:1.75}
+.section-body strong{color:var(--cream);font-family:'Space Grotesk',sans-serif;font-weight:600}
+
+/* DATA TABLE */
+.data-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin:16px 0}
+.data-table-head{padding:14px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.data-table-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;text-align:left;padding:10px 14px;
+  border-bottom:1px solid var(--border)}
+.data-table td{font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+  color:rgba(245,241,235,0.6);padding:8px 14px;
+  border-bottom:1px solid rgba(245,241,235,0.03)}
+.data-table tr:nth-child(even){background:rgba(245,241,235,0.015)}
+.data-note{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  padding:12px 20px;border-top:1px solid var(--border)}
+
+/* TARGET SPEC */
+.target-spec{background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--amber);border-radius:0 6px 6px 0;
+  padding:16px 20px;margin:16px 0}
+.target-spec-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--amber);
+  letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.target-spec-body{font-family:'Source Serif 4',serif;font-size:0.88rem;
+  color:rgba(245,241,235,0.75);line-height:1.7}
+.target-spec-body code{font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+  color:var(--amber);background:rgba(196,154,60,0.08);padding:1px 6px;border-radius:3px}
+
+/* DOWNLOAD BUTTON */
+.btn-download{display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);color:var(--cream);border:1px solid var(--border2);
+  padding:10px 20px;border-radius:6px;font-family:'Space Grotesk',sans-serif;
+  font-size:0.84rem;font-weight:600;text-decoration:none;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;margin:12px 0}
+.btn-download:hover{border-color:rgba(245,241,235,0.3);background:var(--card2)}
+
+/* HINTS */
+.hint{margin-bottom:12px}
+.hint-toggle{display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;cursor:pointer;width:100%;text-align:left;
+  font-family:'Space Grotesk',sans-serif;font-size:0.84rem;color:var(--cream);
+  transition:background 0.15s;border-left:none;border-right:none}
+.hint-toggle:hover{background:var(--card2)}
+.hint-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  width:50px;flex-shrink:0}
+.hint-label{flex:1;font-weight:500}
+.hint-chevron{color:var(--steel);font-size:0.7rem;transition:transform 0.2s}
+.hint.open .hint-chevron{transform:rotate(180deg)}
+.hint-body{display:none;padding:12px 16px 12px 76px;
+  font-family:'Source Serif 4',serif;font-size:0.88rem;
+  color:rgba(245,241,235,0.65);line-height:1.65;
+  background:var(--card);border:1px solid var(--border);border-top:none;
+  border-radius:0 0 6px 6px}
+.hint.open .hint-body{display:block}
+
+/* CHECK ANSWER */
+.check-section{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:24px 28px;margin:24px 0}
+.check-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.check-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--steel);
+  width:220px;flex-shrink:0}
+.check-input{background:var(--card2);border:1px solid var(--border2);border-radius:4px;
+  padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+  color:var(--cream);width:100px;outline:none;transition:border-color 0.2s}
+.check-input:focus{border-color:rgba(196,154,60,0.5)}
+.check-result{font-family:'JetBrains Mono',monospace;font-size:0.68rem;min-width:20px;
+  margin-left:4px}
+.btn-actions{display:flex;gap:12px;margin-top:18px}
+.btn-check{background:var(--crimson);color:var(--cream);border:none;border-radius:6px;
+  padding:10px 22px;font-family:'Space Grotesk',sans-serif;font-size:0.86rem;
+  font-weight:600;cursor:pointer;transition:background 0.2s,transform 0.15s}
+.btn-check:hover{background:#9a2b28;transform:translateY(-1px)}
+.btn-show{background:transparent;color:var(--cream);border:1px solid var(--border2);
+  border-radius:6px;padding:10px 22px;font-family:'Space Grotesk',sans-serif;
+  font-size:0.86rem;font-weight:500;cursor:pointer;transition:border-color 0.2s}
+.btn-show:hover{border-color:rgba(245,241,235,0.3)}
+
+/* SOLUTION */
+.solution{display:none;margin-top:24px;animation:fadeUp 0.4s ease both}
+.solution.show{display:block}
+.formula-display{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:18px 20px;margin:12px 0;overflow-x:auto}
+.formula-code{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--green);
+  line-height:1.8;white-space:pre-wrap}
+.formula-note{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--steel);
+  margin-top:8px;font-style:italic}
+.explanation{font-family:'Source Serif 4',serif;font-size:0.92rem;
+  color:rgba(245,241,235,0.72);line-height:1.75;margin:16px 0}
+
+/* REGISTRY REVEAL */
+.registry-reveal{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:16px 20px;margin:20px 0;display:flex;align-items:center;gap:16px}
+.reg-icon{width:40px;height:40px;border-radius:8px;background:var(--green2);
+  border:1px solid rgba(74,158,107,0.3);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1rem}
+.reg-id{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  letter-spacing:0.06em;margin-bottom:2px}
+.reg-name{font-size:0.88rem;font-weight:600;margin-bottom:4px}
+.reg-link{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  text-decoration:none;transition:opacity 0.2s}
+.reg-link:hover{opacity:0.7}
+
+/* NEXT CHALLENGE */
+.next-challenge{display:flex;justify-content:space-between;align-items:center;
+  margin-top:48px;padding-top:32px;border-top:1px solid var(--border)}
+.next-back{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);
+  text-decoration:none;transition:opacity 0.2s}
+.next-back:hover{opacity:0.7}
+.next-forward{font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  color:rgba(245,241,235,0.2);cursor:default}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .nav-right .nav-link{display:none}
+  .nav-hamburger{display:flex!important}
+  .page{padding:40px 20px 0}
+  .check-row{flex-direction:column;align-items:flex-start;gap:6px}
+  .check-label{width:auto}
+  .btn-actions{flex-direction:column}
+  .next-challenge{flex-direction:column;gap:12px;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/formulalab/" class="nav-back">&larr; All Challenges</a>
+    <a href="/learn/" class="nav-link">Learn</a>
+    <a href="/scanner/" class="nav-link">Scanner</a>
+    <a href="/analytics/" class="nav-link">Analytics</a>
+    <a href="/gridtactics/" class="nav-link">GridTactics</a>
+    <a href="/formulalab/" class="nav-link active">FormulaLab</a>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/formulalab/">&larr; All Challenges</a>
+  <a href="/learn/">Learn</a>
+  <a href="/scanner/">Scanner</a>
+  <a href="/analytics/">Analytics</a>
+  <a href="/gridtactics/">GridTactics</a>
+  <a href="/formulalab/">FormulaLab</a>
+</div>
+
+<div class="page">
+
+  <!-- SECTION 1: CHALLENGE HEADER -->
+  <div class="ch-header">
+    <div class="ch-breadcrumb">FormulaLab &middot; Challenge</div>
+    <div class="ch-id">#001 &middot; The Overlapping Shifts &middot; Intermediate</div>
+    <h1 class="ch-name">The Overlapping Shifts</h1>
+    <div class="ch-meta">
+      <span class="meta-pill pill-tier">Intermediate</span>
+      <span class="meta-pill pill-tag">PTN</span>
+    </div>
+    <div class="env-contract">
+      <strong>Excel 2019+</strong> &middot; Helper columns: allowed &middot; Dynamic arrays: not required
+    </div>
+  </div>
+
+  <!-- SECTION 2: WHAT YOU'LL LEARN -->
+  <div class="section" style="animation-delay:0.1s">
+    <div class="section-label">What You&rsquo;ll Learn</div>
+    <p class="section-body">You&rsquo;ll identify exactly where staffing coverage peaks and valleys &mdash; and see the gaps a manager can&rsquo;t find by scrolling.</p>
+  </div>
+
+  <!-- SECTION 3: THE SCENARIO -->
+  <div class="section" style="animation-delay:0.15s">
+    <div class="section-label">The Scenario</div>
+    <p class="section-body">Pinecrest Urgent Care runs three shifts &mdash; Day, Swing, and Night. Nurses can work partial shifts and overlap windows exist between them. The clinic manager needs to know: for each hour of the day, how many nurses are on the floor? The scheduling system exports a start time and end time per nurse per day &mdash; but it doesn&rsquo;t calculate concurrent coverage. The board meets Thursday.</p>
+  </div>
+
+  <!-- SECTION 4: DATASET + TARGET -->
+  <div class="section" style="animation-delay:0.2s">
+    <div class="section-label">Dataset + Target</div>
+
+    <a class="btn-download" href="#">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Download shift_log.xlsx
+    </a>
+
+    <div class="data-table-wrap">
+      <div class="data-table-head">
+        <span class="data-table-label">Sheet 1 &mdash; Shift Log</span>
+      </div>
+      <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>NurseID</th>
+            <th>NurseName</th>
+            <th>Date</th>
+            <th>ShiftStart</th>
+            <th>ShiftEnd</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>N-014</td><td>Rivera</td><td>2026-04-07</td><td>07:00</td><td>15:30</td></tr>
+          <tr><td>N-022</td><td>Okafor</td><td>2026-04-07</td><td>14:00</td><td>22:30</td></tr>
+          <tr><td>N-031</td><td>Chen</td><td>2026-04-07</td><td>22:00</td><td>06:30</td></tr>
+          <tr><td>N-014</td><td>Rivera</td><td>2026-04-08</td><td>07:00</td><td>15:30</td></tr>
+          <tr><td>N-019</td><td>Patel</td><td>2026-04-08</td><td>06:00</td><td>14:00</td></tr>
+          <tr><td>N-033</td><td>Williams</td><td>2026-04-08</td><td>14:00</td><td>22:30</td></tr>
+          <tr><td>N-022</td><td>Okafor</td><td>2026-04-08</td><td>14:00</td><td>22:30</td></tr>
+          <tr><td>N-041</td><td>Santos</td><td>2026-04-08</td><td>22:00</td><td>06:30</td></tr>
+          <tr><td>N-019</td><td>Patel</td><td>2026-04-09</td><td>06:00</td><td>14:00</td></tr>
+          <tr><td>N-031</td><td>Chen</td><td>2026-04-09</td><td>07:30</td><td>16:00</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="data-note">180 rows &middot; 1 week of shifts &middot; Sheet 2 contains the hours template (168 rows)</div>
+    </div>
+
+    <div class="target-spec">
+      <div class="target-spec-label">Target Specification</div>
+      <p class="target-spec-body">Fill Column C (<strong>NursesOnFloor</strong>) in the Hours Template for every hour of every day.<br>
+      &middot; Monday April 7 at 15:00 should read: <code>4</code><br>
+      &middot; Sunday April 13 at 03:00 should read: <code>1</code></p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: HINTS -->
+  <div class="section" style="animation-delay:0.25s">
+    <div class="section-label">Hints</div>
+
+    <div class="hint" id="hint1">
+      <button class="hint-toggle" onclick="toggleHint('hint1')">
+        <span class="hint-num">Hint 1</span>
+        <span class="hint-label">Click to reveal</span>
+        <span class="hint-chevron">&#9660;</span>
+      </button>
+      <div class="hint-body">Think about what makes a nurse &ldquo;on the floor&rdquo; during a given hour &mdash; and how you&rsquo;d test two time-based conditions at once.</div>
+    </div>
+
+    <div class="hint" id="hint2">
+      <button class="hint-toggle" onclick="toggleHint('hint2')">
+        <span class="hint-num">Hint 2</span>
+        <span class="hint-label">Click to reveal</span>
+        <span class="hint-chevron">&#9660;</span>
+      </button>
+      <div class="hint-body">Start with a single hour. What would have to be true about a nurse&rsquo;s start time and end time for them to still be working at 15:00?</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: CHECK ANSWER + SOLUTION -->
+  <div class="section" style="animation-delay:0.3s">
+    <div class="section-label">Check Your Answer</div>
+
+    <div class="check-section">
+      <div class="check-row">
+        <label class="check-label">Monday April 7 at 15:00 &mdash;</label>
+        <input type="text" class="check-input" id="answer1" placeholder="?">
+        <span class="check-result" id="result1"></span>
+      </div>
+      <div class="check-row">
+        <label class="check-label">Sunday April 13 at 03:00 &mdash;</label>
+        <input type="text" class="check-input" id="answer2" placeholder="?">
+        <span class="check-result" id="result2"></span>
+      </div>
+      <div class="btn-actions">
+        <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
+        <button class="btn-show" onclick="showSolution()">Show Solution</button>
+      </div>
+    </div>
+
+    <div class="solution" id="solution">
+
+      <div class="section-label">Solution</div>
+
+      <div class="formula-display">
+        <div class="formula-code">=COUNTIFS(ShiftStart,"&lt;="&amp;HourCell,ShiftEnd,"&gt;"&amp;HourCell)</div>
+      </div>
+      <p class="formula-note">where HourCell is the current hour in the Hours Template (e.g. B2 containing the datetime for Monday April 7 at 15:00).</p>
+
+      <p class="explanation">A nurse is on the floor during a given hour if their shift started at or before that hour AND their shift hasn&rsquo;t ended yet. COUNTIFS lets you test both conditions across the entire schedule at once &mdash; counting only the rows where both are true. Drag the formula down 168 rows and the coverage map builds itself.</p>
+
+      <div class="registry-reveal">
+        <div class="reg-icon">&#931;</div>
+        <div>
+          <div class="reg-id">PTN-0004 &middot; Conditional Aggregation Pattern</div>
+          <div class="reg-name">Conditional Aggregation Pattern</div>
+          <a href="/learn/" class="reg-link">Learn entry coming soon &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NEXT / BACK -->
+  <div class="next-challenge">
+    <a href="/formulalab/" class="next-back">&larr; Browse all challenges</a>
+    <span class="next-forward">#002 &mdash; coming soon</span>
+  </div>
+
+</div>
+
+<script>
+function toggleHint(id){
+  document.getElementById(id).classList.toggle('open');
+}
+
+function checkAnswer(){
+  var a1 = document.getElementById('answer1').value.trim();
+  var a2 = document.getElementById('answer2').value.trim();
+  var r1 = document.getElementById('result1');
+  var r2 = document.getElementById('result2');
+
+  if(a1 === '4'){
+    r1.textContent = '\u2713';
+    r1.style.color = '#4A9E6B';
+  } else if(a1 !== ''){
+    r1.textContent = '\u2717';
+    r1.style.color = '#B23531';
+  } else {
+    r1.textContent = '';
+  }
+
+  if(a2 === '1'){
+    r2.textContent = '\u2713';
+    r2.style.color = '#4A9E6B';
+  } else if(a2 !== ''){
+    r2.textContent = '\u2717';
+    r2.style.color = '#B23531';
+  } else {
+    r2.textContent = '';
+  }
+
+  if(a1 === '4' && a2 === '1'){
+    document.getElementById('solution').classList.add('show');
+  }
+}
+
+function showSolution(){
+  document.getElementById('solution').classList.add('show');
+}
+
+/* HAMBURGER NAV */
+(function(){
+  var btn = document.getElementById("nav-hamburger");
+  var drw = document.getElementById("nav-drawer");
+  if(!btn||!drw) return;
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    btn.classList.toggle("open");
+    drw.classList.toggle("open");
+  });
+  document.addEventListener("click", function(e){
+    if(!drw.contains(e.target) && !btn.contains(e.target)){
+      btn.classList.remove("open");
+      drw.classList.remove("open");
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>FormulaLab — Real Data, One Formula · Excelligence</title>
+<meta name="description" content="Real scenarios. Real datasets. Produce the target. We never name the formula — you figure out the pattern from the problem.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.1);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.1);
+  --blue:#6B9DC2;--amber:#C49A3C;--violet:#8a6cc9;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover{color:var(--cream)}
+.nav-link.active{color:var(--cream)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.2);padding:2px 8px;border-radius:3px}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;background:none;border:none;margin-left:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--cream);border-radius:2px;transition:all 0.25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(13,27,42,0.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--border2);z-index:150;padding:20px 24px;flex-direction:column;gap:4px}
+.nav-drawer.open{display:flex}
+.nav-drawer a{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(245,241,235,0.6);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-bottom:1px solid rgba(245,241,235,0.06);transition:color 0.2s}
+.nav-drawer a:last-child{border-bottom:none}
+.nav-drawer a:hover{color:var(--cream)}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:96px 40px 80px;text-align:center;
+  animation:fadeUp 0.6s ease both}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.16em;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:10px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:24px;height:1px;background:var(--gold);opacity:0.5}
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:700;letter-spacing:-0.04em;line-height:0.95;margin-bottom:16px}
+.hero h1 .formula{color:var(--cream)}
+.hero h1 .lab{color:var(--amber)}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:1.05rem;color:var(--steel);line-height:1.7;
+  max-width:560px;margin:0 auto 24px}
+.hero-body{font-family:'Source Serif 4',serif;font-size:0.92rem;color:rgba(245,241,235,0.65);
+  line-height:1.7;max-width:540px;margin:0 auto 32px}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em}
+
+/* SECTION LABELS */
+.section-wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 40px 24px}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.section-eyebrow::before{content:'';width:16px;height:1px;background:var(--gold)}
+.section-title{font-size:1.3rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:4px}
+.section-sub{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);margin-bottom:0}
+
+/* DIVIDER */
+.divider{position:relative;z-index:1;max-width:860px;margin:0 auto 48px;padding:0 40px}
+.divider hr{border:none;border-top:1px solid var(--border)}
+
+/* GUIDED INTRO DEMO */
+.fldemo{position:relative;z-index:1;max-width:860px;margin:0 auto 56px;padding:0 40px;
+  animation:fadeUp 0.6s ease 0.18s both}
+.fldemo-arena{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;min-height:320px;display:flex;flex-direction:column}
+.fldemo-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.fldemo-board-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+  color:rgba(245,241,235,0.28);letter-spacing:0.14em;text-transform:uppercase;font-weight:700}
+.fldemo-status{font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  color:rgba(245,241,235,0.22);transition:color 0.3s;min-height:12px}
+.fldemo-status.target{color:rgba(196,154,60,0.85);animation:pulse 1s infinite}
+
+/* Spreadsheet grid */
+.fldemo-grid{flex:1;display:grid;gap:2px;margin-bottom:14px}
+.fldemo-cell{display:flex;align-items:center;justify-content:center;padding:0 6px;
+  font-family:'JetBrains Mono',monospace;font-size:0.64rem;
+  color:rgba(245,241,235,0.42);background:transparent;
+  border:1px solid rgba(255,255,255,0.04);border-radius:3px;
+  min-height:32px;transition:all 0.35s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fldemo-cell-head{font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+  color:rgba(245,241,235,0.2);display:flex;align-items:center;justify-content:center;
+  user-select:none;background:transparent}
+.fldemo-cell.header{color:rgba(245,241,235,0.7);font-weight:600;font-size:0.58rem}
+.fldemo-cell.empty{border:1.5px dashed rgba(196,154,60,0.4);background:rgba(196,154,60,0.03)}
+.fldemo-cell.target{color:var(--amber);background:rgba(196,154,60,0.09);
+  border:1.5px solid rgba(196,154,60,0.55);box-shadow:0 0 12px rgba(196,154,60,0.15)}
+.fldemo-cell.solved{color:#fff;background:rgba(74,158,107,0.2);
+  border:1.5px solid rgba(74,158,107,0.4)}
+.fldemo-cell.filled{color:rgba(74,158,107,0.85);background:rgba(74,158,107,0.085);
+  border:1px solid rgba(74,158,107,0.27)}
+
+/* Target label */
+.fldemo-target-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;
+  color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;font-weight:700;
+  text-align:center;margin-bottom:10px;min-height:16px;transition:opacity 0.3s}
+
+/* Sheet 2 preview */
+.fldemo-sheet2{background:var(--card2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin-top:10px;opacity:0;transform:translateY(8px);
+  transition:opacity 0.4s,transform 0.4s}
+.fldemo-sheet2.show{opacity:1;transform:translateY(0)}
+.fldemo-sheet2-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;
+  color:var(--steel);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.fldemo-sheet2-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.fldemo-sheet2-cell{font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  color:rgba(245,241,235,0.5);padding:4px 8px}
+.fldemo-sheet2-cell.head{color:rgba(245,241,235,0.25);font-size:0.52rem}
+
+/* Formula bar */
+.fldemo-formula-bar{background:var(--card2);border:1px solid var(--border2);border-radius:6px;
+  padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+  color:var(--green);min-height:42px;margin-top:10px;opacity:0;transition:opacity 0.3s}
+.fldemo-formula-bar.show{opacity:1}
+.fldemo-caret{opacity:0.6;animation:blink 0.7s infinite}
+
+/* Badge */
+.fldemo-badge{display:inline-flex;align-items:center;gap:10px;
+  border-radius:8px;padding:10px 16px;margin-top:10px;
+  background:rgba(74,158,107,0.08);border:1px solid rgba(74,158,107,0.3);
+  opacity:0;transform:scale(0.85) translateY(6px);
+  transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275)}
+.fldemo-badge.show{opacity:1;transform:scale(1) translateY(0)}
+.fldemo-badge-id{font-family:'JetBrains Mono',monospace;font-size:0.62rem;
+  color:var(--gold);letter-spacing:0.06em}
+.fldemo-badge-name{font-family:'Space Grotesk',sans-serif;font-size:0.78rem;
+  font-weight:600;color:var(--green)}
+
+/* Caption */
+.fldemo-caption{background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:12px 18px;margin-top:14px;min-height:56px;
+  font-family:'Source Serif 4',serif;font-size:0.86rem;color:rgba(245,241,235,0.2);
+  line-height:1.6;transition:color 0.4s ease}
+.fldemo-caption.lit{color:rgba(245,241,235,0.72)}
+
+/* Nav */
+.fldemo-nav{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:18px}
+.fldemo-btn{background:transparent;color:var(--cream);
+  border:1px solid rgba(255,255,255,0.2);border-radius:8px;
+  padding:10px 26px;font-family:'Space Grotesk',sans-serif;
+  font-size:0.84rem;font-weight:700;cursor:pointer;
+  letter-spacing:0.05em;transition:all 0.2s ease}
+.fldemo-btn:hover:not(:disabled){border-color:rgba(255,255,255,0.4)}
+.fldemo-btn:disabled{color:rgba(245,241,235,0.13);border-color:rgba(255,255,255,0.07);
+  cursor:default;background:transparent}
+.fldemo-btn-primary{background:var(--crimson);border-color:var(--crimson)}
+.fldemo-btn-primary:hover:not(:disabled){background:#9a2b28;border-color:#9a2b28}
+.fldemo-btn-primary:disabled{background:transparent;border-color:rgba(255,255,255,0.07)}
+.fldemo-counter{font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+  color:rgba(245,241,235,0.2);min-width:80px;text-align:center}
+
+/* CHALLENGES SECTION */
+.challenges{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 40px 80px}
+.filter-bar{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.filter-btn{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;padding:10px 18px;cursor:pointer;
+  border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:color 0.2s,border-color 0.2s}
+.filter-btn:hover{color:var(--cream)}
+.filter-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+.challenge-card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:24px 28px;transition:border-color 0.2s}
+.challenge-card:hover{border-color:var(--border2)}
+.challenge-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.challenge-id{font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:600;
+  letter-spacing:0.04em;margin-bottom:4px}
+.challenge-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.challenge-pill{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.06em;
+  padding:3px 10px;border-radius:3px;border:1px solid}
+.pill-tier{color:var(--amber);border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)}
+.pill-tag{color:var(--green);border-color:rgba(74,158,107,0.3);background:rgba(74,158,107,0.08)}
+.challenge-status{display:flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+.challenge-desc{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);
+  line-height:1.65;margin-bottom:16px}
+.challenge-cta{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:opacity 0.2s}
+.challenge-cta:hover{opacity:0.7}
+
+/* THREE PILLAR NAV */
+.pillar-nav{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 40px 96px}
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.pillar-card{background:var(--card);padding:28px 24px;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:6px;border-bottom:2px solid transparent;
+  transition:border-color 0.2s,background 0.15s}
+.pillar-card:hover{background:var(--card2);border-bottom-color:var(--gold)}
+.pillar-card.active-pillar{border-bottom-color:var(--amber);background:var(--card2)}
+.pillar-path{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase}
+.pillar-name{font-size:0.95rem;font-weight:600;letter-spacing:-0.015em}
+.pillar-desc{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);line-height:1.5}
+.pillar-caption{font-family:'Source Serif 4',serif;font-size:0.82rem;color:var(--steel);
+  text-align:center;margin-top:16px;line-height:1.55}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .nav-right .nav-link{display:none}
+  .nav-hamburger{display:flex!important}
+  .hero{padding:64px 20px 48px}
+  .section-wrap,.fldemo,.challenges,.pillar-nav,.divider{padding-left:20px;padding-right:20px}
+  .fldemo-grid{font-size:0.55rem}
+  .filter-bar{overflow-x:auto}
+  .filter-btn{white-space:nowrap}
+  .pillar-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+      <circle cx="16" cy="16" r="13" stroke="#D4A843" stroke-width="0.75" stroke-dasharray="3 3" opacity="0.25"/>
+      <circle cx="16" cy="16" r="9" stroke="#D4A843" stroke-width="0.75" opacity="0.18"/>
+      <circle cx="16" cy="16" r="2.5" fill="#D4A843"/>
+      <circle cx="16" cy="7" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="25" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+      <circle cx="7" cy="16" r="1.5" fill="#D4A843" opacity="0.7"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/learn/" class="nav-link">Learn</a>
+    <a href="/scanner/" class="nav-link">Scanner</a>
+    <a href="/analytics/" class="nav-link">Analytics</a>
+    <a href="/gridtactics/" class="nav-link">GridTactics</a>
+    <a href="/formulalab/" class="nav-link active">FormulaLab</a>
+    <span class="nav-tag">LIVE</span>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/learn/">Learn</a>
+  <a href="/scanner/">Scanner</a>
+  <a href="/analytics/">Analytics</a>
+  <a href="/gridtactics/">GridTactics</a>
+  <a href="/formulalab/">FormulaLab</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Excelligence &middot; Lab Layer</div>
+  <h1><span class="formula">Formula</span><span class="lab">Lab</span></h1>
+  <p class="hero-sub">Real data. One formula. No macros.</p>
+  <p class="hero-body">Here&rsquo;s the scenario. Here&rsquo;s the dataset. Produce the target. We never name the formula &mdash; you figure out the pattern from the problem.</p>
+  <div class="hero-tag">&middot; /formulalab/ &middot; Excelligence</div>
+</div>
+
+<!-- HOW IT WORKS — GUIDED INTRO -->
+<div class="section-wrap">
+  <div class="section-eyebrow">How It Works</div>
+  <h2 class="section-title">Guided Intro</h2>
+  <p class="section-sub">Three steps. Same problem. Watch the pattern emerge.</p>
+</div>
+
+<div class="fldemo">
+  <div class="fldemo-arena" id="fl-arena">
+    <div class="fldemo-head">
+      <span class="fldemo-board-label" id="fl-board-label">Spreadsheet</span>
+      <span class="fldemo-status" id="fl-status"></span>
+    </div>
+    <div class="fldemo-target-label" id="fl-target-label"></div>
+    <div class="fldemo-grid" id="fl-grid"></div>
+    <div class="fldemo-sheet2" id="fl-sheet2">
+      <div class="fldemo-sheet2-label">Sheet 2 &mdash; Reference Table</div>
+      <div class="fldemo-sheet2-grid">
+        <div class="fldemo-sheet2-cell head">EmployeeID</div>
+        <div class="fldemo-sheet2-cell head">Department</div>
+        <div class="fldemo-sheet2-cell">1001</div>
+        <div class="fldemo-sheet2-cell">Mathematics</div>
+        <div class="fldemo-sheet2-cell">1007</div>
+        <div class="fldemo-sheet2-cell">Athletics</div>
+      </div>
+    </div>
+    <div class="fldemo-formula-bar" id="fl-formula"></div>
+    <div class="fldemo-badge" id="fl-badge">
+      <span class="fldemo-badge-id">FRM-0001 &middot; XLOOKUP</span>
+    </div>
+  </div>
+  <div class="fldemo-caption" id="fl-caption">Press Next to begin the guided intro.</div>
+  <div class="fldemo-nav" id="fl-nav"></div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- CHALLENGE INDEX -->
+<div class="section-wrap">
+  <div class="section-eyebrow">The Challenge Index</div>
+  <h2 class="section-title">Challenges</h2>
+  <p class="section-sub">Real scenarios. Registry-grounded. No formula named until you solve it.</p>
+</div>
+
+<div class="challenges">
+  <div class="filter-bar">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Beginner</button>
+    <button class="filter-btn">Intermediate</button>
+    <button class="filter-btn">Advanced</button>
+    <button class="filter-btn">Expert</button>
+  </div>
+
+  <div class="challenge-card">
+    <div class="challenge-header">
+      <div>
+        <div class="challenge-id">#001 &middot; The Overlapping Shifts</div>
+        <div class="challenge-meta">
+          <span class="challenge-pill pill-tier">Intermediate</span>
+          <span class="challenge-pill pill-tag">PTN</span>
+        </div>
+      </div>
+      <div class="challenge-status">
+        <div class="status-dot"></div>
+        <span style="color:var(--green)">LIVE</span>
+      </div>
+    </div>
+    <p class="challenge-desc">Pinecrest Urgent Care runs three overlapping shifts. The clinic manager needs to know: for each hour of each day, how many nurses are on the floor? The scheduling system exports start/end times but doesn&rsquo;t calculate coverage.</p>
+    <a href="/formulalab/001/" class="challenge-cta">Solve Challenge &rarr;</a>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- THREE PILLAR NAV -->
+<div class="pillar-nav">
+  <div class="pillar-grid">
+    <a class="pillar-card" href="/learn/">
+      <div class="pillar-path">/learn/</div>
+      <div class="pillar-name">Decomposition</div>
+      <div class="pillar-desc">Understand what each formula does and why, step by step.</div>
+    </a>
+    <a class="pillar-card active-pillar" href="/formulalab/">
+      <div class="pillar-path">/lab/</div>
+      <div class="pillar-name">Application</div>
+      <div class="pillar-desc">Real scenarios. Figure out the pattern from the problem.</div>
+    </a>
+    <a class="pillar-card" href="/gridtactics/">
+      <div class="pillar-path">/play/</div>
+      <div class="pillar-name">Competition</div>
+      <div class="pillar-desc">Formula scoring game. The registry is the rulebook.</div>
+    </a>
+  </div>
+  <p class="pillar-caption">Three ways in. One registry.</p>
+</div>
+
+<script>
+(function(){
+  /* ── GUIDED INTRO DEMO ── */
+  var STEPS = [
+    {
+      label: "Westlake Community College \u2014 Employee Records",
+      caption: "The registrar\u2019s migration lost all department assignments. Column D is blank for 35 employees. The board report is due Friday.",
+      phase: "SCENARIO"
+    },
+    {
+      label: "Westlake Community College \u2014 Employee Records",
+      caption: "Produce the department for each employee. Cell D2 should read \u2018Mathematics.\u2019 You have a reference table on Sheet 2.",
+      phase: "TARGET"
+    },
+    {
+      label: "Westlake Community College \u2014 Employee Records",
+      caption: "Pattern recognized. The solver identified a lookup problem, chose the governed approach, and the column filled. That\u2019s FormulaLab.",
+      phase: "SOLVE"
+    }
+  ];
+
+  var GRID_DATA = {
+    cols: ["A","B","C","D"],
+    headers: ["EmployeeID","Name","HireDate","Department"],
+    rows: [
+      ["1001","Chen, M.","2019-08-15",""],
+      ["1007","Rivera, J.","2021-01-10",""],
+      ["1014","Okafor, T.","2020-06-22",""],
+      ["1019","Walsh, K.","2018-03-01",""],
+      ["1022","Santos, L.","2022-09-14",""]
+    ],
+    departments: ["Mathematics","Athletics","English","Biology","History"]
+  };
+
+  var FORMULA = "=XLOOKUP(A2,Sheet2!A:A,Sheet2!B:B)";
+
+  var stepIdx = 0;
+  var started = false;
+  var animating = false;
+  var timers = [];
+  var typingInterval = null;
+
+  var $grid, $caption, $nav, $status, $label, $targetLabel, $sheet2, $formula, $badge;
+
+  function $(id){ return document.getElementById(id); }
+  function clearTimers(){
+    for(var i=0;i<timers.length;i++) clearTimeout(timers[i]);
+    timers=[];
+    if(typingInterval){clearInterval(typingInterval);typingInterval=null;}
+  }
+  function after(ms,fn){timers.push(setTimeout(fn,ms));}
+
+  function renderGrid(){
+    var d = GRID_DATA;
+    $grid.style.gridTemplateColumns = "22px repeat("+d.cols.length+",1fr)";
+    $grid.style.gridTemplateRows = "16px repeat("+(d.rows.length+1)+",1fr)";
+    $grid.innerHTML = "";
+
+    // corner
+    var corner = document.createElement("div");
+    corner.className = "fldemo-cell-head";
+    $grid.appendChild(corner);
+
+    // col heads
+    for(var c=0;c<d.cols.length;c++){
+      var ch = document.createElement("div");
+      ch.className = "fldemo-cell-head";
+      ch.textContent = d.cols[c];
+      $grid.appendChild(ch);
+    }
+
+    // header row
+    var rh = document.createElement("div");
+    rh.className = "fldemo-cell-head";
+    rh.textContent = "1";
+    $grid.appendChild(rh);
+    for(var c2=0;c2<d.headers.length;c2++){
+      var hc = document.createElement("div");
+      hc.className = "fldemo-cell header";
+      hc.textContent = d.headers[c2];
+      $grid.appendChild(hc);
+    }
+
+    // data rows
+    for(var r=0;r<d.rows.length;r++){
+      var rowHead = document.createElement("div");
+      rowHead.className = "fldemo-cell-head";
+      rowHead.textContent = String(r+2);
+      $grid.appendChild(rowHead);
+
+      for(var c3=0;c3<d.rows[r].length;c3++){
+        var cell = document.createElement("div");
+        cell.className = "fldemo-cell";
+        cell.dataset.r = r;
+        cell.dataset.c = c3;
+        var val = d.rows[r][c3];
+        if(c3 === 3 && val === ""){
+          cell.classList.add("empty");
+          cell.textContent = "";
+        } else {
+          cell.textContent = val;
+        }
+        $grid.appendChild(cell);
+      }
+    }
+  }
+
+  function getCell(r,c){
+    var cells = $grid.querySelectorAll(".fldemo-cell:not(.header)");
+    for(var i=0;i<cells.length;i++){
+      if(cells[i].dataset.r == r && cells[i].dataset.c == c) return cells[i];
+    }
+    return null;
+  }
+
+  function applyStep(){
+    var step = STEPS[stepIdx];
+    $label.textContent = step.label;
+    $caption.classList.add("lit");
+    $caption.textContent = step.caption;
+
+    // Reset states
+    var empties = $grid.querySelectorAll(".fldemo-cell.empty, .fldemo-cell.target, .fldemo-cell.solved, .fldemo-cell.filled");
+    for(var i=0;i<empties.length;i++){
+      empties[i].classList.remove("target","solved","filled");
+      if(empties[i].dataset.c === "3") empties[i].classList.add("empty");
+    }
+    $targetLabel.textContent = "";
+    $targetLabel.style.opacity = "0";
+    $sheet2.classList.remove("show");
+    $formula.classList.remove("show");
+    $formula.innerHTML = "";
+    $badge.classList.remove("show");
+    $status.classList.remove("target");
+    $status.textContent = "";
+
+    if(step.phase === "SCENARIO"){
+      // Just the grid with empty D column
+      animating = false;
+    }
+    else if(step.phase === "TARGET"){
+      animating = true;
+      // Light up D2 as target
+      after(400, function(){
+        var d2 = getCell(0,3);
+        if(d2){d2.classList.remove("empty");d2.classList.add("target");}
+        $targetLabel.textContent = "TARGET";
+        $targetLabel.style.opacity = "1";
+        $status.textContent = "\u25C9 target lit";
+        $status.classList.add("target");
+      });
+      // Show sheet2
+      after(1200, function(){
+        $sheet2.classList.add("show");
+        animating = false;
+        renderNav();
+      });
+    }
+    else if(step.phase === "SOLVE"){
+      animating = true;
+      // Show target state first
+      var d2 = getCell(0,3);
+      if(d2){d2.classList.remove("empty");d2.classList.add("target");}
+      $targetLabel.textContent = "TARGET";
+      $targetLabel.style.opacity = "1";
+      $sheet2.classList.add("show");
+      $status.textContent = "\u270E solving\u2026";
+
+      // Type formula
+      after(600, function(){
+        $formula.classList.add("show");
+        var fi = 0;
+        $formula.innerHTML = '<span class="fldemo-caret">|</span>';
+        typingInterval = setInterval(function(){
+          fi++;
+          var text = FORMULA.slice(0,fi);
+          if(fi >= FORMULA.length){
+            clearInterval(typingInterval);
+            typingInterval = null;
+            $formula.textContent = text;
+            // Solve D2
+            after(400, function(){
+              d2.classList.remove("target");
+              d2.classList.add("solved");
+              d2.textContent = "Mathematics";
+              $status.textContent = "\u2713 result";
+              $status.classList.remove("target");
+              // Fill remaining
+              after(300, function(){
+                var depts = GRID_DATA.departments;
+                for(var r=1;r<5;r++){
+                  (function(row,dept){
+                    after(row*250, function(){
+                      var cell = getCell(row,3);
+                      if(cell){cell.classList.remove("empty");cell.classList.add("filled");cell.textContent=dept;}
+                    });
+                  })(r,depts[r]);
+                }
+                // Badge
+                after(1400, function(){
+                  $badge.classList.add("show");
+                  $targetLabel.textContent = "";
+                  $targetLabel.style.opacity = "0";
+                  animating = false;
+                  renderNav();
+                });
+              });
+            });
+          } else {
+            $formula.innerHTML = escapeHtml(text) + '<span class="fldemo-caret">|</span>';
+          }
+        }, 38);
+      });
+    }
+
+    renderNav();
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function renderNav(){
+    $nav.innerHTML = "";
+
+    if(!started){
+      var next = document.createElement("button");
+      next.className = "fldemo-btn fldemo-btn-primary";
+      next.textContent = "Next \u2192";
+      next.addEventListener("click", handleStart);
+      $nav.appendChild(next);
+      return;
+    }
+
+    var showBack = stepIdx > 0 && !animating;
+    var showNext = stepIdx < STEPS.length - 1 && !animating;
+    var isLast = stepIdx === STEPS.length - 1;
+
+    // Back
+    var back = document.createElement("button");
+    back.className = "fldemo-btn";
+    back.textContent = "\u2190 Back";
+    back.disabled = !showBack;
+    if(showBack) back.addEventListener("click", handleBack);
+    $nav.appendChild(back);
+
+    // Counter
+    var counter = document.createElement("div");
+    counter.className = "fldemo-counter";
+    counter.textContent = animating ? "playing\u2026" : ((stepIdx+1)+" / "+STEPS.length);
+    $nav.appendChild(counter);
+
+    if(!isLast){
+      var nxt = document.createElement("button");
+      nxt.className = "fldemo-btn fldemo-btn-primary";
+      nxt.textContent = "Next \u2192";
+      nxt.disabled = animating;
+      if(!animating) nxt.addEventListener("click", handleNext);
+      $nav.appendChild(nxt);
+    } else {
+      var replay = document.createElement("button");
+      replay.className = "fldemo-btn";
+      replay.textContent = "\u21BA Replay";
+      replay.disabled = animating;
+      if(!animating) replay.addEventListener("click", handleReset);
+      $nav.appendChild(replay);
+    }
+  }
+
+  function handleStart(){
+    started = true;
+    stepIdx = 0;
+    renderGrid();
+    applyStep();
+  }
+
+  function handleNext(){
+    clearTimers();
+    stepIdx++;
+    applyStep();
+  }
+
+  function handleBack(){
+    clearTimers();
+    stepIdx--;
+    animating = false;
+    renderGrid();
+    applyStep();
+  }
+
+  function handleReset(){
+    clearTimers();
+    started = false;
+    stepIdx = 0;
+    animating = false;
+    renderGrid();
+    $caption.classList.remove("lit");
+    $caption.textContent = "Press Next to begin the guided intro.";
+    $targetLabel.textContent = "";
+    $targetLabel.style.opacity = "0";
+    $sheet2.classList.remove("show");
+    $formula.classList.remove("show");
+    $formula.innerHTML = "";
+    $badge.classList.remove("show");
+    $status.textContent = "";
+    $status.classList.remove("target");
+    $label.textContent = "Spreadsheet";
+    renderNav();
+  }
+
+  function init(){
+    $grid = $("fl-grid");
+    $caption = $("fl-caption");
+    $nav = $("fl-nav");
+    $status = $("fl-status");
+    $label = $("fl-board-label");
+    $targetLabel = $("fl-target-label");
+    $sheet2 = $("fl-sheet2");
+    $formula = $("fl-formula");
+    $badge = $("fl-badge");
+    if(!$grid) return;
+    renderGrid();
+    renderNav();
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  /* ── FILTER BAR (cosmetic only — one card) ── */
+  document.addEventListener("DOMContentLoaded", function(){
+    var btns = document.querySelectorAll(".filter-btn");
+    btns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        btns.forEach(function(b){b.classList.remove("active");});
+        btn.classList.add("active");
+      });
+    });
+  });
+
+  /* ── HAMBURGER NAV ── */
+  var hbtn = document.getElementById("nav-hamburger");
+  var hdrw = document.getElementById("nav-drawer");
+  if(hbtn && hdrw){
+    hbtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      hbtn.classList.toggle("open");
+      hdrw.classList.toggle("open");
+    });
+    document.addEventListener("click", function(e){
+      if(!hdrw.contains(e.target) && !hbtn.contains(e.target)){
+        hbtn.classList.remove("open");
+        hdrw.classList.remove("open");
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
