@@ -10,7 +10,7 @@
 ## WHAT IS EXCELLIGENCE
 
 Excelligence is a governed knowledge graph for Excel intelligence.
-75 entries. 178 typed edges. 4 skill tiers. 7 entry types.
+105 entries. 228 typed edges. 4 skill tiers. 7 entry types.
 Schema locked by unanimous 9-model council review. Zero REJECT. Zero REVISE.
 
 It is not a glossary. Not a tutorial. Not a content volume.
@@ -33,12 +33,12 @@ github: dropdownlogistics/excelligence
 methodology: Chaos -> Structured -> Automated
 design_system: CottageHumble ("Humble surface. Cathedral underneath.")
 schema_version: v0.2.0
-status: Live -- graph explorer deployed, 75 entries, growing
+status: Live -- graph explorer deployed, 105 entries, growing
 
 ## REGISTRY STATE
 
-entries: 75
-edges: 178
+entries: 105
+edges: 228
 schema_version: v0.2.0
 council_verdict: v0.2 READY WITH CONDITIONS (9/9 unanimous)
 
@@ -128,7 +128,7 @@ fonts: Space Grotesk (display), JetBrains Mono (data), Source Serif 4 (body)
 ## GOVERNANCE
 
 Schema locked: CR-EXCEL-001, unanimous, D-001 through D-028
-v0.2 conditions met: difficulty_score, usage_frequency, excel_version on all 75 entries
+v0.2 conditions met: difficulty_score, usage_frequency, excel_version on all 105 entries
 Connor's threshold: "If it survives 50 entries, it's real." -- Passed.
 Rowan Bennett (Seat 1005): "The graph is the cathedral. Everything else is scaffolding."
 

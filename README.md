@@ -2,7 +2,7 @@
 
 A governed knowledge graph for Excel intelligence.
 
-**65 entries · 156 edges · 7 types · 4 tiers · v0.2 schema**
+**105 entries · 228 edges · 7 types · 4 tiers · v0.2 schema**
 
 ## What This Is
 
@@ -30,8 +30,8 @@ Not a glossary. Not a tutorial. A knowledge graph you can traverse.
 
 ## Registry
 
-- **65 entries** across 7 types (FRM, PTN, KEY, CON, ARC, ANT, PQ)
-- **156 typed edges** (LEADS_TO, DEPENDS_ON, PAIRS_WITH)
+- **105 entries** across 7 types (FRM, PTN, KEY, CON, ARC, ANT, PQ)
+- **228 typed edges** (LEADS_TO, DEPENDS_ON, PAIRS_WITH)
 - **Schema v0.2** — difficulty_score, usage_frequency, excel_version on every entry
 - **9-model council review** — zero REJECT, zero REVISE on schema lock
 - **574 validation checks** passed at v0.1.1 lock
