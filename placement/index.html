@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Placement Engine — Excelligence</title>
+<meta name="description" content="Find out where you stand on the graph. Answer 12 questions — get a placement, a tier, and a personal learning path.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;--muted:#4A5A6A;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.12);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.12);
+  --blue:#6B9DC2;--blue2:rgba(107,157,194,0.12);
+  --amber:#C49A3C;--violet:#8a6cc9;--teal:#4AADAD;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+  --frm:#6B9DC2;--ptn:#4A9E6B;--arc:#8a6cc9;--ant:#B23531;--con:#C49A3C;--pq:#4AADAD;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes progressFill{from{width:0}to{width:var(--pct)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover,.nav-link.active{color:var(--cream)}
+
+/* PAGE */
+.page{max-width:740px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:52px 0 40px;border-bottom:1px solid var(--border);margin-bottom:44px}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:14px;height:1px;background:var(--gold)}
+.hero h1{font-size:2rem;font-weight:700;letter-spacing:-0.03em;line-height:1.05;margin-bottom:10px}
+.hero-sub{font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--steel);line-height:1.7;max-width:540px}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-bottom:36px}
+.progress-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;
+  display:flex;justify-content:space-between}
+.progress-bar{height:3px;background:rgba(245,241,235,0.08);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease}
+
+/* QUESTION CARD */
+.q-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;
+  padding:28px 28px 24px;animation:fadeUp 0.35s ease both}
+.q-number{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px}
+.q-text{font-size:1.02rem;font-weight:600;letter-spacing:-0.01em;line-height:1.4;margin-bottom:6px}
+.q-context{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);
+  line-height:1.6;margin-bottom:22px}
+.q-example{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--cream);
+  background:var(--card2);border:1px solid var(--border2);border-left:3px solid var(--gold);
+  padding:9px 14px;border-radius:4px;margin-bottom:22px;word-break:break-all;line-height:1.5}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--card2);
+  border:1px solid var(--border2);border-radius:8px;padding:14px 16px;
+  cursor:pointer;transition:all 0.15s;text-align:left;width:100%}
+.opt:hover{border-color:rgba(245,241,235,0.25);background:rgba(255,255,255,0.03)}
+.opt.selected{border-color:var(--gold);background:var(--gold2)}
+.opt-key{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);
+  letter-spacing:0.08em;flex-shrink:0;margin-top:1px;text-transform:uppercase}
+.opt.selected .opt-key{color:var(--gold)}
+.opt-label{font-size:0.9rem;line-height:1.4;color:var(--cream)}
+.opt-sub{font-family:'Source Serif 4',serif;font-size:0.78rem;color:var(--steel);
+  line-height:1.5;margin-top:3px}
+
+/* NAV BUTTONS */
+.q-nav{display:flex;gap:10px;margin-top:20px;justify-content:space-between;align-items:center}
+.btn-next{background:var(--gold);color:#0D1B2A;font-family:'Space Grotesk',sans-serif;
+  font-size:0.82rem;font-weight:700;padding:11px 24px;border:none;border-radius:6px;
+  cursor:pointer;letter-spacing:0.02em;transition:opacity 0.15s}
+.btn-next:hover{opacity:0.88}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed}
+.btn-back{background:transparent;color:var(--steel);font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;padding:10px 16px;border:1px solid var(--border);border-radius:6px;
+  cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s}
+.btn-back:hover{color:var(--cream)}
+.btn-back:disabled{opacity:0.3;cursor:not-allowed}
+
+/* RESULTS */
+.results{display:none;animation:fadeUp 0.4s ease both}
+.results.visible{display:block}
+
+.placement-hero{text-align:center;padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:36px}
+.placement-tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;
+  padding:6px 18px;border-radius:4px;margin-bottom:18px}
+.placement-title{font-size:1.7rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:8px}
+.placement-sub{font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--steel);
+  line-height:1.7;max-width:480px;margin:0 auto 20px}
+.placement-entry{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.2);
+  padding:7px 16px;border-radius:4px;display:inline-block;letter-spacing:0.06em}
+
+/* SCORES */
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:36px}
+@media(max-width:560px){.score-grid{grid-template-columns:1fr}}
+.score-card{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:16px 18px}
+.score-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px}
+.score-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.score-bar{height:4px;background:rgba(245,241,235,0.08);border-radius:2px;margin-bottom:6px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;transition:width 0.6s ease 0.2s}
+.score-pct{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--cream);font-weight:600}
+
+/* PATH */
+.path-section{margin-bottom:36px}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.section-eyebrow::before{content:'';width:14px;height:1px;background:var(--gold)}
+.section-title{font-size:1.1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
+.section-desc{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);
+  line-height:1.65;margin-bottom:20px}
+
+/* PATH NODES */
+.path-nodes{display:flex;flex-direction:column;gap:0}
+.path-node{display:flex;align-items:flex-start;gap:14px;padding:14px 0}
+.path-node:not(:last-child){border-bottom:1px solid var(--border)}
+.node-connector{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;padding-top:4px}
+.node-dot{width:10px;height:10px;border-radius:50%;border:2px solid;flex-shrink:0}
+.node-line{width:1px;background:var(--border);flex:1;min-height:20px;margin:3px 0}
+.node-content{flex:1}
+.node-id{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted);
+  letter-spacing:0.06em;margin-bottom:2px}
+.node-name{font-size:0.9rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:3px}
+.node-desc{font-family:'Source Serif 4',serif;font-size:0.8rem;color:var(--steel);line-height:1.5}
+.node-tier{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--muted);
+  letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
+.node-learn{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  text-decoration:none;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:4px;
+  margin-top:5px;transition:opacity 0.15s}
+.node-learn:hover{opacity:0.7}
+
+/* ACTIONS */
+.result-actions{display:flex;gap:12px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border)}
+.btn-restart{background:var(--gold);color:#0D1B2A;font-family:'Space Grotesk',sans-serif;
+  font-size:0.82rem;font-weight:700;padding:11px 22px;border:none;border-radius:6px;
+  cursor:pointer;transition:opacity 0.15s}
+.btn-restart:hover{opacity:0.88}
+.btn-explore{background:transparent;color:var(--cream);font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;padding:10px 18px;border:1px solid var(--border2);border-radius:6px;
+  text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;
+  display:inline-flex;align-items:center;transition:border-color 0.15s}
+.btn-explore:hover{border-color:rgba(245,241,235,0.25)}
+
+@media(max-width:600px){
+  nav{padding:0 20px}
+  .page{padding:0 20px}
+  .hero{padding:36px 0 28px}
+  .q-card{padding:20px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" stroke="#D4A843" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="18" cy="18" r="6" fill="#D4A843" opacity="0.9"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="/explorer/">Graph</a>
+    <a class="nav-link" href="/paths/">Paths</a>
+    <a class="nav-link active" href="/placement/">Placement</a>
+    <a class="nav-link" href="/daily/">Daily</a>
+    <a class="nav-link" href="/scanner/">Scanner</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-eyebrow">Placement Engine</div>
+    <h1>Where are you<br>on the graph?</h1>
+    <div class="hero-sub">Twelve questions. A placement on the registry. A personal path generated from the edges you haven't crossed yet.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizSection">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressLabel">Question 1 of 12</span>
+        <span id="progressPct" style="color:var(--gold)">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="q-card" id="qCard">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="placement-hero">
+      <div class="placement-tier-badge" id="tierBadge"></div>
+      <div class="placement-title" id="placementTitle"></div>
+      <div class="placement-sub" id="placementSub"></div>
+      <div class="placement-entry" id="placementEntry"></div>
+    </div>
+
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <div class="path-section">
+      <div class="section-eyebrow">Your learning path</div>
+      <div class="section-title" id="pathTitle"></div>
+      <div class="section-desc" id="pathDesc"></div>
+      <div class="path-nodes" id="pathNodes"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-restart" onclick="restart()">Retake placement</button>
+      <a class="btn-explore" href="/explorer/">Explore full graph</a>
+      <a class="btn-explore" href="/paths/">Browse paths</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── QUESTIONS ──────────────────────────────────────────────────────────
+// Each question has a weight vector: {frm, pq, arc, ant, tier_boost}
+// frm = formula skill, pq = power query, arc = architecture awareness,
+// ant = anti-pattern awareness, tier_boost = pushes toward Expert
+const QUESTIONS = [
+  {
+    id: 'q01',
+    text: 'How do you look up a value in another table?',
+    context: 'You have a product list and need to find the price for a specific item by name.',
+    options: [
+      {key:'A', label:'=VLOOKUP()', sub:'Classic column-index lookup', scores:{frm:1, tier_boost:0}},
+      {key:'B', label:'=XLOOKUP()', sub:'Modern lookup with exact-match default and if_not_found arg', scores:{frm:2, tier_boost:1}},
+      {key:'C', label:'=INDEX(MATCH())', sub:'Two-function combination for flexible lookups', scores:{frm:2, tier_boost:1}},
+      {key:'D', label:"I use FILTER() or a PivotTable", sub:'Array-based or aggregation approach', scores:{frm:3, tier_boost:2}},
+    ]
+  },
+  {
+    id: 'q02',
+    text: 'Have you used SUMIFS or COUNTIFS in the last month?',
+    context: 'Multi-condition summing/counting: sum sales where region="West" AND quarter="Q2".',
+    options: [
+      {key:'A', label:"Never — I use SUM() and filter manually", scores:{frm:0}},
+      {key:'B', label:"Yes, with one condition (SUMIF)", scores:{frm:1}},
+      {key:'C', label:"Yes, with two or more conditions (SUMIFS)", scores:{frm:2, tier_boost:1}},
+      {key:'D', label:"I prefer SUMPRODUCT or GROUPBY for this", scores:{frm:3, tier_boost:2}},
+    ]
+  },
+  {
+    id: 'q03',
+    text: 'How do you handle merged cells in your workbooks?',
+    context: 'Merged cells look clean in headers but cause problems with formulas and sorting.',
+    options: [
+      {key:'A', label:"I merge cells freely for presentation", scores:{ant:0}},
+      {key:'B', label:"I use them sometimes but know they can cause issues", scores:{ant:1}},
+      {key:'C', label:"I avoid them — I use Center Across Selection instead", scores:{ant:2, tier_boost:1}},
+      {key:'D', label:"I actively audit and remove them in workbooks I inherit", scores:{ant:3, tier_boost:2}},
+    ]
+  },
+  {
+    id: 'q04',
+    text: 'Have you written a formula using LET()?',
+    context: 'LET() assigns names to intermediate values inside a formula — =LET(x, A1*2, x+B1).',
+    options: [
+      {key:'A', label:"I haven't heard of LET()", scores:{frm:0}},
+      {key:'B', label:"I've seen it but haven't used it", scores:{frm:1}},
+      {key:'C', label:"Yes, I use it to simplify complex formulas", scores:{frm:2, tier_boost:1}},
+      {key:'D', label:"Yes, and I combine it with LAMBDA for named functions", scores:{frm:3, tier_boost:3}},
+    ]
+  },
+  {
+    id: 'q05',
+    text: 'Do you use Power Query (Get & Transform) to load data?',
+    context: 'Power Query loads, cleans, and shapes data before it reaches your worksheet.',
+    options: [
+      {key:'A', label:"No — I paste data directly", scores:{pq:0}},
+      {key:'B', label:"Occasionally, for simple imports", scores:{pq:1}},
+      {key:'C', label:"Yes — most of my data loads come through PQ", scores:{pq:2, tier_boost:1}},
+      {key:'D', label:"Yes, and I write M code to transform and parameterize queries", scores:{pq:3, tier_boost:3}},
+    ]
+  },
+  {
+    id: 'q06',
+    text: 'How do you structure a workbook you plan to share or maintain?',
+    context: 'Architecture choices: where inputs live, where calculations happen, where outputs appear.',
+    options: [
+      {key:'A', label:"Everything on one sheet, inputs and outputs mixed together", scores:{arc:0}},
+      {key:'B', label:"I separate data sheets from summary/output sheets", scores:{arc:1}},
+      {key:'C', label:"I follow INPUT → LOGIC → OUTPUT separation deliberately", scores:{arc:2, tier_boost:2}},
+      {key:'D', label:"I apply a formal architecture with named ranges, driver tables, and documented data flow", scores:{arc:3, tier_boost:3}},
+    ]
+  },
+  {
+    id: 'q07',
+    text: 'Which of these have you used: FILTER(), UNIQUE(), or SORT()?',
+    context: 'Dynamic array functions that spill results automatically without Ctrl+Shift+Enter.',
+    example: '=FILTER(A2:C100, B2:B100="East")  →  spills all matching rows',
+    options: [
+      {key:'A', label:"None of these", scores:{frm:0}},
+      {key:'B', label:"One of them", scores:{frm:1, tier_boost:1}},
+      {key:'C', label:"Two of them", scores:{frm:2, tier_boost:1}},
+      {key:'D', label:"All three — I use spill-range formulas regularly", scores:{frm:3, tier_boost:2}},
+    ]
+  },
+  {
+    id: 'q08',
+    text: 'Have you ever diagnosed why a workbook was recalculating slowly?',
+    context: 'Slow recalculation is often caused by volatile functions (NOW, TODAY, OFFSET, INDIRECT) or excessive worksheet references.',
+    options: [
+      {key:'A', label:"No — I accept slow workbooks as normal", scores:{ant:0}},
+      {key:'B', label:"I've noticed the pattern but haven't fixed it", scores:{ant:1}},
+      {key:'C', label:"Yes, I've identified and removed volatile functions to fix it", scores:{ant:2, tier_boost:2}},
+      {key:'D', label:"Yes, I proactively audit for volatility before deployment", scores:{ant:3, tier_boost:3}},
+    ]
+  },
+  {
+    id: 'q09',
+    text: 'Have you defined a LAMBDA function in Name Manager?',
+    context: 'LAMBDA lets you create named, reusable functions: =LAMBDA(x, y, x*y) stored as "MULTIPLY".',
+    options: [
+      {key:'A', label:"I don't know what LAMBDA is", scores:{frm:0}},
+      {key:'B', label:"I understand what it does but haven't built one", scores:{frm:1, tier_boost:1}},
+      {key:'C', label:"Yes, I've written a basic LAMBDA", scores:{frm:2, tier_boost:2}},
+      {key:'D', label:"Yes, I maintain a named LAMBDA library and compose functions", scores:{frm:3, tier_boost:4}},
+    ]
+  },
+  {
+    id: 'q10',
+    text: 'When a lookup returns #N/A, what do you do?',
+    context: '#N/A means the lookup found no match. There are several ways to handle it.',
+    options: [
+      {key:'A', label:"Wrap everything in IFERROR() returning empty string", scores:{frm:0, ant:-1}},
+      {key:'B', label:"Use IFERROR() for lookups, IFNA() when I want to keep other errors visible", scores:{frm:1, ant:1, tier_boost:1}},
+      {key:'C', label:"Use XLOOKUP's built-in if_not_found argument — no wrapper needed", scores:{frm:2, ant:2, tier_boost:2}},
+      {key:'D', label:"Design the data model so #N/A can't occur — governed entry points", scores:{frm:2, ant:3, arc:1, tier_boost:3}},
+    ]
+  },
+  {
+    id: 'q11',
+    text: 'Have you used SCAN(), REDUCE(), BYROW(), or BYCOL()?',
+    context: 'LAMBDA higher-order functions: apply a LAMBDA across an array, accumulate values, or aggregate per row/column.',
+    example: '=SCAN(0, B2:B10, LAMBDA(acc, x, acc + x))  →  running total',
+    options: [
+      {key:'A', label:"None of these — they're new to me", scores:{frm:0}},
+      {key:'B', label:"I've read about them but haven't used them", scores:{frm:1, tier_boost:1}},
+      {key:'C', label:"Yes, I've used one of them in a real project", scores:{frm:2, tier_boost:3}},
+      {key:'D', label:"Yes, I use them regularly — they replaced my helper column patterns", scores:{frm:3, tier_boost:5}},
+    ]
+  },
+  {
+    id: 'q12',
+    text: 'How do you document or govern a workbook before you share it?',
+    context: 'Governance: audit trails, version conventions, named range documentation, compliance with a standard.',
+    options: [
+      {key:'A', label:"I share it as-is — the recipient figures it out", scores:{arc:0}},
+      {key:'B', label:"I add a brief notes tab or README", scores:{arc:1}},
+      {key:'C', label:"I follow a consistent structure: named inputs, version in filename, output locked", scores:{arc:2, tier_boost:2}},
+      {key:'D', label:"I apply STD-EXCEL-001 or an equivalent governed standard before any deployment", scores:{arc:3, ant:1, tier_boost:3}},
+    ]
+  },
+];
+
+// ── REGISTRY ENTRIES for the path (keyed subset) ────────────────────────
+const REGISTRY = {
+  'FRM-0001':{name:'XLOOKUP',type:'FRM',tier:'Intermediate',desc:'Modern replacement for VLOOKUP. Exact match by default, returns values in any direction, has a built-in not-found argument.'},
+  'FRM-0003':{name:'FILTER',type:'FRM',tier:'Intermediate',desc:'Returns a spilled array of rows matching one or more conditions. Combines with * (AND) and + (OR).'},
+  'FRM-0004':{name:'UNIQUE',type:'FRM',tier:'Intermediate',desc:'Returns a deduplicated list from a range. Third argument (exactly_once) filters out all duplicates.'},
+  'FRM-0007':{name:'SORT / SORTBY',type:'FRM',tier:'Intermediate',desc:'SORT orders by a column index; SORTBY orders by an external range — useful for multi-key sorts.'},
+  'FRM-0009':{name:'SUMIFS',type:'FRM',tier:'Beginner',desc:'Sums a range where multiple conditions are all true. The analytical workhorse of most Excel workbooks.'},
+  'FRM-0010':{name:'COUNTIFS',type:'FRM',tier:'Beginner',desc:'Counts rows where multiple conditions are all true. Companion to SUMIFS.'},
+  'FRM-0014':{name:'SEQUENCE',type:'FRM',tier:'Intermediate',desc:'Generates an array of sequential numbers. Two-dimensional with the cols argument.'},
+  'FRM-0015':{name:'LET',type:'FRM',tier:'Intermediate',desc:'Assigns names to intermediate values inside a formula. Eliminates repeated sub-expressions.'},
+  'FRM-0016':{name:'REDUCE',type:'FRM',tier:'Expert',desc:'Collapses an array to a single value via a LAMBDA accumulator. Complementary to SCAN.'},
+  'FRM-0018':{name:'INDEX / MATCH',type:'FRM',tier:'Intermediate',desc:'Two-function lookup: MATCH finds the row, INDEX retrieves the value. Pre-XLOOKUP gold standard.'},
+  'FRM-0021':{name:'SUMPRODUCT',type:'FRM',tier:'Advanced',desc:'Multiplies arrays element-by-element and sums the result. Weighted averages, conditional sums without helper columns.'},
+  'FRM-0023':{name:'VSTACK / HSTACK',type:'FRM',tier:'Advanced',desc:'Stack ranges vertically or horizontally. Replaces INDIRECT tricks for combining non-contiguous data.'},
+  'FRM-0029':{name:'LAMBDA',type:'FRM',tier:'Advanced',desc:'Defines a named, reusable function with parameters. Stored in Name Manager, called like a built-in.'},
+  'FRM-0031':{name:'SCAN',type:'FRM',tier:'Expert',desc:'Applies a LAMBDA across an array, returning all intermediate accumulator values. Running totals, state machines.'},
+  'FRM-0032':{name:'BYROW',type:'FRM',tier:'Expert',desc:'Applies a LAMBDA to each row of a range, returning one result per row. Eliminates per-row helper columns.'},
+  'FRM-0033':{name:'GROUPBY',type:'FRM',tier:'Expert',desc:'Groups a range by one column and aggregates another. Formula-native PivotTable for grouped summaries.'},
+  'PQ-0001':{name:'Load to Table',type:'PQ',tier:'Beginner',desc:'The foundation of any Power Query workflow. Data loaded to a worksheet Table is refreshable.'},
+  'PQ-0002':{name:'Custom Column',type:'PQ',tier:'Beginner',desc:'Add a calculated column to a PQ query using M expressions. The PQ equivalent of a helper column.'},
+  'PQ-0012':{name:'Parameters Table',type:'PQ',tier:'Intermediate',desc:'A worksheet table that feeds configuration values into PQ queries — file paths, date ranges, thresholds.'},
+  'PQ-0013':{name:'M Error Handling',type:'PQ',tier:'Intermediate',desc:"try...otherwise catches per-row failures in M. The query continues; bad rows get null instead of an error."},
+  'ARC-0001':{name:'INPUT → LOGIC → OUTPUT',type:'ARC',tier:'Intermediate',desc:'Three-zone workbook architecture: inputs in one area, calculations isolated from both, outputs presented separately.'},
+  'ARC-0006':{name:'Star Schema',type:'ARC',tier:'Advanced',desc:'Relational data model: one fact table with foreign keys to dimension tables. The PivotTable\'s native substrate.'},
+  'ARC-0012':{name:'Named LAMBDA Library',type:'ARC',tier:'Expert',desc:'A governed set of LAMBDA-defined functions in Name Manager. The Excel equivalent of a shared function library.'},
+  'ANT-0001':{name:'Merged Cells',type:'ANT',tier:'Beginner',desc:'Merged cells break range references, sorting, and table operations. Use Center Across Selection for visual centering.'},
+  'ANT-0002':{name:'Volatile Functions',type:'ANT',tier:'Intermediate',desc:'NOW, TODAY, OFFSET, INDIRECT, and RAND recalculate on every worksheet change — the leading cause of slow workbooks.'},
+  'ANT-0016':{name:'Blanket Error Masking',type:'ANT',tier:'Intermediate',desc:'Wrapping every formula in IFERROR("") silently hides real data failures alongside expected lookup misses.'},
+  'ANT-0021':{name:'Legacy Lookup Reliance',type:'ANT',tier:'Intermediate',desc:'VLOOKUP has four structural limitations that XLOOKUP resolves. In 365 workbooks, VLOOKUP is a legacy function.'},
+  'CON-0001':{name:'Range Naming Convention',type:'CON',tier:'Beginner',desc:'Governed naming for named ranges: prefix_AreaName pattern. Eliminates "what is this range?" ambiguity.'},
+};
+
+// ── TIER DEFINITIONS ───────────────────────────────────────────────────
+const TIERS = {
+  Beginner:  {color:'#4A9E6B', bg:'rgba(74,158,107,0.15)', border:'rgba(74,158,107,0.3)',
+    title:'Beginner Practitioner',
+    sub:'You have the foundation. The core functions are within reach and the structural patterns will click quickly once you see them used in context.',
+    anchor_entry:'FRM-0009',
+    path_ids:['FRM-0009','FRM-0010','FRM-0001','ANT-0001','FRM-0003','ARC-0001'],
+    path_note:'Start with the analytical workhorses — SUMIFS and COUNTIFS unlock most analytical questions. Then XLOOKUP replaces VLOOKUP cleanly.',
+  },
+  Intermediate:{color:'#6B9DC2', bg:'rgba(107,157,194,0.15)', border:'rgba(107,157,194,0.3)',
+    title:'Intermediate Analyst',
+    sub:'You have solid command of the core functions. The next frontier is dynamic arrays, LET, and understanding why workbooks behave the way they do.',
+    anchor_entry:'FRM-0015',
+    path_ids:['FRM-0015','FRM-0003','FRM-0004','FRM-0007','ANT-0002','ARC-0001','PQ-0001'],
+    path_note:'LET and the dynamic array trio (FILTER, UNIQUE, SORT) transform how you think about formula design. Then diagnose volatility to speed up the workbooks you already have.',
+  },
+  Advanced:  {color:'#C49A3C', bg:'rgba(196,154,60,0.15)', border:'rgba(196,154,60,0.3)',
+    title:'Advanced Practitioner',
+    sub:'You are fluent in most of the graph. The remaining territory is LAMBDA, the higher-order functions, and governed workbook architecture.',
+    anchor_entry:'FRM-0029',
+    path_ids:['FRM-0029','FRM-0021','FRM-0023','ARC-0001','ARC-0006','PQ-0012','ANT-0016'],
+    path_note:'LAMBDA unlocks the Expert tier entirely. Combine it with architecture patterns and PQ to move into the top tier of the graph.',
+  },
+  Expert:    {color:'#B23531', bg:'rgba(178,53,49,0.15)', border:'rgba(178,53,49,0.3)',
+    title:'Expert Practitioner',
+    sub:'You are operating at the top of the graph. The frontier is the named LAMBDA library architecture and the full GROUPBY / PIVOTBY aggregation model.',
+    anchor_entry:'FRM-0031',
+    path_ids:['FRM-0031','FRM-0032','FRM-0033','ARC-0012','PQ-0013'],
+    path_note:'You are close to the edge of what the registry currently defines. The higher-order LAMBDA functions and new 365 aggregators are the remaining nodes.',
+  },
+};
+
+// ── State ──────────────────────────────────────────────────────────────
+let current = 0;
+let answers = {}; // {q-id: option-key}
+
+function init() { renderQuestion(); }
+
+// ── Render question ────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const pct = Math.round((current / QUESTIONS.length) * 100);
+  document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const selected = answers[q.id] || null;
+
+  let optHtml = q.options.map(o => `
+    <button class="opt${selected === o.key ? ' selected' : ''}" onclick="selectOption('${q.id}','${o.key}')">
+      <span class="opt-key">${o.key}</span>
+      <span>
+        <div class="opt-label">${o.label}</div>
+        ${o.sub ? `<div class="opt-sub">${o.sub}</div>` : ''}
+      </span>
+    </button>`).join('');
+
+  document.getElementById('qCard').innerHTML = `
+    <div class="q-number">Question ${current + 1} / ${QUESTIONS.length}</div>
+    <div class="q-text">${q.text}</div>
+    ${q.context ? `<div class="q-context">${q.context}</div>` : ''}
+    ${q.example ? `<div class="q-example">${q.example}</div>` : ''}
+    <div class="options">${optHtml}</div>
+    <div class="q-nav">
+      <button class="btn-back" onclick="goBack()" ${current === 0 ? 'disabled' : ''}>← Back</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()" ${selected ? '' : 'disabled'}>
+        ${current === QUESTIONS.length - 1 ? 'See my placement →' : 'Next →'}
+      </button>
+    </div>`;
+}
+
+function selectOption(qid, key) {
+  answers[qid] = key;
+  renderQuestion();
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function goNext() {
+  const q = QUESTIONS[current];
+  if (!answers[q.id]) return;
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+// ── Score + placement ──────────────────────────────────────────────────
+function computeScores() {
+  const totals = {frm:0, pq:0, arc:0, ant:0, tier_boost:0};
+  const maxes  = {frm:0, pq:0, arc:0, ant:0, tier_boost:0};
+
+  QUESTIONS.forEach(q => {
+    const best = q.options.reduce((b, o) => {
+      Object.keys(o.scores).forEach(k => { if (o.scores[k] > (b[k]||0)) b[k] = o.scores[k]; });
+      return b;
+    }, {});
+    Object.keys(best).forEach(k => { maxes[k] = (maxes[k]||0) + best[k]; });
+
+    const chosen = q.options.find(o => o.key === answers[q.id]);
+    if (chosen) {
+      Object.entries(chosen.scores).forEach(([k, v]) => { totals[k] = (totals[k]||0) + v; });
+    }
+  });
+
+  const pcts = {};
+  Object.keys(totals).forEach(k => {
+    pcts[k] = maxes[k] ? Math.round((totals[k] / maxes[k]) * 100) : 0;
+  });
+  return {totals, pcts, maxes};
+}
+
+function placementTier(totals, pcts) {
+  const boost = totals.tier_boost || 0;
+  const frmPct = pcts.frm || 0;
+  const pqPct  = pcts.pq  || 0;
+  const arcPct = pcts.arc || 0;
+  const antPct = pcts.ant || 0;
+
+  const overall = (frmPct * 0.4) + (pqPct * 0.2) + (arcPct * 0.2) + (antPct * 0.2);
+
+  if (boost >= 12 || overall >= 75) return 'Expert';
+  if (boost >= 7  || overall >= 50) return 'Advanced';
+  if (boost >= 3  || overall >= 28) return 'Intermediate';
+  return 'Beginner';
+}
+
+// ── Results ────────────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('quizSection').style.display = 'none';
+  const res = document.getElementById('results');
+  res.classList.add('visible');
+
+  const {totals, pcts} = computeScores();
+  const tier = placementTier(totals, pcts);
+  const def = TIERS[tier];
+
+  // Placement hero
+  const badge = document.getElementById('tierBadge');
+  badge.textContent = tier;
+  badge.style.cssText = `background:${def.bg};color:${def.color};border:1px solid ${def.border};font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;padding:6px 18px;border-radius:4px;display:inline-block`;
+  document.getElementById('placementTitle').textContent = def.title;
+  document.getElementById('placementSub').textContent = def.sub;
+  document.getElementById('placementEntry').textContent = `Anchor entry: ${def.anchor_entry} · ${REGISTRY[def.anchor_entry]?.name || ''}`;
+
+  // Score grid
+  const DIMS = [
+    {key:'frm', label:'Formula fluency', color:'#6B9DC2'},
+    {key:'pq',  label:'Power Query',     color:'#4AADAD'},
+    {key:'arc', label:'Architecture',    color:'#8a6cc9'},
+    {key:'ant', label:'Anti-pattern awareness', color:'#B23531'},
+  ];
+  document.getElementById('scoreGrid').innerHTML = DIMS.map(d => `
+    <div class="score-card">
+      <div class="score-label">
+        <span class="score-dot" style="background:${d.color}"></span>
+        ${d.label}
+      </div>
+      <div class="score-bar">
+        <div class="score-fill" style="width:${pcts[d.key]}%;background:${d.color}"></div>
+      </div>
+      <div class="score-pct">${pcts[d.key]}%</div>
+    </div>`).join('');
+
+  // Trigger bar animations on next frame
+  setTimeout(() => {
+    document.querySelectorAll('.score-fill').forEach(el => {
+      el.style.transition = 'width 0.6s ease 0.1s';
+    });
+  }, 50);
+
+  // Path
+  document.getElementById('pathTitle').textContent = `Your path from ${def.anchor_entry}`;
+  document.getElementById('pathDesc').textContent = def.path_note;
+
+  const TYPE_COLORS = {
+    FRM:{c:'#6B9DC2'}, PQ:{c:'#4AADAD'}, ARC:{c:'#8a6cc9'},
+    ANT:{c:'#B23531'}, CON:{c:'#C49A3C'}, PTN:{c:'#4A9E6B'},
+  };
+
+  const nodesHtml = def.path_ids.map((id, i) => {
+    const e = REGISTRY[id];
+    if (!e) return '';
+    const tc = TYPE_COLORS[e.type]?.c || '#D4A843';
+    const isLast = i === def.path_ids.length - 1;
+    return `
+      <div class="path-node">
+        <div class="node-connector">
+          <div class="node-dot" style="border-color:${tc};${i === 0 ? 'background:'+tc : ''}"></div>
+          ${!isLast ? '<div class="node-line"></div>' : ''}
+        </div>
+        <div class="node-content">
+          <div class="node-id" style="color:${tc}">${id} · ${e.type}</div>
+          <div class="node-name">${e.name}</div>
+          <div class="node-desc">${e.desc}</div>
+          <div class="node-tier">Tier: ${e.tier}</div>
+          <a class="node-learn" href="/learn/${id.toLowerCase().replace('-','-')}/">
+            View entry →
+          </a>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('pathNodes').innerHTML = nodesHtml;
+}
+
+function restart() {
+  current = 0;
+  answers = {};
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('quizSection').style.display = 'block';
+  renderQuestion();
+}
+
+init();
+</script>
+</body>
+</html>

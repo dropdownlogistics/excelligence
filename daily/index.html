@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Daily Grid — Excelligence</title>
+<meta name="description" content="One formula challenge, every day. No hints about which function — figure it out from the problem.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0D1B2A;--card:#10202f;--card2:#0e1c2a;
+  --cream:#F5F1EB;--steel:#6B7B8D;--muted:#4A5A6A;
+  --gold:#D4A843;--gold2:rgba(212,168,67,0.1);--gold3:rgba(212,168,67,0.05);
+  --crimson:#B23531;--crimson2:rgba(178,53,49,0.12);
+  --green:#4A9E6B;--green2:rgba(74,158,107,0.12);
+  --blue:#6B9DC2;--amber:#C49A3C;--violet:#8a6cc9;--teal:#4AADAD;
+  --border:rgba(245,241,235,0.07);--border2:rgba(245,241,235,0.13);
+  --frm:#6B9DC2;--ptn:#4A9E6B;--arc:#8a6cc9;--ant:#B23531;--con:#C49A3C;--pq:#4AADAD;--key:#D4A843;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes flash-green{0%,100%{background:var(--card)}50%{background:var(--green2)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--cream);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(212,168,67,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.015) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);height:58px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-word{font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--cream)}
+.nav-word span{color:var(--gold)}
+.nav-right{display:flex;gap:20px;align-items:center}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-link:hover,.nav-link.active{color:var(--cream)}
+.streak-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.25);
+  padding:4px 12px;border-radius:4px;display:flex;align-items:center;gap:6px}
+.streak-fire{font-size:0.8rem}
+
+/* PAGE */
+.page{max-width:780px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:52px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hero-left{}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:14px;height:1px;background:var(--gold)}
+.hero h1{font-size:2rem;font-weight:700;letter-spacing:-0.03em;line-height:1.0;margin-bottom:8px}
+.hero-date{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--steel);
+  letter-spacing:0.06em}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.challenge-num{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--steel);
+  letter-spacing:0.08em;text-transform:uppercase}
+.type-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:4px}
+
+/* CHALLENGE CARD */
+.challenge-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;
+  padding:28px 28px 24px;margin-bottom:28px;animation:fadeUp 0.4s ease both}
+.challenge-title{font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px}
+.challenge-context{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);
+  line-height:1.6;margin-bottom:20px}
+
+/* MINI SPREADSHEET */
+.sheet-wrap{margin-bottom:20px;overflow-x:auto}
+.sheet{border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  border:1px solid rgba(245,241,235,0.15);border-radius:4px;overflow:hidden;min-width:300px}
+.sheet th{background:rgba(255,255,255,0.04);color:var(--steel);padding:5px 12px;
+  font-weight:500;border:1px solid rgba(245,241,235,0.1);text-align:center;
+  letter-spacing:0.04em;font-size:0.62rem}
+.sheet th.row-header{width:28px;color:var(--muted)}
+.sheet td{padding:6px 12px;border:1px solid rgba(245,241,235,0.08);color:var(--cream);
+  white-space:nowrap}
+.sheet td.row-num{background:rgba(255,255,255,0.03);color:var(--muted);text-align:center;font-size:0.62rem}
+.sheet td.header-cell{background:rgba(212,168,67,0.07);color:var(--gold);font-weight:600}
+
+/* TARGET */
+.target-row{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.target-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap}
+.target-value{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold);
+  background:var(--gold2);border:1px solid rgba(212,168,67,0.2);
+  padding:5px 14px;border-radius:4px;font-weight:500}
+
+/* INPUT AREA */
+.input-section{margin-bottom:20px}
+.input-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;
+  display:flex;justify-content:space-between;align-items:center}
+.attempts-left{font-size:0.58rem;color:var(--muted)}
+.formula-input{width:100%;background:var(--card2);border:1px solid var(--border2);
+  border-radius:8px;color:var(--cream);font-family:'JetBrains Mono',monospace;
+  font-size:0.88rem;padding:14px 16px;outline:none;transition:border-color 0.2s;
+  letter-spacing:0.02em}
+.formula-input:focus{border-color:var(--gold)}
+.formula-input::placeholder{color:var(--muted)}
+.formula-input.correct{border-color:var(--green);animation:flash-green 0.6s ease}
+.formula-input.wrong{animation:shake 0.4s ease}
+.formula-input:disabled{opacity:0.5;cursor:not-allowed}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-submit{background:var(--gold);color:#0D1B2A;font-family:'Space Grotesk',sans-serif;
+  font-size:0.82rem;font-weight:700;padding:11px 24px;border:none;border-radius:6px;
+  cursor:pointer;letter-spacing:0.02em;transition:opacity 0.15s}
+.btn-submit:hover{opacity:0.88}
+.btn-submit:disabled{opacity:0.4;cursor:not-allowed}
+.btn-hint{background:transparent;color:var(--steel);font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;padding:10px 16px;border:1px solid var(--border2);border-radius:6px;
+  cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s;display:none}
+.btn-hint:hover{color:var(--cream);border-color:rgba(245,241,235,0.25)}
+.btn-hint.visible{display:block}
+.btn-give-up{background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;padding:10px 16px;border:1px solid var(--border);border-radius:6px;
+  cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s}
+.btn-give-up:hover{color:var(--steel)}
+
+/* HINT BOX */
+.hint-box{background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.2);
+  border-radius:8px;padding:12px 16px;margin-top:12px;display:none}
+.hint-box.visible{display:block}
+.hint-box p{font-family:'Source Serif 4',serif;font-size:0.85rem;color:var(--steel);
+  line-height:1.6}
+.hint-box strong{color:var(--cream)}
+
+/* FEEDBACK */
+.feedback{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+  padding:9px 14px;border-radius:6px;display:none}
+.feedback.visible{display:block}
+.feedback.wrong{background:var(--crimson2);color:var(--crimson);border:1px solid rgba(178,53,49,0.2)}
+.feedback.correct{background:var(--green2);color:var(--green);border:1px solid rgba(74,158,107,0.2)}
+
+/* REVEAL CARD */
+.reveal-card{background:var(--card2);border:1px solid var(--border2);border-radius:12px;
+  padding:24px;margin-top:24px;display:none;animation:fadeUp 0.4s ease both}
+.reveal-card.visible{display:block}
+.reveal-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.reveal-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px}
+.reveal-id{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--muted)}
+.reveal-name{font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
+.reveal-tier{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--steel);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px}
+.solution-line{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--cream);
+  background:var(--card);border:1px solid var(--border2);border-left:3px solid var(--gold);
+  padding:10px 14px;border-radius:4px;margin-bottom:12px;line-height:1.5;word-break:break-all}
+.reveal-note{font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--steel);line-height:1.65}
+.reveal-note strong{color:var(--cream)}
+.reveal-link{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--gold);
+  text-decoration:none;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:6px;
+  margin-top:12px;transition:opacity 0.15s}
+.reveal-link:hover{opacity:0.75}
+
+/* SHARE SECTION */
+.share-section{margin-top:24px;padding-top:24px;border-top:1px solid var(--border);display:none}
+.share-section.visible{display:block}
+.share-result{font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+  background:var(--card);border:1px solid var(--border2);border-radius:8px;
+  padding:14px 16px;margin-bottom:12px;white-space:pre-wrap;line-height:1.6;color:var(--cream)}
+.btn-share{background:var(--card);color:var(--cream);font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;padding:9px 18px;border:1px solid var(--border2);border-radius:6px;
+  cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.15s}
+.btn-share:hover{border-color:rgba(245,241,235,0.25);color:var(--cream)}
+.copied-msg{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--green);
+  margin-left:10px;opacity:0;transition:opacity 0.3s}
+.copied-msg.show{opacity:1}
+
+/* HISTORY DOTS */
+.history-row{display:flex;align-items:center;gap:6px;margin-top:8px}
+.history-dot{width:10px;height:10px;border-radius:50%}
+
+/* MOBILE */
+@media(max-width:600px){
+  nav{padding:0 20px}
+  .page{padding:0 20px}
+  .hero{padding:36px 0 28px}
+  .challenge-card{padding:20px}
+  .hero h1{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" stroke="#D4A843" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="18" cy="18" r="6" fill="#D4A843" opacity="0.9"/>
+    </svg>
+    <span class="nav-word">Excel<span>ligence</span></span>
+  </a>
+  <div class="nav-right">
+    <span class="streak-badge" id="streakBadge" style="display:none">
+      <span class="streak-fire">🔥</span>
+      <span id="streakCount">0</span>-day streak
+    </span>
+    <a class="nav-link" href="/explorer/">Graph</a>
+    <a class="nav-link" href="/scanner/">Scanner</a>
+    <a class="nav-link active" href="/daily/">Daily</a>
+    <a class="nav-link" href="/formulalab/">FormulaLab</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Daily Grid</div>
+      <h1>One formula.<br>Every day.</h1>
+      <div class="hero-date" id="heroDate">Loading…</div>
+    </div>
+    <div class="hero-right">
+      <div class="challenge-num" id="challengeNum"></div>
+      <div class="type-badge" id="typeBadge"></div>
+      <div class="hero-right" id="tierLabel" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase"></div>
+    </div>
+  </div>
+
+  <div class="challenge-card" id="challengeCard">
+    <div class="challenge-title" id="challengeTitle"></div>
+    <div class="challenge-context" id="challengeContext"></div>
+    <div class="sheet-wrap" id="sheetWrap"></div>
+    <div class="target-row" style="margin-bottom:20px">
+      <span class="target-label">Produce:</span>
+      <span class="target-value" id="targetValue"></span>
+    </div>
+    <div class="input-section">
+      <div class="input-label">
+        <span>Your formula or answer</span>
+        <span class="attempts-left" id="attemptsLeft"></span>
+      </div>
+      <input type="text" class="formula-input" id="formulaInput"
+        placeholder="=FUNCTION(args…)  or describe the answer" autocomplete="off" spellcheck="false">
+      <div class="feedback" id="feedback"></div>
+      <div class="hint-box" id="hintBox"><p id="hintText"></p></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-submit" id="btnSubmit" onclick="submitAnswer()">Submit</button>
+      <button class="btn-hint" id="btnHint" onclick="showHint()">Show hint</button>
+      <button class="btn-give-up" id="btnGiveUp" onclick="giveUp()">Give up</button>
+    </div>
+    <div class="reveal-card" id="revealCard">
+      <div class="reveal-header">
+        <span class="reveal-badge" id="revealBadge"></span>
+        <span class="reveal-id" id="revealId"></span>
+      </div>
+      <div class="reveal-name" id="revealName"></div>
+      <div class="reveal-tier" id="revealTier"></div>
+      <div class="solution-line" id="revealSolution"></div>
+      <div class="reveal-note" id="revealNote"></div>
+      <a class="reveal-link" href="/learn/" id="revealLink">View registry entry →</a>
+    </div>
+    <div class="share-section" id="shareSection">
+      <div class="share-result" id="shareText"></div>
+      <button class="btn-share" onclick="copyShare()">Copy result</button>
+      <span class="copied-msg" id="copiedMsg">Copied!</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const CHALLENGES = [
+  {id:'c001',entry_id:'FRM-0001',entry_name:'XLOOKUP',entry_type:'FRM',tier:'Intermediate',
+   title:'Find the unit price for "Bearing Assembly"',
+   context:'Parts catalog. Find the price for a specific part name.',
+   data:{headers:['Part Name','Unit Price'],rows:[['Valve Seal','$4.20'],['Bearing Assembly','$11.75'],['Gasket Kit','$6.50'],['Drive Shaft','$38.00']]},
+   target:'$11.75',
+   accepted:['XLOOKUP','VLOOKUP','INDEX','FILTER','MATCH'],
+   solution:'=XLOOKUP("Bearing Assembly", A2:A5, B2:B5)',
+   hint:'Look up a value in one column and return the corresponding value from another column in the same row.',
+   note:'XLOOKUP is the modern replacement for VLOOKUP — cleaner syntax, returns values to the left, has a built-in if-not-found argument.'},
+
+  {id:'c002',entry_id:'FRM-0003',entry_name:'FILTER',entry_type:'FRM',tier:'Intermediate',
+   title:'Return only the East region rows',
+   context:'Regional inventory with three columns. Show only East region entries.',
+   data:{headers:['Part','Region','Qty'],rows:[['Valve','East','120'],['Gasket','West','85'],['Bearing','East','200'],['Seal','North','60']]},
+   target:'Valve/120 and Bearing/200 (two rows, all columns)',
+   accepted:['FILTER'],
+   solution:'=FILTER(A2:C5, B2:B5="East")',
+   hint:'Extract only the rows where a condition is true — the result spills automatically.',
+   note:'FILTER returns a spilled array of all matching rows — no helper columns, no Ctrl+Shift+Enter.'},
+
+  {id:'c003',entry_id:'FRM-0004',entry_name:'UNIQUE',entry_type:'FRM',tier:'Intermediate',
+   title:'List each department exactly once',
+   context:'Employee list with repeated departments. Extract the distinct names.',
+   data:{headers:['Employee','Department'],rows:[['Reyes','Engineering'],['Park','Finance'],['Osei','Engineering'],['Torres','HR'],['Kim','Finance']]},
+   target:'Engineering, Finance, HR  (each once)',
+   accepted:['UNIQUE'],
+   solution:'=UNIQUE(B2:B6)',
+   hint:'Deduplicate a column — one formula, no Remove Duplicates.',
+   note:'UNIQUE spills a deduplicated list. Combine with SORT to get an alphabetical unique list.'},
+
+  {id:'c004',entry_id:'FRM-0009',entry_name:'SUMIFS',entry_type:'FRM',tier:'Beginner',
+   title:'Total Q2 sales for the West region only',
+   context:'Sales log by quarter and region. Two conditions must both be true.',
+   data:{headers:['Quarter','Region','Sales'],rows:[['Q1','West','14200'],['Q2','East','18500'],['Q2','West','22100'],['Q3','West','9800'],['Q2','West','16400']]},
+   target:'38500',
+   accepted:['SUMIFS','SUMIF','SUMPRODUCT','FILTER'],
+   solution:'=SUMIFS(C2:C6, A2:A6, "Q2", B2:B6, "West")',
+   hint:'Sum a column, but only where two other columns match specific values.',
+   note:'SUMIFS is the workhorse of analytical worksheets — multiple criteria, one formula.'},
+
+  {id:'c005',entry_id:'FRM-0010',entry_name:'COUNTIFS',entry_type:'FRM',tier:'Beginner',
+   title:'Count inspections that are both PASS and High priority',
+   context:'Inspection log. Two columns must match simultaneously.',
+   data:{headers:['Inspector','Result','Priority'],rows:[['Walsh','PASS','High'],['Diaz','FAIL','High'],['Walsh','PASS','Low'],['Chen','PASS','High'],['Diaz','PASS','High']]},
+   target:'3',
+   accepted:['COUNTIFS','COUNTIF','SUMPRODUCT','FILTER'],
+   solution:'=COUNTIFS(B2:B6, "PASS", C2:C6, "High")',
+   hint:'Count rows where two columns both match conditions.',
+   note:'COUNTIFS is COUNTIF with multiple criteria — no array formula needed.'},
+
+  {id:'c006',entry_id:'FRM-0015',entry_name:'LET',entry_type:'FRM',tier:'Intermediate',
+   title:'Calculate net margin % without repeating the revenue sub-expression',
+   context:'Revenue = 80000, Cost = 52000. Net = Revenue − Cost. Margin% = Net / Revenue. Assign intermediate values inside one formula.',
+   data:{headers:['Product','Revenue','Cost'],rows:[['Alpha','80000','52000']]},
+   target:'35.00%  (no helper cells, no repeated B2 references)',
+   accepted:['LET'],
+   solution:'=LET(rev, B2, cost, C2, net, rev-cost, net/rev)',
+   hint:'Name intermediate results inside the formula to avoid repeating the same sub-expression.',
+   note:'LET assigns names to interim values — cleaner and faster than repeating the same calculation three times.'},
+
+  {id:'c007',entry_id:'FRM-0025',entry_name:'IFERROR',entry_type:'FRM',tier:'Beginner',
+   title:'Return "" instead of #N/A when the lookup finds no match',
+   context:'Parts lookup. Some IDs have no entry in the catalog. The formula currently returns #N/A.',
+   data:{headers:['Part ID','Lookup Result'],rows:[['P-001','Valve Seal'],['P-099','#N/A'],['P-003','Bearing']]},
+   target:'"" (empty string) for P-099 instead of #N/A',
+   accepted:['IFERROR','IFNA','XLOOKUP'],
+   solution:'=IFERROR(XLOOKUP(A2, catalog_id, catalog_name), "")',
+   hint:'Wrap the formula to catch errors and return something clean instead.',
+   note:'IFERROR catches all errors. For #N/A specifically, IFNA is more precise — it leaves real errors visible.'},
+
+  {id:'c008',entry_id:'FRM-0014',entry_name:'SEQUENCE',entry_type:'FRM',tier:'Intermediate',
+   title:'Generate the numbers 1 through 8 without dragging a fill handle',
+   context:'Dynamic numbering. One formula, spills downward automatically.',
+   data:{headers:['Target output (spills from one formula cell):'],rows:[['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8']]},
+   target:'1, 2, 3, 4, 5, 6, 7, 8  (spilled from a single formula)',
+   accepted:['SEQUENCE','ROW'],
+   solution:'=SEQUENCE(8)',
+   hint:'Generate a numbered list — no fill handle, no manual entry.',
+   note:'SEQUENCE(rows, [cols], [start], [step]) is the building block for most array-formula indexing.'},
+
+  {id:'c009',entry_id:'FRM-0022',entry_name:'TEXTJOIN',entry_type:'FRM',tier:'Intermediate',
+   title:'Combine all city names with ", " between them in one formula',
+   context:'Site list. Produce a single comma-separated string from a column of cities.',
+   data:{headers:['Site','City'],rows:[['S-1','Denver'],['S-2','Atlanta'],['S-3','Portland'],['S-4','Cleveland']]},
+   target:'"Denver, Atlanta, Portland, Cleveland"',
+   accepted:['TEXTJOIN','CONCAT','CONCATENATE'],
+   solution:'=TEXTJOIN(", ", TRUE, B2:B5)',
+   hint:'Join multiple text values with a separator, ignoring any blank cells.',
+   note:'TEXTJOIN accepts a range — no need to & each cell individually.'},
+
+  {id:'c010',entry_id:'FRM-0001',entry_name:'XLOOKUP',entry_type:'FRM',tier:'Intermediate',
+   title:'Look up vendor rating, return "Unknown" if the vendor is not in the list',
+   context:'Vendor registry. Some PO vendors have not yet been rated.',
+   data:{headers:['Vendor','Rating'],rows:[['Acme Supply','A'],['Global Parts','B+'],['FastShip Co','A-']]},
+   target:'"Unknown" when the lookup vendor is not in the registry',
+   accepted:['XLOOKUP','IFERROR','IFNA'],
+   solution:'=XLOOKUP("New Vendor", A2:A4, B2:B4, "Unknown")',
+   hint:'This function has a built-in argument for what to return when nothing matches — no IFERROR wrapper needed.',
+   note:"XLOOKUP's 4th argument is the if_not_found value. Cleaner than wrapping VLOOKUP in IFERROR."},
+
+  {id:'c011',entry_id:'FRM-0003',entry_name:'FILTER',entry_type:'FRM',tier:'Intermediate',
+   title:'Show Q3 orders over $5,000 only',
+   context:'Order log. Two conditions must both be true: Q3 AND amount above threshold.',
+   data:{headers:['Order','Quarter','Amount'],rows:[['ORD-101','Q3','6200'],['ORD-102','Q2','8100'],['ORD-103','Q3','3400'],['ORD-104','Q3','7700'],['ORD-105','Q1','5500']]},
+   target:'ORD-101/$6200 and ORD-104/$7700  (two rows)',
+   accepted:['FILTER'],
+   solution:'=FILTER(A2:C6, (B2:B6="Q3") * (C2:C6>5000))',
+   hint:'FILTER can handle multiple conditions — multiply Boolean arrays for AND logic.',
+   note:'Multiplying Boolean arrays inside FILTER creates AND conditions. Adding (+) creates OR.'},
+
+  {id:'c012',entry_id:'FRM-0007',entry_name:'SORT',entry_type:'FRM',tier:'Intermediate',
+   title:'Sort the score list from highest to lowest score',
+   context:'Leaderboard. Sort without rearranging the original data — the sorted view spills from one formula.',
+   data:{headers:['Name','Score'],rows:[['Rivera','82'],['Pham','91'],['Osei','74'],['Walsh','95'],['Kim','87']]},
+   target:'Walsh/95, Pham/91, Kim/87, Rivera/82, Osei/74',
+   accepted:['SORT','SORTBY','LARGE'],
+   solution:'=SORT(A2:B6, 2, -1)',
+   hint:'Sort a range by a specific column. The third argument controls direction: 1 = ascending, -1 = descending.',
+   note:'SORT(array, sort_index, sort_order) — non-destructive sort that leaves the original data untouched.'},
+
+  {id:'c013',entry_id:'FRM-0023',entry_name:'VSTACK',entry_type:'FRM',tier:'Advanced',
+   title:'Stack the Q1 and Q2 tables into one continuous list',
+   context:'Two quarterly tables exist as separate named ranges. Combine them vertically into one array.',
+   data:{headers:['Q1 table','Q2 table'],rows:[['Alpha / 120','Alpha / 145'],['Beta / 88','Beta / 102']]},
+   target:'Alpha/120, Beta/88, Alpha/145, Beta/102  (4 rows, 2 cols)',
+   accepted:['VSTACK','INDIRECT'],
+   solution:'=VSTACK(q1_range, q2_range)',
+   hint:'Combine two ranges vertically — rows from the second argument are appended below the first.',
+   note:'VSTACK and HSTACK replaced complex INDIRECT tricks for combining non-contiguous ranges in 365.'},
+
+  {id:'c014',entry_id:'FRM-0021',entry_name:'SUMPRODUCT',entry_type:'FRM',tier:'Advanced',
+   title:'Calculate a weighted average from scores and weights columns',
+   context:'Three categories with different weights. Weighted avg = Σ(score × weight) / Σ(weights).',
+   data:{headers:['Category','Score','Weight'],rows:[['Safety','88','0.40'],['Quality','92','0.35'],['Delivery','79','0.25']]},
+   target:'87.45',
+   accepted:['SUMPRODUCT','SUM'],
+   solution:'=SUMPRODUCT(B2:B4, C2:C4) / SUM(C2:C4)',
+   hint:'Multiply two arrays element-by-element, then sum the products — that is the numerator of the weighted average.',
+   note:'SUMPRODUCT(array1, array2) multiplies corresponding elements and returns their sum — no Ctrl+Shift+Enter.'},
+
+  {id:'c015',entry_id:'FRM-0018',entry_name:'INDEX / MATCH',entry_type:'FRM',tier:'Intermediate',
+   title:'Find the certification level for inspector "Walsh"',
+   context:'Inspector registry. Return the Cert Level column value for a matching name.',
+   data:{headers:['Inspector','Zone','Cert Level'],rows:[['Chen','North','Level 2'],['Walsh','East','Level 3'],['Reyes','West','Level 1']]},
+   target:'"Level 3"',
+   accepted:['INDEX','XLOOKUP','VLOOKUP','FILTER'],
+   solution:'=INDEX(C2:C4, MATCH("Walsh", A2:A4, 0))',
+   hint:'Find the row position of the name first, then use that position to retrieve the value from a different column.',
+   note:'INDEX/MATCH: MATCH finds the row number, INDEX uses it. Pre-XLOOKUP gold standard — still valid when XLOOKUP is unavailable.'},
+
+  {id:'c016',entry_id:'FRM-0014',entry_name:'SEQUENCE',entry_type:'FRM',tier:'Intermediate',
+   title:'Generate a 3×4 grid of sequential numbers starting at 1',
+   context:'Create a 3-column, 4-row numbered grid from a single formula.',
+   data:{headers:['Expected output (spilled 4 rows × 3 cols):'],rows:[['1','2','3'],['4','5','6'],['7','8','9'],['10','11','12']]},
+   target:'1 through 12 in a 4-row × 3-column grid',
+   accepted:['SEQUENCE','ROW','COLUMN'],
+   solution:'=SEQUENCE(4, 3)',
+   hint:'SEQUENCE has optional arguments for rows and columns — it can produce a 2D array.',
+   note:'SEQUENCE(rows, cols, start, step) — all optional after the first. Perfect for building reference grids.'},
+
+  {id:'c017',entry_id:'FRM-0029',entry_name:'LAMBDA',entry_type:'FRM',tier:'Advanced',
+   title:'Define a reusable COMMISSION function: sales × rate',
+   context:'Commission = sales × rate. Write it once in Name Manager, call it as =COMMISSION(sales, rate) anywhere.',
+   data:{headers:['Sales','Rate','Commission'],rows:[['42000','0.08','3360'],['61000','0.06','3660']]},
+   target:'=COMMISSION(B2, C2) evaluates correctly for both rows',
+   accepted:['LAMBDA'],
+   solution:'=LAMBDA(sales, rate, sales * rate)  ← stored as "COMMISSION" in Name Manager',
+   hint:'Define a function with parameters inside the formula itself — no VBA, no module.',
+   note:'LAMBDA enables user-defined functions in Excel without VBA. Store in Name Manager, call like a built-in.'},
+
+  {id:'c018',entry_id:'FRM-0031',entry_name:'SCAN',entry_type:'FRM',tier:'Expert',
+   title:'Build a running total column from a single formula',
+   context:'Monthly spend. Running total accumulates each month. The entire column from one formula — no fill handle.',
+   data:{headers:['Month','Spend','Running Total'],rows:[['Jan','12000','12000'],['Feb','9500','21500'],['Mar','14200','35700'],['Apr','8800','44500']]},
+   target:'12000, 21500, 35700, 44500  (all four values from one formula)',
+   accepted:['SCAN','LAMBDA'],
+   solution:'=SCAN(0, B2:B5, LAMBDA(acc, x, acc + x))',
+   hint:'A LAMBDA higher-order function that accumulates a value across the array and returns ALL intermediate results.',
+   note:'SCAN returns every intermediate accumulator value — unlike REDUCE which returns only the final. Perfect for running totals.'},
+
+  {id:'c019',entry_id:'FRM-0032',entry_name:'BYROW',entry_type:'FRM',tier:'Expert',
+   title:'Find each student\'s highest score across all four subjects',
+   context:'Test scores across 4 subjects. One formula produces one max value per student row.',
+   data:{headers:['Student','Math','Science','English','History'],rows:[['Rivera','88','92','79','85'],['Kim','74','68','91','82'],['Osei','95','87','90','93']]},
+   target:'92, 91, 95  (one value per row, from one formula)',
+   accepted:['BYROW','LAMBDA','MAP'],
+   solution:'=BYROW(B2:E4, LAMBDA(row, MAX(row)))',
+   hint:'Apply a function to every row of a range and return one result per row.',
+   note:'BYROW eliminates per-row helper columns. BYCOL is its column-wise counterpart.'},
+
+  {id:'c020',entry_id:'FRM-0033',entry_name:'GROUPBY',entry_type:'FRM',tier:'Expert',
+   title:'Sum sales by region — no PivotTable, one formula',
+   context:'Sales data with a Region column. Group and aggregate into a summary.',
+   data:{headers:['Region','Sales'],rows:[['East','14200'],['West','18800'],['East','9600'],['North','21000'],['West','13400']]},
+   target:'East/23800, North/21000, West/32200  (grouped, sorted)',
+   accepted:['GROUPBY','PIVOTBY','SUMIFS','UNIQUE'],
+   solution:'=GROUPBY(A2:A6, B2:B6, SUM)',
+   hint:'Group one column\'s values and aggregate another — the formula version of a PivotTable.',
+   note:'GROUPBY(row_fields, values, function) is new in 365 — replaces SUMIFS+UNIQUE for group summaries.'},
+
+  {id:'c021',entry_id:'FRM-0034',entry_name:'PIVOTBY',entry_type:'FRM',tier:'Expert',
+   title:'Build a region × quarter sales matrix — one formula',
+   context:'Sales data with Region and Quarter columns. Produce a cross-tab with regions as rows, quarters as columns.',
+   data:{headers:['Region','Quarter','Sales'],rows:[['East','Q1','12000'],['West','Q1','18000'],['East','Q2','15000'],['West','Q2','11000']]},
+   target:'Matrix: East/West rows × Q1/Q2 columns, values summed',
+   accepted:['PIVOTBY','GROUPBY'],
+   solution:'=PIVOTBY(A2:A5, B2:B5, C2:C5, SUM)',
+   hint:'This function takes row fields, column fields, values, and an aggregation function — like a PivotTable in one formula.',
+   note:'PIVOTBY creates a pivot-style cross-tab directly on the sheet. No dialog, no refresh button.'},
+
+  {id:'c022',entry_id:'FRM-0007',entry_name:'SORT / SORTBY',entry_type:'FRM',tier:'Intermediate',
+   title:'Sort the list alphabetically by city, but rank column stays attached',
+   context:'Site list. Sort by the City column but keep all columns together.',
+   data:{headers:['Rank','City','Zone'],rows:[['3','Denver','West'],['1','Atlanta','South'],['4','Portland','West'],['2','Cleveland','North']]},
+   target:'Atlanta/South, Cleveland/North, Denver/West, Portland/West  (sorted by city)',
+   accepted:['SORT','SORTBY'],
+   solution:'=SORT(A2:C5, 2, 1)  OR  =SORTBY(A2:C5, B2:B5, 1)',
+   hint:'Sort a multi-column range by a specific column while keeping all columns aligned.',
+   note:'SORT(array, sort_index, order) — sort_index is the column number within the array to sort by.'},
+
+  {id:'c023',entry_id:'PQ-0013',entry_name:'M Error Handling',entry_type:'PQ',tier:'Intermediate',
+   title:'In Power Query M, handle failed type conversions without crashing the query',
+   context:'A Date column contains some text values ("TBD"). Date.From() crashes on those rows.',
+   data:{headers:['Order Date','Problem'],rows:[['2026-03-15','Valid date'],['TBD','Crashes on Date.From()'],['2026-03-18','Valid date']]},
+   target:'null for "TBD", valid dates for good rows — query does not crash',
+   accepted:['TRY','OTHERWISE','ERROR'],
+   solution:'try Date.From([Order Date]) otherwise null',
+   hint:'The M language has a two-keyword construct for catching errors: one keyword tries the expression, another provides the fallback.',
+   note:'try...otherwise is M\'s error handler — catches per-row failures and substitutes a fallback without crashing the query.'},
+
+  {id:'c024',entry_id:'ANT-0001',entry_name:'Merged Cells',entry_type:'ANT',tier:'Beginner',
+   title:'Identify the anti-pattern: SUMIFS returns 0 on a range with merged header cells',
+   context:'Rows 1-2 are a merged header. SUMIFS over C3:C10 unexpectedly returns 0.',
+   data:{headers:['Finding','Detail'],rows:[['Rows 1-2:','Single merged cell spanning two rows'],['C3:C10:','Data — but SUMIFS sees row 1 only'],['SUMIFS result:','0 (wrong)']]},
+   target:'The anti-pattern name and its registry ID',
+   accepted:['MERGE','ANT-0001','MERGED CELL','MERGE CELL'],
+   solution:'ANT-0001 — Merged Cells: SUMIFS skips rows below merged cells, treating them as part of the header.',
+   hint:'What common formatting choice breaks range references, sorting, and table operations in Excel?',
+   note:'Merged cells appear in 4 of the top 5 "my formula broke" complaints. Use Center Across Selection as a visual-only alternative.'},
+
+  {id:'c025',entry_id:'ANT-0002',entry_name:'Volatile Functions',entry_type:'ANT',tier:'Intermediate',
+   title:'Identify which functions cause the workbook to recalculate on every keystroke',
+   context:'A slow workbook recalculates constantly. Audit is looking for volatile functions.',
+   data:{headers:['Formula','Volatile?'],rows:[['=SUM(A1:A100)','No'],['=NOW()','???'],['=XLOOKUP(B2,D:D,E:E)','No'],['=TODAY()','???'],['=OFFSET(A1,B2,0)','???']]},
+   target:'The volatile functions from the list',
+   accepted:['NOW','TODAY','VOLATILE','ANT-0002','OFFSET','INDIRECT','RAND'],
+   solution:'ANT-0002 — Volatile Functions: NOW(), TODAY(), and OFFSET() recalculate on ANY worksheet change, not just when their inputs change.',
+   hint:'Which functions recalculate even when none of their inputs changed?',
+   note:'Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are the leading cause of slow large workbooks.'},
+
+  {id:'c026',entry_id:'ANT-0016',entry_name:'Blanket Error Masking',entry_type:'ANT',tier:'Intermediate',
+   title:'What is the governance risk of wrapping every formula in IFERROR("")?',
+   context:'An audit found 40+ formulas using =IFERROR(<formula>, "") across the workbook.',
+   data:{headers:['Error caught','Masked as'],rows:[['#N/A  (lookup miss)','""'],['#DIV/0!  (missing data)','""'],['#REF!  (broken link)','""'],['#VALUE!  (bad load)','""']]},
+   target:'The anti-pattern name and what it silently hides',
+   accepted:['MASK','BLANKET','ANT-0016','IFERROR','ERROR MASKING'],
+   solution:'ANT-0016 — Blanket Error Masking: catches real data-failure errors alongside expected lookup misses, hiding them silently.',
+   hint:'What happens when every error — including the ones that signal real data problems — returns an empty string?',
+   note:'Use IFNA for lookup-miss-only handling. Reserve IFERROR for genuinely expected error conditions.'},
+
+  {id:'c027',entry_id:'ANT-0021',entry_name:'Legacy Lookup Reliance',entry_type:'ANT',tier:'Intermediate',
+   title:'Name the four structural limitations of VLOOKUP that XLOOKUP resolves',
+   context:'A workbook migration is flagging all =VLOOKUP() calls. The analyst wants to know why.',
+   data:{headers:['Scenario','VLOOKUP','XLOOKUP'],rows:[['Return column LEFT of lookup key','Cannot','Can'],['Exact match default','Requires 0/FALSE','Exact by default'],['Not-found handler','Needs IFERROR wrap','Built-in 4th argument'],['Column reference breaks on insert','Yes','No']]},
+   target:'ANT-0021 — and the four limitations',
+   accepted:['ANT-0021','LEGACY','VLOOKUP','XLOOKUP','LOOKUP RELIANCE'],
+   solution:'ANT-0021 — Legacy Lookup Reliance: VLOOKUP cannot look left, defaults to approximate match, has no if_not_found, and column offsets break on insert.',
+   hint:'Each row in the table above describes one limitation. Name the anti-pattern and the registry entry.',
+   note:'In Excel 365, VLOOKUP is a legacy function. The Excelligence scanner flags it as ANT-0021.'},
+
+  {id:'c028',entry_id:'FRM-0016',entry_name:'REDUCE',entry_type:'FRM',tier:'Expert',
+   title:'Concatenate all items in a column with " | " as separator using a LAMBDA accumulator',
+   context:'Build "Alpha | Beta | Gamma | Delta" from a column. TEXTJOIN would also work — but use the accumulator pattern.',
+   data:{headers:['Item'],rows:[['Alpha'],['Beta'],['Gamma'],['Delta']]},
+   target:'"Alpha | Beta | Gamma | Delta"',
+   accepted:['REDUCE','LAMBDA','TEXTJOIN'],
+   solution:'=REDUCE("", A2:A5, LAMBDA(acc, x, IF(acc="", x, acc & " | " & x)))',
+   hint:'A LAMBDA higher-order function that collapses an array to a SINGLE final value through repeated accumulation.',
+   note:'REDUCE returns ONE final value — unlike SCAN which returns all intermediates. The two are complementary.'},
+
+  {id:'c029',entry_id:'PQ-0012',entry_name:'Parameters Table',entry_type:'PQ',tier:'Intermediate',
+   title:'Reference a dynamic file path from a worksheet table inside Power Query M',
+   context:'The file path is stored in a worksheet table named "Parameters". Do not hardcode it in the query.',
+   data:{headers:['Parameter','Value'],rows:[['FilePath','C:\\Reports\\2026\\Q2.xlsx'],['StartDate','2026-04-01']]},
+   target:'M expression that reads the FilePath value from the Parameters table',
+   accepted:['PARAMETERS','TABLE','CURRENTWORKBOOK','EXCEL'],
+   solution:'Excel.CurrentWorkbook(){[Name="Parameters"]}[Content]{0}[Value]',
+   hint:'In M, use a function that accesses the current workbook\'s tables by name, then navigate to the specific cell.',
+   note:'A Parameters Table makes PQ queries operator-controlled — analysts change values on the sheet, not inside the query editor.'},
+
+  {id:'c030',entry_id:'ANT-0019',entry_name:'Over-Volatile Architecture',entry_type:'ANT',tier:'Advanced',
+   title:'Identify the systemic anti-pattern: 80% of formulas recalculate on every keystroke',
+   context:'Workbook has 2,400 formulas. 1,900 reference cells containing OFFSET or INDIRECT.',
+   data:{headers:['Formula type','Count','Recalc trigger'],rows:[['OFFSET-based lookups','840','Any change anywhere'],['INDIRECT ranges','620','Any change anywhere'],['NOW() in calculations','440','Any change anywhere'],['Non-volatile formulas','500','Only when inputs change']]},
+   target:'The anti-pattern name and the root cause',
+   accepted:['VOLATILE','ANT-0019','OVER-VOLATILE','INDIRECT','OFFSET'],
+   solution:'ANT-0019 — Over-Volatile Architecture: systemic reliance on volatile functions forces full workbook recalculation on every edit.',
+   hint:'When a workbook is built on functions that recalculate always rather than only when needed, the problem compounds with scale.',
+   note:'ANT-0019 is the workbook-scale consequence of ANT-0002. Fix: replace OFFSET with structured references, INDIRECT with named ranges.'},
+];
+
+// ── State ──────────────────────────────────────────────────────────────
+const today = new Date();
+const epochDay = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86400000);
+const challenge = CHALLENGES[epochDay % CHALLENGES.length];
+const challengeNum = epochDay % CHALLENGES.length + 1;
+
+let attempts = 0;
+const MAX_ATTEMPTS = 3;
+let solved = false;
+let revealed = false;
+
+const LS_STREAK = 'eg_daily_streak';
+const LS_LAST   = 'eg_daily_last';
+const LS_HIST   = 'eg_daily_hist';
+
+// ── Type colors ────────────────────────────────────────────────────────
+const TYPE_COLORS = {
+  FRM:{bg:'rgba(107,157,194,0.15)',color:'#6B9DC2',border:'rgba(107,157,194,0.3)'},
+  ANT:{bg:'rgba(178,53,49,0.15)',color:'#B23531',border:'rgba(178,53,49,0.3)'},
+  PQ: {bg:'rgba(74,173,173,0.15)',color:'#4AADAD',border:'rgba(74,173,173,0.3)'},
+  ARC:{bg:'rgba(138,108,201,0.15)',color:'#8a6cc9',border:'rgba(138,108,201,0.3)'},
+  CON:{bg:'rgba(196,154,60,0.15)',color:'#C49A3C',border:'rgba(196,154,60,0.3)'},
+  PTN:{bg:'rgba(74,158,107,0.15)',color:'#4A9E6B',border:'rgba(74,158,107,0.3)'},
+};
+
+function typeStyle(t) {
+  const c = TYPE_COLORS[t] || TYPE_COLORS.FRM;
+  return `background:${c.bg};color:${c.color};border:1px solid ${c.border}`;
+}
+
+// ── Init ───────────────────────────────────────────────────────────────
+function init() {
+  const dateStr = today.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+  document.getElementById('heroDate').textContent = dateStr;
+  document.getElementById('challengeNum').textContent = `Challenge #${challengeNum}`;
+
+  const badge = document.getElementById('typeBadge');
+  badge.textContent = challenge.entry_type;
+  badge.setAttribute('style', typeStyle(challenge.entry_type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:4px');
+
+  document.getElementById('tierLabel').textContent = challenge.tier;
+  document.getElementById('challengeTitle').textContent = challenge.title;
+  document.getElementById('challengeContext').textContent = challenge.context;
+  document.getElementById('targetValue').textContent = challenge.target;
+  document.getElementById('hintText').textContent = challenge.hint;
+
+  buildSheet();
+  updateAttempts();
+  loadStreak();
+  checkAlreadyPlayed();
+
+  document.getElementById('formulaInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !solved && !revealed) submitAnswer();
+  });
+}
+
+function buildSheet() {
+  const d = challenge.data;
+  let html = '<table class="sheet"><thead><tr><th class="row-header"></th>';
+  d.headers.forEach((_, i) => {
+    html += `<th>${String.fromCharCode(65 + i)}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+  // Header row (row 1)
+  html += '<tr><td class="row-num">1</td>';
+  d.headers.forEach(h => { html += `<td class="header-cell">${h}</td>`; });
+  html += '</tr>';
+  // Data rows
+  d.rows.forEach((row, ri) => {
+    html += `<tr><td class="row-num">${ri + 2}</td>`;
+    row.forEach(cell => { html += `<td>${cell}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('sheetWrap').innerHTML = html;
+}
+
+function updateAttempts() {
+  const left = MAX_ATTEMPTS - attempts;
+  document.getElementById('attemptsLeft').textContent = `${left} attempt${left !== 1 ? 's' : ''} remaining`;
+}
+
+// ── Streak ─────────────────────────────────────────────────────────────
+function todayKey() {
+  return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+}
+
+function loadStreak() {
+  const streak = parseInt(localStorage.getItem(LS_STREAK) || '0', 10);
+  if (streak > 0) {
+    document.getElementById('streakCount').textContent = streak;
+    document.getElementById('streakBadge').style.display = 'flex';
+  }
+}
+
+function updateStreak(won) {
+  const lastPlayed = localStorage.getItem(LS_LAST);
+  const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayKey = `${yesterday.getFullYear()}-${yesterday.getMonth()}-${yesterday.getDate()}`;
+  let streak = parseInt(localStorage.getItem(LS_STREAK) || '0', 10);
+
+  if (won) {
+    if (lastPlayed === yesterdayKey || lastPlayed === todayKey()) {
+      streak = lastPlayed === todayKey() ? streak : streak + 1;
+    } else {
+      streak = 1;
+    }
+  } else {
+    streak = 0;
+  }
+
+  localStorage.setItem(LS_STREAK, streak);
+  localStorage.setItem(LS_LAST, todayKey());
+
+  if (streak > 0) {
+    document.getElementById('streakCount').textContent = streak;
+    document.getElementById('streakBadge').style.display = 'flex';
+  } else {
+    document.getElementById('streakBadge').style.display = 'none';
+  }
+}
+
+function checkAlreadyPlayed() {
+  const hist = JSON.parse(localStorage.getItem(LS_HIST) || '[]');
+  const prev = hist.find(h => h.date === todayKey());
+  if (prev) {
+    solved = prev.solved;
+    revealed = true;
+    attempts = prev.attempts;
+    updateAttempts();
+    document.getElementById('formulaInput').disabled = true;
+    document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('btnHint').style.display = 'none';
+    document.getElementById('btnGiveUp').style.display = 'none';
+    showReveal();
+    showShare(prev.solved, prev.attempts);
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback visible ' + (prev.solved ? 'correct' : 'wrong');
+    fb.textContent = prev.solved
+      ? `Already solved today — ${prev.attempts} attempt${prev.attempts !== 1 ? 's' : ''}. Come back tomorrow!`
+      : "Already played today. Come back tomorrow for a new challenge.";
+  }
+}
+
+// ── Submit ─────────────────────────────────────────────────────────────
+function submitAnswer() {
+  if (solved || revealed) return;
+  const raw = document.getElementById('formulaInput').value.trim();
+  if (!raw) return;
+
+  const normalized = raw.replace(/^=/, '').toUpperCase().replace(/\s+/g, '');
+  const isCorrect = challenge.accepted.some(kw => normalized.includes(kw.toUpperCase().replace(/\s+/g, '')));
+
+  attempts++;
+  updateAttempts();
+
+  const input = document.getElementById('formulaInput');
+  const fb = document.getElementById('feedback');
+
+  if (isCorrect) {
+    solved = true;
+    revealed = true;
+    input.classList.add('correct');
+    input.disabled = true;
+    document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('btnHint').style.display = 'none';
+    document.getElementById('btnGiveUp').style.display = 'none';
+    fb.className = 'feedback visible correct';
+    fb.textContent = attempts === 1 ? '✓ Correct! First try.' : `✓ Correct in ${attempts} ${attempts === 1 ? 'try' : 'tries'}.`;
+    showReveal();
+    showShare(true, attempts);
+    saveHistory(true);
+    updateStreak(true);
+  } else {
+    input.classList.add('wrong');
+    setTimeout(() => input.classList.remove('wrong'), 500);
+    fb.className = 'feedback visible wrong';
+
+    if (attempts >= MAX_ATTEMPTS) {
+      fb.textContent = `Not quite — the accepted answer uses: ${challenge.solution.split('=')[1] ? challenge.solution.substring(0, 30) + '…' : challenge.solution.substring(0, 30) + '…'}`;
+      revealed = true;
+      input.disabled = true;
+      document.getElementById('btnSubmit').disabled = true;
+      document.getElementById('btnHint').style.display = 'none';
+      document.getElementById('btnGiveUp').style.display = 'none';
+      showReveal();
+      showShare(false, attempts);
+      saveHistory(false);
+      updateStreak(false);
+    } else {
+      fb.textContent = attempts === 1 ? 'Not quite. Try again — or show a hint.' : 'Still not right. One more attempt before reveal.';
+      document.getElementById('btnHint').classList.add('visible');
+    }
+  }
+}
+
+function showHint() {
+  document.getElementById('hintBox').classList.add('visible');
+}
+
+function giveUp() {
+  revealed = true;
+  document.getElementById('formulaInput').disabled = true;
+  document.getElementById('btnSubmit').disabled = true;
+  document.getElementById('btnHint').style.display = 'none';
+  document.getElementById('btnGiveUp').style.display = 'none';
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback visible wrong';
+  fb.textContent = 'Revealed. Study the entry and try again tomorrow.';
+  showReveal();
+  showShare(false, attempts);
+  saveHistory(false);
+  updateStreak(false);
+}
+
+// ── Reveal ─────────────────────────────────────────────────────────────
+function showReveal() {
+  const card = document.getElementById('revealCard');
+  card.classList.add('visible');
+
+  const badge = document.getElementById('revealBadge');
+  badge.textContent = challenge.entry_type;
+  badge.setAttribute('style', typeStyle(challenge.entry_type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px');
+
+  document.getElementById('revealId').textContent = challenge.entry_id;
+  document.getElementById('revealName').textContent = challenge.entry_name;
+  document.getElementById('revealTier').textContent = `Tier: ${challenge.tier}`;
+  document.getElementById('revealSolution').textContent = challenge.solution;
+  document.getElementById('revealNote').innerHTML = challenge.note;
+
+  const slug = challenge.entry_id.toLowerCase().replace('-', '-');
+  document.getElementById('revealLink').href = `/learn/${slug}/`;
+}
+
+// ── Share ──────────────────────────────────────────────────────────────
+function showShare(won, att) {
+  const dateStr = today.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  let squares = '';
+  for (let i = 0; i < att - (won ? 1 : 0); i++) squares += '🟨';
+  if (won) squares += '🟩';
+  else squares += '🟥';
+
+  const text = `Daily Grid #${challengeNum} — ${dateStr}\n${squares}\n\nexcelligence.dev/daily`;
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareSection').classList.add('visible');
+}
+
+function copyShare() {
+  const text = document.getElementById('shareText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const msg = document.getElementById('copiedMsg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2000);
+  });
+}
+
+// ── History ────────────────────────────────────────────────────────────
+function saveHistory(won) {
+  const hist = JSON.parse(localStorage.getItem(LS_HIST) || '[]');
+  const existing = hist.findIndex(h => h.date === todayKey());
+  const entry = {date: todayKey(), solved: won, attempts, challengeNum};
+  if (existing >= 0) hist[existing] = entry; else hist.push(entry);
+  if (hist.length > 90) hist.splice(0, hist.length - 90);
+  localStorage.setItem(LS_HIST, JSON.stringify(hist));
+}
+
+init();
+</script>
+</body>
+</html>
