@@ -1,6 +1,6 @@
 # excelligence.dev
 # ProductManifest v2.0
-# Last updated: 2026-03-22
+# Last updated: 2026-07-22
 # Classification: ProductManifest
 # Parent: dropdownlogistics.com/llms.txt (OperatorManifest v2.0)
 # Graph explorer: /explorer/
@@ -10,7 +10,7 @@
 ## WHAT IS EXCELLIGENCE
 
 Excelligence is a governed knowledge graph for Excel intelligence.
-105 entries. 228 typed edges. 4 skill tiers. 7 entry types.
+123 entries. 337 typed edges. 4 skill tiers. 7 entry types.
 Schema locked by unanimous 9-model council review. Zero REJECT. Zero REVISE.
 
 It is not a glossary. Not a tutorial. Not a content volume.
@@ -33,34 +33,34 @@ github: dropdownlogistics/excelligence
 methodology: Chaos -> Structured -> Automated
 design_system: CottageHumble ("Humble surface. Cathedral underneath.")
 schema_version: v0.2.0
-status: Live -- graph explorer deployed, 105 entries, growing
+status: Live -- graph explorer deployed, 123 entries, growing
 
 ## REGISTRY STATE
 
-entries: 105
-edges: 228
+entries: 123
+edges: 337
 schema_version: v0.2.0
 council_verdict: v0.2 READY WITH CONDITIONS (9/9 unanimous)
 
 entry_types:
-  FRM: 22  -- Formula
-  PTN: 15  -- Pattern
-  ARC:  8  -- Architecture
-  ANT:  8  -- Anti-Pattern
-  CON:  9  -- Convention
-  PQ:   7  -- Power Query
-  KEY:  6  -- Shortcut
+  FRM: 33  -- Formula
+  PTN: 19  -- Pattern
+  ARC: 15  -- Architecture
+  ANT: 21  -- Anti-Pattern
+  CON: 12  -- Convention
+  PQ:  15  -- Power Query
+  KEY:  8  -- Shortcut
 
 skill_tiers:
-  Beginner:     19 entries
-  Intermediate: 28 entries
-  Advanced:     23 entries
-  Expert:        5 entries
+  Beginner:     31 entries
+  Intermediate: 46 entries
+  Advanced:     33 entries
+  Expert:       13 entries
 
 edge_types:
-  LEADS_TO:   54
-  DEPENDS_ON: 33
-  PAIRS_WITH: 31
+  LEADS_TO:   131
+  DEPENDS_ON:  81
+  PAIRS_WITH: 125
 
 ## SCHEMA
 
@@ -95,11 +95,17 @@ Public. Consumable by any tool, model, or integration.
 /explorer/              Graph Explorer (force-directed, Explore + Path Finder)
 /radial/                Radial Map (4-ring tier layout, animated drift)
 /paths/                 Learning Paths (Your First Hour, Star Schema Path)
+/daily/                 Daily Grid -- date-seeded formula challenge, streaks, share
+/placement/             Placement Engine -- diagnostic quiz, tier placement, BFS path
+/formulalab/            FormulaLab -- guided challenges with registry citations
+/scanner/               Anti-pattern Scanner (paste formula, get ANT citations)
+/gridtactics/           GridTactics -- chess-tier Excel game mechanic
 /tools/                 Tools hub
 /tools/cf-patterns/     CF Pattern Library (10 patterns, copy-ready formulas)
 /standards/excel-001/   STD-EXCEL-001 -- Analytical Workbook Standard (9 rules)
 /standards/excel-002/   STD-EXCEL-002 -- Operational Workbook Standard (8 rules)
 /api/excelligence.json  Registry export (full graph)
+/mcp/                   MCP Server -- 4 tools callable from any AI session
 
 ## BRAND
 
@@ -128,7 +134,7 @@ fonts: Space Grotesk (display), JetBrains Mono (data), Source Serif 4 (body)
 ## GOVERNANCE
 
 Schema locked: CR-EXCEL-001, unanimous, D-001 through D-028
-v0.2 conditions met: difficulty_score, usage_frequency, excel_version on all 105 entries
+v0.2 conditions met: difficulty_score, usage_frequency, excel_version on all 123 entries
 Connor's threshold: "If it survives 50 entries, it's real." -- Passed.
 Rowan Bennett (Seat 1005): "The graph is the cathedral. Everything else is scaffolding."
 
