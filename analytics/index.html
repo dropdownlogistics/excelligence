@@ -260,7 +260,7 @@ nav{
   <div class="hero">
     <div class="hero-label">Registry Analytics</div>
     <h1>The Graph<br><span>Knows Itself</span></h1>
-    <p class="hero-sub">Live diagnostics on the registry â€” density, distribution, topology, and health. The system audits itself so you know where to build next.</p>
+    <p class="hero-sub">Live diagnostics on the registry — density, distribution, topology, and health. The system audits itself so you know where to build next.</p>
     <div class="hero-meta" id="hero-meta">
       <span>Loading registryâ€¦</span>
     </div>
@@ -324,7 +324,7 @@ nav{
     <div class="two-col section">
       <div class="card">
         <div class="card-label">Low-Connectivity Entries</div>
-        <div class="section-title" style="font-size:0.85rem;margin-bottom:16px;color:var(--steel);font-weight:400">Entries with 1 or fewer edges â€” registry gaps</div>
+        <div class="section-title" style="font-size:0.85rem;margin-bottom:16px;color:var(--steel);font-weight:400">Entries with 1 or fewer edges — registry gaps</div>
         <div class="orphan-list" id="orphan-list"></div>
       </div>
       <div class="card">
@@ -341,7 +341,7 @@ nav{
       Data source: /excelligence.json<br>
       A Dropdown Logistics product &middot; excelligence.dev
     </div>
-    <div class="footer-right" id="footer-meta">â€”</div>
+    <div class="footer-right" id="footer-meta">—</div>
   </div>
 
 </div><!-- /page -->
@@ -640,7 +640,7 @@ function render(data) {
   const orphanList = document.getElementById('orphan-list');
   const lowConn = Object.entries(edgeCount).filter(([,c])=>c<=1).slice(0,8);
   if(lowConn.length===0) {
-    orphanList.innerHTML = `<div class="orphan-empty">No orphaned entries â€” all nodes connected</div>`;
+    orphanList.innerHTML = `<div class="orphan-empty">No orphaned entries — all nodes connected</div>`;
   } else {
     lowConn.forEach(([id, cnt]) => {
       const entry = entries.find(e=>e.id===id);

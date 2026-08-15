@@ -275,7 +275,7 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
   <div class="hero">
     <div class="hero-label">Anti-Pattern Scanner</div>
     <h1>Paste a formula.<br>Get a <span>governed</span> diagnosis.</h1>
-    <p class="hero-sub">Describe your workbook problem or paste a formula. The scanner checks it against the Excelligence registry and returns findings â€” each one cited to a governed entry with a rationale and alternative.</p>
+    <p class="hero-sub">Describe your workbook problem or paste a formula. The scanner checks it against the Excelligence registry and returns findings — each one cited to a governed entry with a rationale and alternative.</p>
     <div class="coverage-badge">
       <div class="coverage-dot"></div>
 
@@ -339,7 +339,7 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
   <div class="input-section">
     <div class="input-label">
       Your Formula or Workbook Description
-      <span>Plain English or raw formula â€” both work</span>
+      <span>Plain English or raw formula — both work</span>
     </div>
     <div class="input-wrap">
       <textarea
@@ -359,7 +359,7 @@ textarea::placeholder{color:var(--steel);opacity:0.6}
       <div class="pill" data-example="I use merged cells for my headers and hide rows to filter data instead of using AutoFilter.">Merged cells + hidden rows</div>
       <div class="pill" data-example="=IF(A2=1,&quot;Low&quot;,IF(A2=2,&quot;Medium&quot;,IF(A2=3,&quot;High&quot;,IF(A2=4,&quot;Critical&quot;,&quot;Unknown&quot;))))">Nested IFs</div>
       <div class="pill" data-example="My commission rate of 0.035 is hardcoded in 47 different cells across 6 sheets.">Hardcoded values</div>
-      <div class="pill" data-example="I color rows red, yellow, or green to show status. There's no status column â€” just the colors.">Color as data</div>
+      <div class="pill" data-example="I color rows red, yellow, or green to show status. There's no status column — just the colors.">Color as data</div>
     </div>
   </div>
 
@@ -384,10 +384,10 @@ fetch('/api/excelligence.json')
   .then(r => r.json())
   .then(data => {
     const antCount = data.entries.filter(e => e.type === 'ANT').length;
-    coverageText.textContent = `Checking against ${antCount} governed anti-patterns Â· Registry v0.2`;
+    coverageText.textContent = `Checking against ${antCount} governed anti-patterns · Registry v0.2`;
   })
   .catch(() => {
-    coverageText.textContent = 'Registry connected Â· Anti-Pattern Scanner';
+    coverageText.textContent = 'Registry connected · Anti-Pattern Scanner';
   });
 
 // â”€â”€ Char counter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
