@@ -26,7 +26,7 @@ Not a glossary. Not a tutorial. A knowledge graph you can traverse.
 | Tools Hub | `/tools/` |
 | STD-EXCEL-001 | `/standards/excel-001/` |
 | STD-EXCEL-002 | `/standards/excel-002/` |
-| Registry Export | `/api/excelligence.json` |
+| Registry Export | `/excelligence.json` |
 
 ## Registry
 
@@ -63,7 +63,7 @@ Not a glossary. Not a tutorial. A knowledge graph you can traverse.
 Static JSON export of the full registry:
 
 ```
-/api/excelligence.json
+/excelligence.json
 ```
 
 Public. Consumable by any tool, model, or integration.

@@ -101,6 +101,12 @@ def export_json(registry_path, output_path):
         "aliases": aliases,
     }
 
+    # The workbook holds text that was pasted in already garbled ("â†’" for "→"). Repair every string
+    # on the way out, so a re-export can't bring it back (api/mojibake.py, 2026-09-27).
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from mojibake import repair
+    output = repair(output)
+
     os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else ".", exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)

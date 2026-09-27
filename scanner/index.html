@@ -380,10 +380,13 @@ const results = document.getElementById('results');
 const coverageText = document.getElementById('coverage-text');
 
 // â”€â”€ Load coverage count â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-fetch('/api/excelligence.json')
-  .then(r => r.json())
+let ANT_TOTAL = null;  // real ANT count from the registry; set below
+
+fetch('/excelligence.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(data => {
-    const antCount = data.entries.filter(e => e.type === 'ANT').length;
+    const antCount = (data.entries || []).filter(e => e.type === 'ANT').length;
+    ANT_TOTAL = antCount;
     coverageText.textContent = `Checking against ${antCount} governed anti-patterns · Registry v0.2`;
   })
   .catch(() => {
@@ -408,6 +411,19 @@ document.querySelectorAll('.pill').forEach(pill => {
 });
 
 // â”€â”€ Severity color â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Everything below comes from the model via /api/scan: treat it as untrusted text.
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// Severity is whitelisted: it becomes part of a class name.
+function sevName(sev) {
+  const s = String(sev || '').toLowerCase();
+  return s === 'high' ? 'High' : s === 'medium' ? 'Medium' : 'Low';
+}
+
 function sevClass(sev) {
   if (!sev) return '';
   const s = sev.toLowerCase();
@@ -424,14 +440,14 @@ function renderResults(data) {
     results.innerHTML = `
       <div class="error-card">
         <div class="error-label">Scanner Error</div>
-        <div class="error-text">${data.error}</div>
+        <div class="error-text">${esc(data.error)}</div>
       </div>`;
     return;
   }
 
   const findingCount = (data.findings || []).length;
   const isClean = data.clean || findingCount === 0;
-  const coverage = data.coverage || 0;
+  const coverage = Math.max(0, parseInt(data.coverage, 10) || 0);
 
   // Header
   results.innerHTML = `
@@ -447,41 +463,43 @@ function renderResults(data) {
     summaryCard.className = `summary-card ${isClean ? 'clean' : 'findings'}`;
     summaryCard.innerHTML = `
       <div class="summary-label">${isClean ? 'Diagnosis' : 'Summary'}</div>
-      <div class="summary-text">${data.summary}</div>
+      <div class="summary-text">${esc(data.summary)}</div>
     `;
     results.appendChild(summaryCard);
   }
 
   // Findings
-  if (!isClean && data.findings) {
+  if (!isClean && Array.isArray(data.findings)) {
     data.findings.forEach(f => {
+      f = f || {};
+      const sev = sevName(f.severity);
       const card = document.createElement('div');
-      card.className = `finding sev-${f.severity}`;
+      card.className = `finding sev-${sev.toLowerCase()}`;
       card.innerHTML = `
         <div class="finding-header">
-          <div class="finding-id">${f.id}</div>
-          <div class="finding-name">${f.name}</div>
-          <div class="sev-badge sev-${f.severity}">${f.severity}</div>
+          <div class="finding-id">${esc(f.id)}</div>
+          <div class="finding-name">${esc(f.name)}</div>
+          <div class="sev-badge sev-${sev}">${sev}</div>
         </div>
         <div class="finding-body">
           <div class="finding-row">
             <div class="finding-row-label">Finding</div>
-            <div class="finding-row-text">${f.finding}</div>
+            <div class="finding-row-text">${esc(f.finding)}</div>
           </div>
           <div class="finding-row">
             <div class="finding-row-label">Alternative</div>
-            <div class="finding-row-text">${f.governed_alternative}</div>
+            <div class="finding-row-text">${esc(f.governed_alternative)}</div>
           </div>
           ${f.governance_note ? `
           <div class="finding-row">
             <div class="finding-row-label">Governance</div>
-            <div class="finding-row-text">${f.governance_note}</div>
+            <div class="finding-row-text">${esc(f.governance_note)}</div>
           </div>` : ''}
           <div class="finding-row">
             <div class="finding-row-label">Registry</div>
             <div class="finding-row-text">
-              <a class="finding-link" href="/explorer/#${f.id}" target="_blank">
-                View ${f.id} in graph &rarr;
+              <a class="finding-link" href="/explorer/#${encodeURIComponent(String(f.id || ''))}" target="_blank" rel="noopener">
+                View ${esc(f.id)} in graph &rarr;
               </a>
             </div>
           </div>
@@ -492,8 +510,8 @@ function renderResults(data) {
   }
 
   // Coverage footer
-  const totalEntries = 93;
-  const covPct = Math.round(coverage / totalEntries * 100);
+  const antTotal = ANT_TOTAL || coverage;  // registry ANT count; falls back to the reported coverage
+  const covPct = antTotal ? Math.min(100, Math.round(coverage / antTotal * 100)) : 0;
   const footer = document.createElement('div');
   footer.className = 'coverage-footer';
   footer.innerHTML = `
@@ -503,7 +521,7 @@ function renderResults(data) {
         <div class="cov-bar" style="width:0%" id="cov-bar"></div>
       </div>
     </div>
-    <div class="cov-right">${coverage} / ${totalEntries} entries<br>ANT layer only</div>
+    <div class="cov-right">${coverage} / ${antTotal} ANT entries<br>ANT layer only</div>
   `;
   results.appendChild(footer);
   setTimeout(() => {
