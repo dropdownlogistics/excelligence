@@ -258,7 +258,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
       <div class="reveal-tier" id="revealTier"></div>
       <div class="solution-line" id="revealSolution"></div>
       <div class="reveal-note" id="revealNote"></div>
-      <a class="reveal-link" href="/learn/" id="revealLink">View registry entry →</a>
+      <a class="reveal-link" href="/explorer/" id="revealLink">View registry entry →</a>
     </div>
     <div class="share-section" id="shareSection">
       <div class="share-result" id="shareText"></div>
@@ -269,8 +269,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,27,42,0.95);backdrop-fi
 </div>
 
 <script>
+// Each challenge names its registry entry by id only; name, type and tier are
+// read from /excelligence.json at load (single source of truth).
 const CHALLENGES = [
-  {id:'c001',entry_id:'FRM-0001',entry_name:'XLOOKUP',entry_type:'FRM',tier:'Intermediate',
+  {id:'c001',entry_id:'FRM-0001',  // XLOOKUP
    title:'Find the unit price for "Bearing Assembly"',
    context:'Parts catalog. Find the price for a specific part name.',
    data:{headers:['Part Name','Unit Price'],rows:[['Valve Seal','$4.20'],['Bearing Assembly','$11.75'],['Gasket Kit','$6.50'],['Drive Shaft','$38.00']]},
@@ -280,7 +282,7 @@ const CHALLENGES = [
    hint:'Look up a value in one column and return the corresponding value from another column in the same row.',
    note:'XLOOKUP is the modern replacement for VLOOKUP — cleaner syntax, returns values to the left, has a built-in if-not-found argument.'},
 
-  {id:'c002',entry_id:'FRM-0003',entry_name:'FILTER',entry_type:'FRM',tier:'Intermediate',
+  {id:'c002',entry_id:'FRM-0005',  // FILTER
    title:'Return only the East region rows',
    context:'Regional inventory with three columns. Show only East region entries.',
    data:{headers:['Part','Region','Qty'],rows:[['Valve','East','120'],['Gasket','West','85'],['Bearing','East','200'],['Seal','North','60']]},
@@ -290,7 +292,7 @@ const CHALLENGES = [
    hint:'Extract only the rows where a condition is true — the result spills automatically.',
    note:'FILTER returns a spilled array of all matching rows — no helper columns, no Ctrl+Shift+Enter.'},
 
-  {id:'c003',entry_id:'FRM-0004',entry_name:'UNIQUE',entry_type:'FRM',tier:'Intermediate',
+  {id:'c003',entry_id:'FRM-0008',  // UNIQUE
    title:'List each department exactly once',
    context:'Employee list with repeated departments. Extract the distinct names.',
    data:{headers:['Employee','Department'],rows:[['Reyes','Engineering'],['Park','Finance'],['Osei','Engineering'],['Torres','HR'],['Kim','Finance']]},
@@ -300,7 +302,7 @@ const CHALLENGES = [
    hint:'Deduplicate a column — one formula, no Remove Duplicates.',
    note:'UNIQUE spills a deduplicated list. Combine with SORT to get an alphabetical unique list.'},
 
-  {id:'c004',entry_id:'FRM-0009',entry_name:'SUMIFS',entry_type:'FRM',tier:'Beginner',
+  {id:'c004',entry_id:'FRM-0011',  // COUNTIFS/SUMIFS
    title:'Total Q2 sales for the West region only',
    context:'Sales log by quarter and region. Two conditions must both be true.',
    data:{headers:['Quarter','Region','Sales'],rows:[['Q1','West','14200'],['Q2','East','18500'],['Q2','West','22100'],['Q3','West','9800'],['Q2','West','16400']]},
@@ -310,7 +312,7 @@ const CHALLENGES = [
    hint:'Sum a column, but only where two other columns match specific values.',
    note:'SUMIFS is the workhorse of analytical worksheets — multiple criteria, one formula.'},
 
-  {id:'c005',entry_id:'FRM-0010',entry_name:'COUNTIFS',entry_type:'FRM',tier:'Beginner',
+  {id:'c005',entry_id:'FRM-0011',  // COUNTIFS/SUMIFS
    title:'Count inspections that are both PASS and High priority',
    context:'Inspection log. Two columns must match simultaneously.',
    data:{headers:['Inspector','Result','Priority'],rows:[['Walsh','PASS','High'],['Diaz','FAIL','High'],['Walsh','PASS','Low'],['Chen','PASS','High'],['Diaz','PASS','High']]},
@@ -320,7 +322,7 @@ const CHALLENGES = [
    hint:'Count rows where two columns both match conditions.',
    note:'COUNTIFS is COUNTIF with multiple criteria — no array formula needed.'},
 
-  {id:'c006',entry_id:'FRM-0015',entry_name:'LET',entry_type:'FRM',tier:'Intermediate',
+  {id:'c006',entry_id:'FRM-0002',  // LET
    title:'Calculate net margin % without repeating the revenue sub-expression',
    context:'Revenue = 80000, Cost = 52000. Net = Revenue − Cost. Margin% = Net / Revenue. Assign intermediate values inside one formula.',
    data:{headers:['Product','Revenue','Cost'],rows:[['Alpha','80000','52000']]},
@@ -330,7 +332,7 @@ const CHALLENGES = [
    hint:'Name intermediate results inside the formula to avoid repeating the same sub-expression.',
    note:'LET assigns names to interim values — cleaner and faster than repeating the same calculation three times.'},
 
-  {id:'c007',entry_id:'FRM-0025',entry_name:'IFERROR',entry_type:'FRM',tier:'Beginner',
+  {id:'c007',entry_id:'FRM-0025',  // IFERROR
    title:'Return "" instead of #N/A when the lookup finds no match',
    context:'Parts lookup. Some IDs have no entry in the catalog. The formula currently returns #N/A.',
    data:{headers:['Part ID','Lookup Result'],rows:[['P-001','Valve Seal'],['P-099','#N/A'],['P-003','Bearing']]},
@@ -340,7 +342,7 @@ const CHALLENGES = [
    hint:'Wrap the formula to catch errors and return something clean instead.',
    note:'IFERROR catches all errors. For #N/A specifically, IFNA is more precise — it leaves real errors visible.'},
 
-  {id:'c008',entry_id:'FRM-0014',entry_name:'SEQUENCE',entry_type:'FRM',tier:'Intermediate',
+  {id:'c008',entry_id:'FRM-0017',  // SEQUENCE
    title:'Generate the numbers 1 through 8 without dragging a fill handle',
    context:'Dynamic numbering. One formula, spills downward automatically.',
    data:{headers:['Target output (spills from one formula cell):'],rows:[['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8']]},
@@ -350,7 +352,7 @@ const CHALLENGES = [
    hint:'Generate a numbered list — no fill handle, no manual entry.',
    note:'SEQUENCE(rows, [cols], [start], [step]) is the building block for most array-formula indexing.'},
 
-  {id:'c009',entry_id:'FRM-0022',entry_name:'TEXTJOIN',entry_type:'FRM',tier:'Intermediate',
+  {id:'c009',entry_id:'FRM-0014',  // TEXTJOIN
    title:'Combine all city names with ", " between them in one formula',
    context:'Site list. Produce a single comma-separated string from a column of cities.',
    data:{headers:['Site','City'],rows:[['S-1','Denver'],['S-2','Atlanta'],['S-3','Portland'],['S-4','Cleveland']]},
@@ -360,7 +362,7 @@ const CHALLENGES = [
    hint:'Join multiple text values with a separator, ignoring any blank cells.',
    note:'TEXTJOIN accepts a range — no need to & each cell individually.'},
 
-  {id:'c010',entry_id:'FRM-0001',entry_name:'XLOOKUP',entry_type:'FRM',tier:'Intermediate',
+  {id:'c010',entry_id:'FRM-0001',  // XLOOKUP
    title:'Look up vendor rating, return "Unknown" if the vendor is not in the list',
    context:'Vendor registry. Some PO vendors have not yet been rated.',
    data:{headers:['Vendor','Rating'],rows:[['Acme Supply','A'],['Global Parts','B+'],['FastShip Co','A-']]},
@@ -370,7 +372,7 @@ const CHALLENGES = [
    hint:'This function has a built-in argument for what to return when nothing matches — no IFERROR wrapper needed.',
    note:"XLOOKUP's 4th argument is the if_not_found value. Cleaner than wrapping VLOOKUP in IFERROR."},
 
-  {id:'c011',entry_id:'FRM-0003',entry_name:'FILTER',entry_type:'FRM',tier:'Intermediate',
+  {id:'c011',entry_id:'FRM-0005',  // FILTER
    title:'Show Q3 orders over $5,000 only',
    context:'Order log. Two conditions must both be true: Q3 AND amount above threshold.',
    data:{headers:['Order','Quarter','Amount'],rows:[['ORD-101','Q3','6200'],['ORD-102','Q2','8100'],['ORD-103','Q3','3400'],['ORD-104','Q3','7700'],['ORD-105','Q1','5500']]},
@@ -380,7 +382,7 @@ const CHALLENGES = [
    hint:'FILTER can handle multiple conditions — multiply Boolean arrays for AND logic.',
    note:'Multiplying Boolean arrays inside FILTER creates AND conditions. Adding (+) creates OR.'},
 
-  {id:'c012',entry_id:'FRM-0007',entry_name:'SORT',entry_type:'FRM',tier:'Intermediate',
+  {id:'c012',entry_id:'FRM-0007',  // SORT
    title:'Sort the score list from highest to lowest score',
    context:'Leaderboard. Sort without rearranging the original data — the sorted view spills from one formula.',
    data:{headers:['Name','Score'],rows:[['Rivera','82'],['Pham','91'],['Osei','74'],['Walsh','95'],['Kim','87']]},
@@ -390,7 +392,7 @@ const CHALLENGES = [
    hint:'Sort a range by a specific column. The third argument controls direction: 1 = ascending, -1 = descending.',
    note:'SORT(array, sort_index, sort_order) — non-destructive sort that leaves the original data untouched.'},
 
-  {id:'c013',entry_id:'FRM-0023',entry_name:'VSTACK',entry_type:'FRM',tier:'Advanced',
+  {id:'c013',entry_id:'FRM-0016',  // HSTACK/VSTACK
    title:'Stack the Q1 and Q2 tables into one continuous list',
    context:'Two quarterly tables exist as separate named ranges. Combine them vertically into one array.',
    data:{headers:['Q1 table','Q2 table'],rows:[['Alpha / 120','Alpha / 145'],['Beta / 88','Beta / 102']]},
@@ -400,7 +402,7 @@ const CHALLENGES = [
    hint:'Combine two ranges vertically — rows from the second argument are appended below the first.',
    note:'VSTACK and HSTACK replaced complex INDIRECT tricks for combining non-contiguous ranges in 365.'},
 
-  {id:'c014',entry_id:'FRM-0021',entry_name:'SUMPRODUCT',entry_type:'FRM',tier:'Advanced',
+  {id:'c014',entry_id:'FRM-0006',  // SUMPRODUCT
    title:'Calculate a weighted average from scores and weights columns',
    context:'Three categories with different weights. Weighted avg = Σ(score × weight) / Σ(weights).',
    data:{headers:['Category','Score','Weight'],rows:[['Safety','88','0.40'],['Quality','92','0.35'],['Delivery','79','0.25']]},
@@ -410,7 +412,7 @@ const CHALLENGES = [
    hint:'Multiply two arrays element-by-element, then sum the products — that is the numerator of the weighted average.',
    note:'SUMPRODUCT(array1, array2) multiplies corresponding elements and returns their sum — no Ctrl+Shift+Enter.'},
 
-  {id:'c015',entry_id:'FRM-0018',entry_name:'INDEX / MATCH',entry_type:'FRM',tier:'Intermediate',
+  {id:'c015',entry_id:'FRM-0003',  // INDEX/MATCH
    title:'Find the certification level for inspector "Walsh"',
    context:'Inspector registry. Return the Cert Level column value for a matching name.',
    data:{headers:['Inspector','Zone','Cert Level'],rows:[['Chen','North','Level 2'],['Walsh','East','Level 3'],['Reyes','West','Level 1']]},
@@ -420,7 +422,7 @@ const CHALLENGES = [
    hint:'Find the row position of the name first, then use that position to retrieve the value from a different column.',
    note:'INDEX/MATCH: MATCH finds the row number, INDEX uses it. Pre-XLOOKUP gold standard — still valid when XLOOKUP is unavailable.'},
 
-  {id:'c016',entry_id:'FRM-0014',entry_name:'SEQUENCE',entry_type:'FRM',tier:'Intermediate',
+  {id:'c016',entry_id:'FRM-0017',  // SEQUENCE
    title:'Generate a 3×4 grid of sequential numbers starting at 1',
    context:'Create a 3-column, 4-row numbered grid from a single formula.',
    data:{headers:['Expected output (spilled 4 rows × 3 cols):'],rows:[['1','2','3'],['4','5','6'],['7','8','9'],['10','11','12']]},
@@ -430,7 +432,7 @@ const CHALLENGES = [
    hint:'SEQUENCE has optional arguments for rows and columns — it can produce a 2D array.',
    note:'SEQUENCE(rows, cols, start, step) — all optional after the first. Perfect for building reference grids.'},
 
-  {id:'c017',entry_id:'FRM-0029',entry_name:'LAMBDA',entry_type:'FRM',tier:'Advanced',
+  {id:'c017',entry_id:'FRM-0004',  // LAMBDA
    title:'Define a reusable COMMISSION function: sales × rate',
    context:'Commission = sales × rate. Write it once in Name Manager, call it as =COMMISSION(sales, rate) anywhere.',
    data:{headers:['Sales','Rate','Commission'],rows:[['42000','0.08','3360'],['61000','0.06','3660']]},
@@ -440,7 +442,7 @@ const CHALLENGES = [
    hint:'Define a function with parameters inside the formula itself — no VBA, no module.',
    note:'LAMBDA enables user-defined functions in Excel without VBA. Store in Name Manager, call like a built-in.'},
 
-  {id:'c018',entry_id:'FRM-0031',entry_name:'SCAN',entry_type:'FRM',tier:'Expert',
+  {id:'c018',entry_id:'FRM-0031',  // SCAN
    title:'Build a running total column from a single formula',
    context:'Monthly spend. Running total accumulates each month. The entire column from one formula — no fill handle.',
    data:{headers:['Month','Spend','Running Total'],rows:[['Jan','12000','12000'],['Feb','9500','21500'],['Mar','14200','35700'],['Apr','8800','44500']]},
@@ -450,7 +452,7 @@ const CHALLENGES = [
    hint:'A LAMBDA higher-order function that accumulates a value across the array and returns ALL intermediate results.',
    note:'SCAN returns every intermediate accumulator value — unlike REDUCE which returns only the final. Perfect for running totals.'},
 
-  {id:'c019',entry_id:'FRM-0032',entry_name:'BYROW',entry_type:'FRM',tier:'Expert',
+  {id:'c019',entry_id:'FRM-0032',  // BYROW
    title:'Find each student\'s highest score across all four subjects',
    context:'Test scores across 4 subjects. One formula produces one max value per student row.',
    data:{headers:['Student','Math','Science','English','History'],rows:[['Rivera','88','92','79','85'],['Kim','74','68','91','82'],['Osei','95','87','90','93']]},
@@ -460,7 +462,7 @@ const CHALLENGES = [
    hint:'Apply a function to every row of a range and return one result per row.',
    note:'BYROW eliminates per-row helper columns. BYCOL is its column-wise counterpart.'},
 
-  {id:'c020',entry_id:'FRM-0033',entry_name:'GROUPBY',entry_type:'FRM',tier:'Expert',
+  {id:'c020',entry_id:'FRM-0027',  // GROUPBY
    title:'Sum sales by region — no PivotTable, one formula',
    context:'Sales data with a Region column. Group and aggregate into a summary.',
    data:{headers:['Region','Sales'],rows:[['East','14200'],['West','18800'],['East','9600'],['North','21000'],['West','13400']]},
@@ -470,7 +472,7 @@ const CHALLENGES = [
    hint:'Group one column\'s values and aggregate another — the formula version of a PivotTable.',
    note:'GROUPBY(row_fields, values, function) is new in 365 — replaces SUMIFS+UNIQUE for group summaries.'},
 
-  {id:'c021',entry_id:'FRM-0034',entry_name:'PIVOTBY',entry_type:'FRM',tier:'Expert',
+  {id:'c021',entry_id:'FRM-0028',  // PIVOTBY
    title:'Build a region × quarter sales matrix — one formula',
    context:'Sales data with Region and Quarter columns. Produce a cross-tab with regions as rows, quarters as columns.',
    data:{headers:['Region','Quarter','Sales'],rows:[['East','Q1','12000'],['West','Q1','18000'],['East','Q2','15000'],['West','Q2','11000']]},
@@ -480,7 +482,7 @@ const CHALLENGES = [
    hint:'This function takes row fields, column fields, values, and an aggregation function — like a PivotTable in one formula.',
    note:'PIVOTBY creates a pivot-style cross-tab directly on the sheet. No dialog, no refresh button.'},
 
-  {id:'c022',entry_id:'FRM-0007',entry_name:'SORT / SORTBY',entry_type:'FRM',tier:'Intermediate',
+  {id:'c022',entry_id:'FRM-0007',  // SORT
    title:'Sort the list alphabetically by city, but rank column stays attached',
    context:'Site list. Sort by the City column but keep all columns together.',
    data:{headers:['Rank','City','Zone'],rows:[['3','Denver','West'],['1','Atlanta','South'],['4','Portland','West'],['2','Cleveland','North']]},
@@ -490,7 +492,7 @@ const CHALLENGES = [
    hint:'Sort a multi-column range by a specific column while keeping all columns aligned.',
    note:'SORT(array, sort_index, order) — sort_index is the column number within the array to sort by.'},
 
-  {id:'c023',entry_id:'PQ-0013',entry_name:'M Error Handling',entry_type:'PQ',tier:'Intermediate',
+  {id:'c023',entry_id:'PQ-0013',  // M Error Handling (try...otherwise)
    title:'In Power Query M, handle failed type conversions without crashing the query',
    context:'A Date column contains some text values ("TBD"). Date.From() crashes on those rows.',
    data:{headers:['Order Date','Problem'],rows:[['2026-03-15','Valid date'],['TBD','Crashes on Date.From()'],['2026-03-18','Valid date']]},
@@ -500,7 +502,7 @@ const CHALLENGES = [
    hint:'The M language has a two-keyword construct for catching errors: one keyword tries the expression, another provides the fallback.',
    note:'try...otherwise is M\'s error handler — catches per-row failures and substitutes a fallback without crashing the query.'},
 
-  {id:'c024',entry_id:'ANT-0001',entry_name:'Merged Cells',entry_type:'ANT',tier:'Beginner',
+  {id:'c024',entry_id:'ANT-0001',  // Merged Cells
    title:'Identify the anti-pattern: SUMIFS returns 0 on a range with merged header cells',
    context:'Rows 1-2 are a merged header. SUMIFS over C3:C10 unexpectedly returns 0.',
    data:{headers:['Finding','Detail'],rows:[['Rows 1-2:','Single merged cell spanning two rows'],['C3:C10:','Data — but SUMIFS sees row 1 only'],['SUMIFS result:','0 (wrong)']]},
@@ -510,7 +512,7 @@ const CHALLENGES = [
    hint:'What common formatting choice breaks range references, sorting, and table operations in Excel?',
    note:'Merged cells appear in 4 of the top 5 "my formula broke" complaints. Use Center Across Selection as a visual-only alternative.'},
 
-  {id:'c025',entry_id:'ANT-0002',entry_name:'Volatile Functions',entry_type:'ANT',tier:'Intermediate',
+  {id:'c025',entry_id:'ANT-0002',  // Volatile Functions
    title:'Identify which functions cause the workbook to recalculate on every keystroke',
    context:'A slow workbook recalculates constantly. Audit is looking for volatile functions.',
    data:{headers:['Formula','Volatile?'],rows:[['=SUM(A1:A100)','No'],['=NOW()','???'],['=XLOOKUP(B2,D:D,E:E)','No'],['=TODAY()','???'],['=OFFSET(A1,B2,0)','???']]},
@@ -520,7 +522,7 @@ const CHALLENGES = [
    hint:'Which functions recalculate even when none of their inputs changed?',
    note:'Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are the leading cause of slow large workbooks.'},
 
-  {id:'c026',entry_id:'ANT-0016',entry_name:'Blanket Error Masking',entry_type:'ANT',tier:'Intermediate',
+  {id:'c026',entry_id:'ANT-0016',  // Blanket Error Masking
    title:'What is the governance risk of wrapping every formula in IFERROR("")?',
    context:'An audit found 40+ formulas using =IFERROR(<formula>, "") across the workbook.',
    data:{headers:['Error caught','Masked as'],rows:[['#N/A  (lookup miss)','""'],['#DIV/0!  (missing data)','""'],['#REF!  (broken link)','""'],['#VALUE!  (bad load)','""']]},
@@ -530,7 +532,7 @@ const CHALLENGES = [
    hint:'What happens when every error — including the ones that signal real data problems — returns an empty string?',
    note:'Use IFNA for lookup-miss-only handling. Reserve IFERROR for genuinely expected error conditions.'},
 
-  {id:'c027',entry_id:'ANT-0021',entry_name:'Legacy Lookup Reliance',entry_type:'ANT',tier:'Intermediate',
+  {id:'c027',entry_id:'ANT-0021',  // Legacy Lookup Reliance
    title:'Name the four structural limitations of VLOOKUP that XLOOKUP resolves',
    context:'A workbook migration is flagging all =VLOOKUP() calls. The analyst wants to know why.',
    data:{headers:['Scenario','VLOOKUP','XLOOKUP'],rows:[['Return column LEFT of lookup key','Cannot','Can'],['Exact match default','Requires 0/FALSE','Exact by default'],['Not-found handler','Needs IFERROR wrap','Built-in 4th argument'],['Column reference breaks on insert','Yes','No']]},
@@ -540,7 +542,7 @@ const CHALLENGES = [
    hint:'Each row in the table above describes one limitation. Name the anti-pattern and the registry entry.',
    note:'In Excel 365, VLOOKUP is a legacy function. The Excelligence scanner flags it as ANT-0021.'},
 
-  {id:'c028',entry_id:'FRM-0016',entry_name:'REDUCE',entry_type:'FRM',tier:'Expert',
+  {id:'c028',entry_id:'FRM-0020',  // REDUCE
    title:'Concatenate all items in a column with " | " as separator using a LAMBDA accumulator',
    context:'Build "Alpha | Beta | Gamma | Delta" from a column. TEXTJOIN would also work — but use the accumulator pattern.',
    data:{headers:['Item'],rows:[['Alpha'],['Beta'],['Gamma'],['Delta']]},
@@ -550,7 +552,7 @@ const CHALLENGES = [
    hint:'A LAMBDA higher-order function that collapses an array to a SINGLE final value through repeated accumulation.',
    note:'REDUCE returns ONE final value — unlike SCAN which returns all intermediates. The two are complementary.'},
 
-  {id:'c029',entry_id:'PQ-0012',entry_name:'Parameters Table',entry_type:'PQ',tier:'Intermediate',
+  {id:'c029',entry_id:'PQ-0012',  // Parameters Table Pattern
    title:'Reference a dynamic file path from a worksheet table inside Power Query M',
    context:'The file path is stored in a worksheet table named "Parameters". Do not hardcode it in the query.',
    data:{headers:['Parameter','Value'],rows:[['FilePath','C:\\Reports\\2026\\Q2.xlsx'],['StartDate','2026-04-01']]},
@@ -560,7 +562,7 @@ const CHALLENGES = [
    hint:'In M, use a function that accesses the current workbook\'s tables by name, then navigate to the specific cell.',
    note:'A Parameters Table makes PQ queries operator-controlled — analysts change values on the sheet, not inside the query editor.'},
 
-  {id:'c030',entry_id:'ANT-0019',entry_name:'Over-Volatile Architecture',entry_type:'ANT',tier:'Advanced',
+  {id:'c030',entry_id:'ANT-0019',  // Over-Volatile Architecture
    title:'Identify the systemic anti-pattern: 80% of formulas recalculate on every keystroke',
    context:'Workbook has 2,400 formulas. 1,900 reference cells containing OFFSET or INDIRECT.',
    data:{headers:['Formula type','Count','Recalc trigger'],rows:[['OFFSET-based lookups','840','Any change anywhere'],['INDIRECT ranges','620','Any change anywhere'],['NOW() in calculations','440','Any change anywhere'],['Non-volatile formulas','500','Only when inputs change']]},
@@ -576,6 +578,8 @@ const today = new Date();
 const epochDay = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86400000);
 const challenge = CHALLENGES[epochDay % CHALLENGES.length];
 const challengeNum = epochDay % CHALLENGES.length + 1;
+
+let ENTRY = {id: challenge.entry_id, name: '', type: '', tier: ''};  // filled from the registry
 
 let attempts = 0;
 const MAX_ATTEMPTS = 3;
@@ -608,10 +612,10 @@ function init() {
   document.getElementById('challengeNum').textContent = `Challenge #${challengeNum}`;
 
   const badge = document.getElementById('typeBadge');
-  badge.textContent = challenge.entry_type;
-  badge.setAttribute('style', typeStyle(challenge.entry_type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:4px');
+  badge.textContent = ENTRY.type;
+  badge.setAttribute('style', typeStyle(ENTRY.type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:4px');
 
-  document.getElementById('tierLabel').textContent = challenge.tier;
+  document.getElementById('tierLabel').textContent = ENTRY.tier;
   document.getElementById('challengeTitle').textContent = challenge.title;
   document.getElementById('challengeContext').textContent = challenge.context;
   document.getElementById('targetValue').textContent = challenge.target;
@@ -792,17 +796,16 @@ function showReveal() {
   card.classList.add('visible');
 
   const badge = document.getElementById('revealBadge');
-  badge.textContent = challenge.entry_type;
-  badge.setAttribute('style', typeStyle(challenge.entry_type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px');
+  badge.textContent = ENTRY.type;
+  badge.setAttribute('style', typeStyle(ENTRY.type) + ';font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px');
 
-  document.getElementById('revealId').textContent = challenge.entry_id;
-  document.getElementById('revealName').textContent = challenge.entry_name;
-  document.getElementById('revealTier').textContent = `Tier: ${challenge.tier}`;
+  document.getElementById('revealId').textContent = ENTRY.id;
+  document.getElementById('revealName').textContent = ENTRY.name;
+  document.getElementById('revealTier').textContent = ENTRY.tier ? `Tier: ${ENTRY.tier}` : '';
   document.getElementById('revealSolution').textContent = challenge.solution;
   document.getElementById('revealNote').innerHTML = challenge.note;
 
-  const slug = challenge.entry_id.toLowerCase().replace('-', '-');
-  document.getElementById('revealLink').href = `/learn/${slug}/`;
+  document.getElementById('revealLink').href = `/explorer/#${ENTRY.id}`;
 }
 
 // ── Share ──────────────────────────────────────────────────────────────
@@ -837,7 +840,14 @@ function saveHistory(won) {
   localStorage.setItem(LS_HIST, JSON.stringify(hist));
 }
 
-init();
+fetch('/excelligence.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(data => {
+    const e = (data.entries || []).find(x => x.id === challenge.entry_id);
+    if (e) ENTRY = {id: e.id, name: e.name, type: e.type, tier: e.tier};
+  })
+  .catch(() => {})
+  .then(init);
 </script>
 </body>
 </html>
