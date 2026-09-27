@@ -92,6 +92,19 @@ def main():
                 if learn_dyn_re.search(line):
                     findings.append((rel, lineno, "LEARN", "runtime-built /learn/${...}/ link cannot be verified"))
 
+    # MOJIBAKE: garbled text (UTF-8 read as Windows-1252) in the registry. The workbook carries it,
+    # and api/mojibake.py repairs it on export; this makes sure it never comes back.
+    sys.path.insert(0, os.path.join(root, "api"))
+    try:
+        from mojibake import find as find_mojibake
+        with open(os.path.join(root, "excelligence.json"), encoding="utf-8") as f:
+            reg_text = f.read()
+        for off, garbled, fixed in find_mojibake(reg_text):
+            findings.append(("excelligence.json", reg_text.count("\n", 0, off) + 1, "MOJIBAKE",
+                             f"{ascii(garbled)} should be {ascii(fixed)}; run python api/mojibake.py --fix excelligence.json"))
+    except ImportError as exc:  # a gate that cannot run must refuse, not pass
+        findings.append(("api/mojibake.py", 0, "UNREADABLE", f"mojibake check unavailable: {exc}"))
+
     for rel, lineno, kind, msg in findings:
         print(f"{rel}:{lineno}: {kind}: {msg}")
     kinds = {}
