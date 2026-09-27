@@ -4,9 +4,16 @@ Exposes the Excelligence registry graph as callable tools for any AI session.
 
 Tools:
   query_entry(query)         — look up an entry by ID or name
-  find_path(from_id, to_id)  — BFS learning path between two entries
+  find_path(from_id, to_id)  — shortest learning path between two entries
   diagnose(formula)          — identify functions, flag anti-patterns
   prerequisites(id)          — return what must be known before this entry
+
+Path rule (standards/PATH-RULE.md — the same rule /explorer/ and /paths/ use):
+  LEADS_TO A->B  : forward (A then B)
+  DEPENDS_ON A->B: "A depends on B", so B comes first: traverse B -> A
+  PAIRS_WITH A--B: both directions
+  Shortest path  : BFS, neighbours visited in ascending id order
+  prerequisites(X): transitive closure of X's DEPENDS_ON targets
 
 Usage:
   uvx --from . mcp run excelligence_mcp
@@ -38,11 +45,18 @@ def _build_index():
     graph = defaultdict(list)       # id -> [(target_id, edge_type)]
     reverse = defaultdict(list)     # id -> [(source_id, edge_type)]
 
+    # Names and aliases: first entry in file order wins (e.g. 'LET' is both
+    # FRM-0002 and FRM-0023; FRM-0002 answers), so lookups are deterministic.
     for entry in registry["entries"]:
         by_id[entry["id"]] = entry
-        by_name[entry["name"].lower()] = entry
-        for alias in entry.get("aliases", []):
-            by_name[alias.lower()] = entry
+        by_name.setdefault(entry["name"].lower(), entry)
+    for entry in registry["entries"]:
+        for alias in entry.get("aliases", []):          # inline form, if present
+            by_name.setdefault(alias.lower(), entry)
+    for row in registry.get("aliases", []):              # top-level [{entry_id, alias}]
+        entry = by_id.get(row.get("entry_id"))
+        if entry and row.get("alias"):
+            by_name.setdefault(row["alias"].lower(), entry)
 
     for edge in registry["edges"]:
         src, tgt, etype = edge["source"], edge["target"], edge["type"]
@@ -53,6 +67,68 @@ def _build_index():
 
 
 _registry, BY_ID, BY_NAME, GRAPH, REVERSE = _build_index()
+
+# ── Path rule (standards/PATH-RULE.md) ─────────────────────────────────────────
+
+# When one step is joined by more than one relation, report the strongest.
+_PRECEDENCE = {"LEADS_TO": 0, "DEPENDS_ON": 1, "PAIRS_WITH": 2}
+
+
+def _learning_adjacency(edges):
+    """adjacency[a][b] = relation that lets a learner step from a to b."""
+    adj = defaultdict(dict)
+
+    def add(a, b, rel):
+        cur = adj[a].get(b)
+        if cur is None or _PRECEDENCE[rel] < _PRECEDENCE[cur]:
+            adj[a][b] = rel
+
+    for e in edges:
+        if e["type"] == "LEADS_TO":
+            add(e["source"], e["target"], "LEADS_TO")
+        elif e["type"] == "DEPENDS_ON":
+            add(e["target"], e["source"], "DEPENDS_ON")
+        elif e["type"] == "PAIRS_WITH":
+            add(e["source"], e["target"], "PAIRS_WITH")
+            add(e["target"], e["source"], "PAIRS_WITH")
+    return dict(adj)
+
+
+LEARN = _learning_adjacency(_registry["edges"])
+
+
+def _shortest_path(start, end):
+    """BFS over LEARN, neighbours in ascending id order. Returns [ids] or None."""
+    if start == end:
+        return [start]
+    prev = {start: None}
+    queue = deque([start])
+    while queue:
+        cur = queue.popleft()
+        for n in sorted(LEARN.get(cur, {})):
+            if n in prev:
+                continue
+            prev[n] = cur
+            if n == end:
+                path = [n]
+                while prev[path[0]] is not None:
+                    path.insert(0, prev[path[0]])
+                return path
+            queue.append(n)
+    return None
+
+
+def _prerequisites(eid):
+    """Transitive closure of eid's DEPENDS_ON targets, sorted by id."""
+    seen = set()
+    stack = [eid]
+    while stack:
+        cur = stack.pop()
+        for tgt, etype in GRAPH.get(cur, []):
+            if etype == "DEPENDS_ON" and tgt != eid and tgt not in seen:
+                seen.add(tgt)
+                stack.append(tgt)
+    return sorted(seen)
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -182,9 +258,10 @@ def query_entry(query: str) -> str:
 @mcp.tool()
 def find_path(from_id: str, to_id: str) -> str:
     """
-    Find a learning path between two registry entries by traversing LEADS_TO
-    and DEPENDS_ON edges. Returns the shortest BFS path with entry names and
-    tiers at each hop. Use this to build a curriculum sequence.
+    Find the shortest learning path between two registry entries. Traverses
+    LEADS_TO forward, DEPENDS_ON reversed (a dependency comes first) and
+    PAIRS_WITH both ways; ties break by ascending id (standards/PATH-RULE.md).
+    Returns each hop with entry name, tier and the relation that joins it.
     """
     src = _resolve(from_id)
     tgt = _resolve(to_id)
@@ -198,25 +275,16 @@ def find_path(from_id: str, to_id: str) -> str:
     if start == end:
         return f"Same entry: {start} — {src['name']}"
 
-    queue = deque([(start, [start], [])])
-    visited = {start}
-
-    while queue:
-        current, path, edge_labels = queue.popleft()
-        if current == end:
-            lines = [f"Path: {src['name']} → {tgt['name']} ({len(path)-1} hop{'s' if len(path)>2 else ''})"]
-            for i, node_id in enumerate(path):
-                e = BY_ID[node_id]
-                if i == 0:
-                    lines.append(f"  ○ {node_id} — {e['name']} [{e['tier']}]")
-                else:
-                    lines.append(f"  → {node_id} — {e['name']} [{e['tier']}]  ({edge_labels[i-1]})")
-            return "\n".join(lines)
-
-        for target_id, etype in GRAPH.get(current, []):
-            if etype in ("LEADS_TO", "DEPENDS_ON") and target_id not in visited:
-                visited.add(target_id)
-                queue.append((target_id, path + [target_id], edge_labels + [etype]))
+    path = _shortest_path(start, end)
+    if path:
+        lines = [f"Path: {src['name']} → {tgt['name']} ({len(path)-1} hop{'s' if len(path)>2 else ''})"]
+        for i, node_id in enumerate(path):
+            e = BY_ID[node_id]
+            if i == 0:
+                lines.append(f"  ○ {node_id} — {e['name']} [{e['tier']}]")
+            else:
+                lines.append(f"  → {node_id} — {e['name']} [{e['tier']}]  ({LEARN[path[i-1]][node_id]})")
+        return "\n".join(lines)
 
     return (
         f"No path found from {start} to {end}. "
@@ -273,9 +341,10 @@ def diagnose(formula: str) -> str:
 @mcp.tool()
 def prerequisites(id: str) -> str:
     """
-    Return what a learner must know before tackling a registry entry.
-    Covers two signals: entries this one DEPENDS_ON, and entries that LEAD_TO it.
-    Use this to plan a curriculum or verify readiness before introducing a concept.
+    Return what a learner must know before tackling a registry entry: the
+    transitive closure of its DEPENDS_ON targets (standards/PATH-RULE.md).
+    Entries that LEAD_TO it and entries it PAIRS_WITH are listed separately
+    as context; they are not prerequisites.
     """
     entry = _resolve(id)
     if not entry:
@@ -283,11 +352,9 @@ def prerequisites(id: str) -> str:
 
     eid = entry["id"]
 
-    # What this entry depends on directly
-    direct_deps = [
-        BY_ID[tgt] for tgt, etype in GRAPH.get(eid, [])
-        if etype == "DEPENDS_ON" and tgt in BY_ID
-    ]
+    # Prerequisites: transitive closure of DEPENDS_ON targets
+    direct = {tgt for tgt, etype in GRAPH.get(eid, []) if etype == "DEPENDS_ON"}
+    prereq_ids = [p for p in _prerequisites(eid) if p in BY_ID]
 
     # What leads to this entry (stepping stones)
     leads_to_me = [
@@ -297,31 +364,35 @@ def prerequisites(id: str) -> str:
 
     # What this entry pairs with (peer context)
     pairs = [
-        BY_ID[tgt] for tgt, etype in GRAPH.get(eid, [])
-        if etype == "PAIRS_WITH" and tgt in BY_ID
+        BY_ID[pid] for pid in sorted(
+            {tgt for tgt, etype in GRAPH.get(eid, []) if etype == "PAIRS_WITH"}
+            | {src for src, etype in REVERSE.get(eid, []) if etype == "PAIRS_WITH"}
+        ) if pid in BY_ID
     ]
 
     lines = [f"## Prerequisites for {eid} — {entry['name']} [{entry['tier']}]\n"]
     lines.append(f"**Intent:** {entry['intent']}\n")
 
-    if direct_deps:
-        lines.append("### Must know first (DEPENDS_ON):")
-        for e in sorted(direct_deps, key=lambda x: x["difficulty_score"]):
-            lines.append(f"- {_format_entry(e, brief=True)}")
+    if prereq_ids:
+        lines.append("### Must know first (DEPENDS_ON, transitive):")
+        for pid in prereq_ids:
+            e = BY_ID[pid]
+            via = "" if pid in direct else "  (indirect)"
+            lines.append(f"- {_format_entry(e, brief=True)}{via}")
 
     if leads_to_me:
-        lines.append("\n### Stepping stones (LEADS_TO this entry):")
+        lines.append("\n### Context, not prerequisites: stepping stones (LEADS_TO this entry):")
         for e in sorted(leads_to_me, key=lambda x: x["difficulty_score"]):
             lines.append(f"- {_format_entry(e, brief=True)}")
 
     if pairs:
-        lines.append("\n### Commonly paired with (PAIRS_WITH):")
+        lines.append("\n### Context, not prerequisites: commonly paired with (PAIRS_WITH):")
         for e in sorted(pairs, key=lambda x: x["difficulty_score"]):
             lines.append(f"- {e['id']} **{e['name']}** [{e['tier']}]")
 
-    if not direct_deps and not leads_to_me:
+    if not prereq_ids:
         lines.append(
-            f"No prerequisite path found. {entry['name']} is self-contained or an entry point "
+            f"No prerequisites (no DEPENDS_ON edges). {entry['name']} is self-contained or an entry point "
             f"at the {entry['tier']} tier. Start here if you're at that level."
         )
 
