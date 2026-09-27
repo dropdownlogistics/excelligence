@@ -305,7 +305,7 @@ function showPanel(id){
   var edgesSec=document.getElementById("p-edges-section");
   var edgeDotColors={LEADS_TO:"var(--green)",DEPENDS_ON:"var(--crimson)",PAIRS_WITH:"var(--amber)"};
   if(allConnEdges.length){
-    document.getElementById("p-edges").innerHTML=allConnEdges.map(function(e){var isOut=e.source===id,otherId=isOut?e.target:e.source,other=REGISTRY.entries.find(function(x){return x.id===otherId;}),label=isOut?e.type:"&lt;-"+e.type;return '<div class="edge-item" onclick="selectNode(\"'+otherId+'\")">'+'<div class="e-dot" style="background:'+edgeDotColors[e.type]+'"></div>'+'<span class="e-type" style="color:'+edgeDotColors[e.type]+'">'+label+'</span>'+'<span class="e-name">'+( other?other.name:otherId)+'</span></div>';}).join("");
+    document.getElementById("p-edges").innerHTML=allConnEdges.map(function(e){var isOut=e.source===id,otherId=isOut?e.target:e.source,other=REGISTRY.entries.find(function(x){return x.id===otherId;}),label=isOut?e.type:"&lt;-"+e.type;return '<div class="edge-item" onclick="selectNode(\''+otherId+'\')">'+'<div class="e-dot" style="background:'+edgeDotColors[e.type]+'"></div>'+'<span class="e-type" style="color:'+edgeDotColors[e.type]+'">'+label+'</span>'+'<span class="e-name">'+( other?other.name:otherId)+'</span></div>';}).join("");
     edgesSec.style.display="";
   }else edgesSec.style.display="none";
   var govSec=document.getElementById("p-gov-section");
@@ -319,8 +319,11 @@ function toggleEdge(type){var btn=document.querySelector(".edge-chip[data-edge=\
 function updateStats(){var vc=REGISTRY.entries.filter(function(e){return activeTypes.has(e.type);}).length;var ec=REGISTRY.edges.filter(function(e){return activeEdges.has(e.type)&&activeTypes.has((REGISTRY.entries.find(function(x){return x.id===e.source;})||{}).type)&&activeTypes.has((REGISTRY.entries.find(function(x){return x.id===e.target;})||{}).type);}).length;document.getElementById("stats-display").textContent=vc+" entries / "+ec+" edges";}
 document.getElementById("radial-canvas").addEventListener("click",function(){selectedId=null;resetHighlight();document.getElementById("panel-placeholder").style.display="flex";document.getElementById("panel-selected").style.display="none";});
 window.addEventListener("resize",function(){if(registryLoaded)buildScene();});
+// Deep links: /radial/#FRM-0001 or /radial/?node=FRM-0001 (the DDL-wide convention). Hash wins if both are present.
+function entryIdFromUrl(entries){var h="";try{h=decodeURIComponent((location.hash||"").replace(/^#/,""));}catch(e){}var q=new URLSearchParams(location.search).get("node")||"";var id=(h||q).trim().toUpperCase();return id&&entries.some(function(e){return e.id===id;})?id:null;}
+function applyDeepLink(){var id=entryIdFromUrl(REGISTRY.entries);if(id)selectNode(id);}
 function loadRegistry(){return fetch("/excelligence.json").then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(data){REGISTRY=data;REGISTRY.entries=data.entries||[];REGISTRY.edges=data.edges||[];registryLoaded=true;return data;});}
-document.addEventListener("DOMContentLoaded",function(){loadRegistry().then(function(){buildScene();}).catch(function(err){document.getElementById("stats-display").textContent="Registry failed to load ("+err.message+")";});});
+document.addEventListener("DOMContentLoaded",function(){loadRegistry().then(function(){buildScene();applyDeepLink();window.addEventListener("hashchange",applyDeepLink);}).catch(function(err){document.getElementById("stats-display").textContent="Registry failed to load ("+err.message+")";});});
 </script>
 <script>
 (function(){

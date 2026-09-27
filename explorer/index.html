@@ -319,7 +319,7 @@ function showEntryPanel(id){
   if(allE.length){
     document.getElementById("p-edges").innerHTML=allE.map(function(e){
       var isOut=e.source===id,oid=isOut?e.target:e.source,other=allEntries.find(function(x){return x.id===oid;}),lbl=isOut?e.type:"&lt;-"+e.type;
-      return '<div class="edge-item" onclick="onNodeClickById(\"'+oid+'\")">'+'<div class="edge-type-dot '+e.type+'"></div>'+'<span class="edge-label '+e.type+'">'+lbl+"</span>"+'<span class="edge-target">'+( other?other.name:oid)+"</span>"+'<span class="edge-target-id">'+oid+"</span></div>";
+      return '<div class="edge-item" onclick="onNodeClickById(\''+oid+'\')">'+'<div class="edge-type-dot '+e.type+'"></div>'+'<span class="edge-label '+e.type+'">'+lbl+"</span>"+'<span class="edge-target">'+( other?other.name:oid)+"</span>"+'<span class="edge-target-id">'+oid+"</span></div>";
     }).join("");es.style.display="";
   }else es.style.display="none";
   var gs=document.getElementById("p-governance-section");
@@ -385,7 +385,7 @@ function findPath(){
   var html="<div style=\"padding:10px 18px 4px;font-size:11px;color:var(--dim);font-family:'JetBrains Mono',monospace;\">"+found.length+" STEPS</div>";
   found.forEach(function(id,i){
     var entry=allEntries.find(function(e){return e.id===id;}),color=TYPE_COLORS[(entry||{}).type]||"#888";
-    html+='<div class="path-step" onclick="onNodeClickById(\"'+id+'\");setMode(\"explore\")">'+'<div class="path-step-num" style="background:'+color+'">'+( i+1)+"</div><div>"+'<div class="path-step-name">'+( entry?entry.name:id)+"</div>"+'<div class="path-step-id">'+id+" / "+((entry||{}).tier||"")+"</div></div></div>";
+    html+='<div class="path-step" onclick="setMode(\'explore\');onNodeClickById(\''+id+'\')">'+'<div class="path-step-num" style="background:'+color+'">'+( i+1)+"</div><div>"+'<div class="path-step-name">'+( entry?entry.name:id)+"</div>"+'<div class="path-step-id">'+id+" / "+((entry||{}).tier||"")+"</div></div></div>";
     if(i<found.length-1)html+='<div style="width:1px;height:14px;background:var(--border2);margin-left:29px;margin-bottom:2px;"></div>';
   });
   resultEl.innerHTML=html;
@@ -395,8 +395,11 @@ function zoomOut(){svg.transition().call(zoomBehavior.scaleBy,0.77);}
 function zoomReset(){var s=window.innerWidth<768?0.7:1;svg.transition().call(zoomBehavior.transform,d3.zoomIdentity.scale(s));}
 window.addEventListener("resize",function(){if(!svg)return;var c=document.getElementById("graph-container"),W=c.clientWidth,H=c.clientHeight;svg.attr("width",W).attr("height",H);if(simulation)simulation.force("center",d3.forceCenter(W/2,H/2)).alpha(0.3).restart();});
 document.getElementById("graph-canvas").addEventListener("click",function(e){if(e.target.id==="graph-canvas"||e.target.tagName==="svg"){if(mode==="explore")clearSelection();}});
+// Deep links: /explorer/#FRM-0001 or /explorer/?node=FRM-0001 (the DDL-wide convention). Hash wins if both are present.
+function entryIdFromUrl(entries){var h="";try{h=decodeURIComponent((location.hash||"").replace(/^#/,""));}catch(e){}var q=new URLSearchParams(location.search).get("node")||"";var id=(h||q).trim().toUpperCase();return id&&entries.some(function(e){return e.id===id;})?id:null;}
+function applyDeepLink(){var id=entryIdFromUrl(allEntries);if(!id)return;if(mode!=="explore")setMode("explore");onNodeClickById(id);}
 function loadRegistry(){return fetch("/excelligence.json").then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(data){REGISTRY=data;allEntries=data.entries||[];allEdges=data.edges||[];allTags=data.tags||[];allAliases=data.aliases||[];var sb=document.getElementById("stats-bar");if(sb)sb.textContent=allEntries.length+" entries / "+allEdges.length+" edges";return data;});}
-document.addEventListener("DOMContentLoaded",function(){loadRegistry().then(function(){initGraph();}).catch(function(err){var sb=document.getElementById("stats-bar");if(sb)sb.textContent="Registry failed to load ("+err.message+")";});setTimeout(function(){if(svg&&window.innerWidth<768){var c=document.getElementById("graph-container");svg.attr("width",c.clientWidth).attr("height",c.clientHeight);svg.call(zoomBehavior.transform,d3.zoomIdentity.translate(c.clientWidth/2,c.clientHeight/2).scale(0.7));}},800);});
+document.addEventListener("DOMContentLoaded",function(){loadRegistry().then(function(){initGraph();applyDeepLink();window.addEventListener("hashchange",applyDeepLink);}).catch(function(err){var sb=document.getElementById("stats-bar");if(sb)sb.textContent="Registry failed to load ("+err.message+")";});setTimeout(function(){if(svg&&window.innerWidth<768){var c=document.getElementById("graph-container");svg.attr("width",c.clientWidth).attr("height",c.clientHeight);svg.call(zoomBehavior.transform,d3.zoomIdentity.translate(c.clientWidth/2,c.clientHeight/2).scale(0.7));}},800);});
 </script>
 </body>
 </html>
