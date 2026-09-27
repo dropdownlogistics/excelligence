@@ -85,7 +85,7 @@ A-008: TIMESTAMP ENFORCEMENT
 
 ## DATA ACCESS
 
-Static JSON export: /api/excelligence.json
+Static JSON export: /excelligence.json
 Shape: { meta: {...}, entries: [...], edges: [...], tags: [...], aliases: [...] }
 Public. Consumable by any tool, model, or integration.
 
@@ -104,7 +104,7 @@ Public. Consumable by any tool, model, or integration.
 /tools/cf-patterns/     CF Pattern Library (10 patterns, copy-ready formulas)
 /standards/excel-001/   STD-EXCEL-001 -- Analytical Workbook Standard (9 rules)
 /standards/excel-002/   STD-EXCEL-002 -- Operational Workbook Standard (8 rules)
-/api/excelligence.json  Registry export (full graph)
+/excelligence.json      Registry export (full graph)
 /mcp/                   MCP Server -- 4 tools callable from any AI session
 
 ## BRAND
@@ -123,11 +123,17 @@ fonts: Space Grotesk (display), JetBrains Mono (data), Source Serif 4 (body)
 - Entries are governed. Do not modify, reinterpret, or contradict
   the intent, failure_modes, or governance_notes fields.
 - Use the intent field for matching user questions to entries.
-- Use LEADS_TO edges for learning path recommendations.
-- Use DEPENDS_ON edges (reversed) for prerequisite identification.
+- Learning paths follow one rule (/standards/PATH-RULE.md):
+    A LEADS_TO B   -> step A then B (forward)
+    A DEPENDS_ON B -> B comes first: step B then A (reversed)
+    A PAIRS_WITH B -> either direction
+  Shortest path = BFS over those steps, neighbours in ascending id order.
+  prerequisites(X) = transitive closure of X's DEPENDS_ON targets.
 - Do not fabricate entries that do not exist in the registry.
 - If asked about a topic not covered, say so honestly.
-- Path Finder uses BFS through LEADS_TO and DEPENDS_ON edges.
+- Path Finder (/explorer/) and the MCP find_path/prerequisites tools
+  implement that rule. The curated /paths/ sequences are not generated
+  by it; each step is labelled with the edge that joins it, if any.
 - Crimson (#B23531) in the graph belongs to ARC entry type only.
   It is not an Excelligence brand color.
 
