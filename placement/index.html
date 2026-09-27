@@ -383,66 +383,71 @@ const QUESTIONS = [
   },
 ];
 
-// ── REGISTRY ENTRIES for the path (keyed subset) ────────────────────────
-const REGISTRY = {
-  'FRM-0001':{name:'XLOOKUP',type:'FRM',tier:'Intermediate',desc:'Modern replacement for VLOOKUP. Exact match by default, returns values in any direction, has a built-in not-found argument.'},
-  'FRM-0003':{name:'FILTER',type:'FRM',tier:'Intermediate',desc:'Returns a spilled array of rows matching one or more conditions. Combines with * (AND) and + (OR).'},
-  'FRM-0004':{name:'UNIQUE',type:'FRM',tier:'Intermediate',desc:'Returns a deduplicated list from a range. Third argument (exactly_once) filters out all duplicates.'},
-  'FRM-0007':{name:'SORT / SORTBY',type:'FRM',tier:'Intermediate',desc:'SORT orders by a column index; SORTBY orders by an external range — useful for multi-key sorts.'},
-  'FRM-0009':{name:'SUMIFS',type:'FRM',tier:'Beginner',desc:'Sums a range where multiple conditions are all true. The analytical workhorse of most Excel workbooks.'},
-  'FRM-0010':{name:'COUNTIFS',type:'FRM',tier:'Beginner',desc:'Counts rows where multiple conditions are all true. Companion to SUMIFS.'},
-  'FRM-0014':{name:'SEQUENCE',type:'FRM',tier:'Intermediate',desc:'Generates an array of sequential numbers. Two-dimensional with the cols argument.'},
-  'FRM-0015':{name:'LET',type:'FRM',tier:'Intermediate',desc:'Assigns names to intermediate values inside a formula. Eliminates repeated sub-expressions.'},
-  'FRM-0016':{name:'REDUCE',type:'FRM',tier:'Expert',desc:'Collapses an array to a single value via a LAMBDA accumulator. Complementary to SCAN.'},
-  'FRM-0018':{name:'INDEX / MATCH',type:'FRM',tier:'Intermediate',desc:'Two-function lookup: MATCH finds the row, INDEX retrieves the value. Pre-XLOOKUP gold standard.'},
-  'FRM-0021':{name:'SUMPRODUCT',type:'FRM',tier:'Advanced',desc:'Multiplies arrays element-by-element and sums the result. Weighted averages, conditional sums without helper columns.'},
-  'FRM-0023':{name:'VSTACK / HSTACK',type:'FRM',tier:'Advanced',desc:'Stack ranges vertically or horizontally. Replaces INDIRECT tricks for combining non-contiguous data.'},
-  'FRM-0029':{name:'LAMBDA',type:'FRM',tier:'Advanced',desc:'Defines a named, reusable function with parameters. Stored in Name Manager, called like a built-in.'},
-  'FRM-0031':{name:'SCAN',type:'FRM',tier:'Expert',desc:'Applies a LAMBDA across an array, returning all intermediate accumulator values. Running totals, state machines.'},
-  'FRM-0032':{name:'BYROW',type:'FRM',tier:'Expert',desc:'Applies a LAMBDA to each row of a range, returning one result per row. Eliminates per-row helper columns.'},
-  'FRM-0033':{name:'GROUPBY',type:'FRM',tier:'Expert',desc:'Groups a range by one column and aggregates another. Formula-native PivotTable for grouped summaries.'},
-  'PQ-0001':{name:'Load to Table',type:'PQ',tier:'Beginner',desc:'The foundation of any Power Query workflow. Data loaded to a worksheet Table is refreshable.'},
-  'PQ-0002':{name:'Custom Column',type:'PQ',tier:'Beginner',desc:'Add a calculated column to a PQ query using M expressions. The PQ equivalent of a helper column.'},
-  'PQ-0012':{name:'Parameters Table',type:'PQ',tier:'Intermediate',desc:'A worksheet table that feeds configuration values into PQ queries — file paths, date ranges, thresholds.'},
-  'PQ-0013':{name:'M Error Handling',type:'PQ',tier:'Intermediate',desc:"try...otherwise catches per-row failures in M. The query continues; bad rows get null instead of an error."},
-  'ARC-0001':{name:'INPUT → LOGIC → OUTPUT',type:'ARC',tier:'Intermediate',desc:'Three-zone workbook architecture: inputs in one area, calculations isolated from both, outputs presented separately.'},
-  'ARC-0006':{name:'Star Schema',type:'ARC',tier:'Advanced',desc:'Relational data model: one fact table with foreign keys to dimension tables. The PivotTable\'s native substrate.'},
-  'ARC-0012':{name:'Named LAMBDA Library',type:'ARC',tier:'Expert',desc:'A governed set of LAMBDA-defined functions in Name Manager. The Excel equivalent of a shared function library.'},
-  'ANT-0001':{name:'Merged Cells',type:'ANT',tier:'Beginner',desc:'Merged cells break range references, sorting, and table operations. Use Center Across Selection for visual centering.'},
-  'ANT-0002':{name:'Volatile Functions',type:'ANT',tier:'Intermediate',desc:'NOW, TODAY, OFFSET, INDIRECT, and RAND recalculate on every worksheet change — the leading cause of slow workbooks.'},
-  'ANT-0016':{name:'Blanket Error Masking',type:'ANT',tier:'Intermediate',desc:'Wrapping every formula in IFERROR("") silently hides real data failures alongside expected lookup misses.'},
-  'ANT-0021':{name:'Legacy Lookup Reliance',type:'ANT',tier:'Intermediate',desc:'VLOOKUP has four structural limitations that XLOOKUP resolves. In 365 workbooks, VLOOKUP is a legacy function.'},
-  'CON-0001':{name:'Range Naming Convention',type:'CON',tier:'Beginner',desc:'Governed naming for named ranges: prefix_AreaName pattern. Eliminates "what is this range?" ambiguity.'},
+// ── PAGE COPY for path entries ─────────────────────────────────
+// Name, type and tier come from /excelligence.json at load (single source of truth).
+// Keys are registry ids, each resolved by entry NAME against excelligence.json.
+const ENTRY_COPY = {
+  'FRM-0001':'Modern replacement for VLOOKUP. Exact match by default, returns values in any direction, has a built-in not-found argument.',  // XLOOKUP
+  'FRM-0005':'Returns a spilled array of rows matching one or more conditions. Combines with * (AND) and + (OR).',  // FILTER
+  'FRM-0008':'Returns a deduplicated list from a range. Third argument (exactly_once) filters out all duplicates.',  // UNIQUE
+  'FRM-0007':'SORT orders by a column index; SORTBY orders by an external range — useful for multi-key sorts.',  // SORT
+  'FRM-0011':'SUMIFS sums and COUNTIFS counts the rows where multiple conditions are all true. The analytical workhorses of most Excel workbooks.',  // COUNTIFS/SUMIFS
+  'FRM-0017':'Generates an array of sequential numbers. Two-dimensional with the cols argument.',  // SEQUENCE
+  'FRM-0002':'Assigns names to intermediate values inside a formula. Eliminates repeated sub-expressions.',  // LET
+  'FRM-0020':'Collapses an array to a single value via a LAMBDA accumulator. Complementary to SCAN.',  // REDUCE
+  'FRM-0003':'Two-function lookup: MATCH finds the row, INDEX retrieves the value. Pre-XLOOKUP gold standard.',  // INDEX/MATCH
+  'FRM-0006':'Multiplies arrays element-by-element and sums the result. Weighted averages, conditional sums without helper columns.',  // SUMPRODUCT
+  'FRM-0016':'Stack ranges vertically or horizontally. Replaces INDIRECT tricks for combining non-contiguous data.',  // HSTACK/VSTACK
+  'FRM-0004':'Defines a named, reusable function with parameters. Stored in Name Manager, called like a built-in.',  // LAMBDA
+  'FRM-0031':'Applies a LAMBDA across an array, returning all intermediate accumulator values. Running totals, state machines.',  // SCAN
+  'FRM-0032':'Applies a LAMBDA to each row of a range, returning one result per row. Eliminates per-row helper columns.',  // BYROW
+  'FRM-0027':'Groups a range by one column and aggregates another. Formula-native PivotTable for grouped summaries.',  // GROUPBY
+  'PQ-0001':'The foundation of any Power Query workflow. Data loaded to a worksheet Table is refreshable.',  // Power Query Load to Table
+  'PQ-0007':'Add a calculated column to a PQ query using M expressions. The PQ equivalent of a helper column.',  // Custom Column (M Formula)
+  'PQ-0012':'A worksheet table that feeds configuration values into PQ queries — file paths, date ranges, thresholds.',  // Parameters Table Pattern
+  'PQ-0013':"try...otherwise catches per-row failures in M. The query continues; bad rows get null instead of an error.",  // M Error Handling (try...otherwise)
+  'ARC-0006':'Three-zone workbook architecture: inputs in one area, calculations isolated from both, outputs presented separately.',  // INPUT -> LOGIC -> OUTPUT Architecture
+  'PTN-0001':'Relational data model: one fact table with foreign keys to dimension tables. The PivotTable\'s native substrate.',  // Star Schema Layout
+  'ARC-0012':'A governed set of LAMBDA-defined functions in Name Manager. The Excel equivalent of a shared function library.',  // Named LAMBDA Library
+  'ANT-0001':'Merged cells break range references, sorting, and table operations. Use Center Across Selection for visual centering.',  // Merged Cells
+  'ANT-0002':'NOW, TODAY, OFFSET, INDIRECT, and RAND recalculate on every worksheet change — the leading cause of slow workbooks.',  // Volatile Functions
+  'ANT-0016':'Wrapping every formula in IFERROR("") silently hides real data failures alongside expected lookup misses.',  // Blanket Error Masking
+  'ANT-0021':'VLOOKUP has four structural limitations that XLOOKUP resolves. In 365 workbooks, VLOOKUP is a legacy function.',  // Legacy Lookup Reliance
 };
+// Placement items with no registry entry: kept as copy, never linked by id.
+const UNLINKED_COPY = {
+  'Range Naming Convention':{type:'CON', desc:'Governed naming for named ranges: prefix_AreaName pattern. Eliminates "what is this range?" ambiguity.'},
+};
+let REGISTRY = {};  // id -> {name,type,tier,desc}, built by loadRegistry()
 
 // ── TIER DEFINITIONS ───────────────────────────────────────────────────
 const TIERS = {
   Beginner:  {color:'#4A9E6B', bg:'rgba(74,158,107,0.15)', border:'rgba(74,158,107,0.3)',
     title:'Beginner Practitioner',
     sub:'You have the foundation. The core functions are within reach and the structural patterns will click quickly once you see them used in context.',
-    anchor_entry:'FRM-0009',
-    path_ids:['FRM-0009','FRM-0010','FRM-0001','ANT-0001','FRM-0003','ARC-0001'],
+    anchor_entry:'FRM-0011',
+    path_ids:['FRM-0011','FRM-0001','ANT-0001','FRM-0005','ARC-0006'],
     path_note:'Start with the analytical workhorses — SUMIFS and COUNTIFS unlock most analytical questions. Then XLOOKUP replaces VLOOKUP cleanly.',
   },
   Intermediate:{color:'#6B9DC2', bg:'rgba(107,157,194,0.15)', border:'rgba(107,157,194,0.3)',
     title:'Intermediate Analyst',
     sub:'You have solid command of the core functions. The next frontier is dynamic arrays, LET, and understanding why workbooks behave the way they do.',
-    anchor_entry:'FRM-0015',
-    path_ids:['FRM-0015','FRM-0003','FRM-0004','FRM-0007','ANT-0002','ARC-0001','PQ-0001'],
+    anchor_entry:'FRM-0002',
+    path_ids:['FRM-0002','FRM-0005','FRM-0008','FRM-0007','ANT-0002','ARC-0006','PQ-0001'],
     path_note:'LET and the dynamic array trio (FILTER, UNIQUE, SORT) transform how you think about formula design. Then diagnose volatility to speed up the workbooks you already have.',
   },
   Advanced:  {color:'#C49A3C', bg:'rgba(196,154,60,0.15)', border:'rgba(196,154,60,0.3)',
     title:'Advanced Practitioner',
     sub:'You are fluent in most of the graph. The remaining territory is LAMBDA, the higher-order functions, and governed workbook architecture.',
-    anchor_entry:'FRM-0029',
-    path_ids:['FRM-0029','FRM-0021','FRM-0023','ARC-0001','ARC-0006','PQ-0012','ANT-0016'],
+    anchor_entry:'FRM-0004',
+    path_ids:['FRM-0004','FRM-0006','FRM-0016','ARC-0006','PTN-0001','PQ-0012','ANT-0016'],
     path_note:'LAMBDA unlocks the Expert tier entirely. Combine it with architecture patterns and PQ to move into the top tier of the graph.',
   },
   Expert:    {color:'#B23531', bg:'rgba(178,53,49,0.15)', border:'rgba(178,53,49,0.3)',
     title:'Expert Practitioner',
     sub:'You are operating at the top of the graph. The frontier is the named LAMBDA library architecture and the full GROUPBY / PIVOTBY aggregation model.',
     anchor_entry:'FRM-0031',
-    path_ids:['FRM-0031','FRM-0032','FRM-0033','ARC-0012','PQ-0013'],
+    path_ids:['FRM-0031','FRM-0032','FRM-0027','ARC-0012','PQ-0013'],
     path_note:'You are close to the edge of what the registry currently defines. The higher-order LAMBDA functions and new 365 aggregators are the remaining nodes.',
   },
 };
@@ -451,7 +456,21 @@ const TIERS = {
 let current = 0;
 let answers = {}; // {q-id: option-key}
 
-function init() { renderQuestion(); }
+function loadRegistry() {
+  return fetch('/excelligence.json')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(data => {
+      REGISTRY = {};
+      (data.entries || []).forEach(e => {
+        REGISTRY[e.id] = {name: e.name, type: e.type, tier: e.tier, desc: ENTRY_COPY[e.id] || e.what_it_does || ''};
+      });
+    })
+    .catch(() => { REGISTRY = {}; });  // quiz still works; the path list stays empty
+}
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function init() { renderQuestion(); loadRegistry(); }
 
 // ── Render question ────────────────────────────────────────────────────
 function renderQuestion() {
@@ -612,10 +631,10 @@ function showResults() {
         </div>
         <div class="node-content">
           <div class="node-id" style="color:${tc}">${id} · ${e.type}</div>
-          <div class="node-name">${e.name}</div>
-          <div class="node-desc">${e.desc}</div>
-          <div class="node-tier">Tier: ${e.tier}</div>
-          <a class="node-learn" href="/learn/${id.toLowerCase().replace('-','-')}/">
+          <div class="node-name">${esc(e.name)}</div>
+          <div class="node-desc">${esc(e.desc)}</div>
+          <div class="node-tier">Tier: ${esc(e.tier)}</div>
+          <a class="node-learn" href="/explorer/#${id}">
             View entry →
           </a>
         </div>
