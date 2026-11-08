@@ -1,1 +1,4 @@
 .env.local
+
+# Claude Code local settings: approved commands, can hold secrets (FND-0074)
+.claude/settings.local.json
